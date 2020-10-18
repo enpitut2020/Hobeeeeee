@@ -1,9 +1,9 @@
 <template>
-  <div class="container">
-    <div>
+  <div>
       <Logo />
       <h1 class="title">hobeeeeee</h1>
-      <div v-for="article in articles" :key="article.id">
+    <div class="columns">
+      <div v-for="article in articles" :key="article.id" class="column is-one-quarter">
         <ArticleCard :article="article" />
       </div>
     </div>
