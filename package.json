@@ -13,7 +13,8 @@
     "bulma": "^0.9.1",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
-    "vue-graph-vis": "^0.1.4"
+    "vue-graph-vis": "^0.1.4",
+    "vue-visjs": "^0.4.1"
   },
   "devDependencies": {
     "node-sass": "^4.14.1",
