@@ -2,6 +2,7 @@
   <div>
       <Logo />
       <h1 class="title">hobeeeeee</h1>
+      <nuxt-link to="/graph">趣味を探す</nuxt-link>
     <div class="columns">
       <div v-for="article in articles" :key="article.id" class="column is-one-quarter">
         <ArticleCard :article="article" />
