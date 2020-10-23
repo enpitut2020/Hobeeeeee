@@ -19,17 +19,18 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-    css: [
-      { src: 'bulma/bulma.sass', lang: 'sass' }
+  css: [
+    { src: 'bulma/bulma.sass', lang: 'sass' }
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-      '~/plugins/articlesData',
+    '~/plugins/articlesData',
+    '~/plugins/nodeRelations',
     {
       src: '@/plugins/vue-mavon-editor',
       srr: false
-    }
+    },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
