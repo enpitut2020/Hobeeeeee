@@ -3,6 +3,7 @@
 <h1 class="title">記事一覧です</h1>
 {{this.articlesData}}
 </div>
+
 </template>
 
 <script>
