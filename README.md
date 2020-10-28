@@ -1,12 +1,14 @@
 # hobeeeeee
 
-## Build Setup
+## リリースノート
+
+## セットアップ
 
 ```bash
 # パッケージインストール
 $ yarn install
 or
-$ npm install 
+$ npm install
 # localhost:3000でローカルサーバ立ち上げ
 $ yarn dev
 or
