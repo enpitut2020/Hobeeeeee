@@ -1,19 +1,15 @@
 <template>
-  <div class="card relative-node">
-    <nuxt-link :to="'/graph/' + node.id"
+  <button class="button is-link is-light">
+    <nuxt-link :to="'/' + node.id + '/graph/'"
       >関連の趣味 {{ node.title }}
     </nuxt-link>
-  </div>
+  </button>
 </template>
-
 <script>
 export default {
   props: ["node"],
 };
 </script>
-<style scoped>
-.relative-node{
-    background-color:#F18805
-}
-</style>
 
+<style scoped>
+</style>

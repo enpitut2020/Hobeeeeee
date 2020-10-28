@@ -25,8 +25,7 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '~/plugins/articlesData',
-    '~/plugins/nodeRelations',
+    '~/plugins/hobbiesData',
     {
       src: '@/plugins/vue-mavon-editor',
       srr: false
