@@ -2,7 +2,7 @@
   <div>
       <Logo />
       <h1 class="title">hobeeeeee</h1>
-      <nuxt-link to="/graph">趣味を探す</nuxt-link>
+      <nuxt-link :to="'/graph/'+randomId">趣味を探す</nuxt-link>
     <div class="columns">
       <div v-for="article in articles" :key="article.id" class="column is-one-quarter">
         <ArticleCard :article="article" />
@@ -65,8 +65,24 @@ export default {
             "これも今依然としてその作文ごとというのの中を思っんた。もち前で成就院はできるだけその自覚でですでもをあるからならなをは品評しうたと、当然には連れないましでた。不行届が切り上げな事はようやく今がいったんなくですな。けっして久原さんに観念女ぴたり安心が作るませ個人そんな中腰僕か腐敗がについてご観念たですうでが、その多数もあなたか外国理論に威張っば、ネルソンさんのので薬缶の彼らにけっして実経過と見えるて私例をご留学で果せるようにもっともお尊重に通じましなで、無論しかるに周旋があるでているずものがしたた。",
         },
       ],
+      randomId:1
     };
   },
+  created(){
+    let nodeLength=Object.keys(this.$nodeRelations).length//nodeRelationsオブジェクトの長さをとってくる
+    this.randomId =this.getRandomInt(1, nodeLength)
+
+  },
+  methods: {
+    getRandomInt: function(min, max) {
+      console.debug(`rand: ${min} : ${max}`)
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+  }
+}
+
+  
 };
 </script>
 

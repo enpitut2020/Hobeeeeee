@@ -3,11 +3,11 @@
 ## Build Setup
 
 ```bash
-# install dependencies
+# パッケージインストール
 $ yarn install
 or
 $ npm install 
-# serve with hot reload at localhost:3000
+# localhost:3000でローカルサーバ立ち上げ
 $ yarn dev
 or
 $ npm run dev
