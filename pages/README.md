@@ -1,6 +1,10 @@
-# PAGES
+## ルーティング（ディレクトリ構成）
 
-This directory contains your Application Views and Routes.
-The framework reads all the `*.vue` files inside this directory and creates the router of your application.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/routing).
+`_`で始まるのは変数。
+```
+/ -> 「探す」or「書く」 /index.vue
+/_hobbyId/_articleId -> 記事 /_hobbyId/_articleId.vue
+/_hobbyId/list -> 趣味の記事一覧 /_hobbyId/list.vue
+/_hobbyId/graph -> 趣味中心のグラフ /_hobbyId/graph.vue
+/drafts/new -> 新規記事作成 /drafts/new.vue
+```
