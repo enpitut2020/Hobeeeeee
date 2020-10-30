@@ -1,6 +1,5 @@
 <template>
   <div>
-<<<<<<< HEAD
       <Logo />
       <h1 class="title">hobeeeeee</h1>
     <div class="columns">
@@ -8,13 +7,9 @@
         <ArticleCard :article="article" />
       </div>
     </div>
-=======
-    <Logo />
-    <h1 class="title">hobeeeeee</h1>
     <nuxt-link :to="randomId + '/graph/'">趣味を探す</nuxt-link>
     <nuxt-link to="/drafts/new">趣味を布教する</nuxt-link>
     <div class="columns"></div>
->>>>>>> develop
   </div>
 </template>
 
