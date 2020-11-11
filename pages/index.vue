@@ -7,7 +7,8 @@
     <div class="columns"></div>
     <div>
       <p>firebaseから!!</p>
-      {{ hobbeeData.title }}
+      {{ hobbeeData[0].title }}
+      {{ randomId }}
     </div>
   </div>
 </template>
@@ -18,15 +19,15 @@ const db = firebase.firestore();
 
 export default {
   async asyncData() {
-    console.debug(db);
-    let hobbeeData;
+    let hobbeeData = [];
     await db
       .collection("hobbees")
-      .doc("mOuvsY2QvNrePwNNRfNl")
       .get()
-      .then((data) => {
-        hobbeeData = data.data();
-        console.debug(data.data());
+      .then((querySnapshot) => {
+        querySnapshot.forEach((data) => {
+          hobbeeData.push(data.data());
+          console.debug("data.data(): ", data.data());
+        });
       })
       .catch((e) => {
         console.error(e);
@@ -34,16 +35,13 @@ export default {
     return { hobbeeData: hobbeeData };
   },
 
-  data() {
-    return {
-      randomId: 1,
-    };
+  computed: {
+    randomId() {
+      return this.hobbeeData[this.getRandomInt(0, this.hobbeeData.length - 1)]
+        .id;
+    },
   },
 
-  created() {
-    let nodeLength = Object.keys(this.$hobbiesData).length; //nodeRelationsオブジェクトの長さをとってくる
-    this.randomId = this.getRandomInt(1, nodeLength);
-  },
   methods: {
     getRandomInt: function (min, max) {
       console.debug(`rand: ${min} : ${max}`);

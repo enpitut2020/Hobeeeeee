@@ -31,12 +31,14 @@ export default {
     };
   },
   created() {
-    this.targetNode = this.$hobbiesData[this.id];
-    if (this.targetNode) {
-      this.targetNode.relativeId.forEach((id) => {
-        this.relativeNodes.push(this.$hobbiesData[id]);
-      });
-    }
+    this.$hobbiesData().then((data) => {
+      console.debug(
+        JSON.stringify(data),
+        data[this.id].id,
+        data[this.id].title
+      );
+      this.targetNode = data[this.id];
+    });
   },
 };
 </script>
