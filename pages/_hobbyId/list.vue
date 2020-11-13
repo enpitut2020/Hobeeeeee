@@ -29,9 +29,6 @@ export default {
       this.targetHobby = data[this.$route.params.hobbyId];
     });
     //TODO: articles取得
-    // for (let key in this.targetHobby.articles) {
-    //   this.articlesData.push(this.targetHobby.articles[key]);
-    // }
   },
 };
 </script>

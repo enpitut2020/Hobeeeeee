@@ -7,7 +7,7 @@
     <div class="columns"></div>
     <div>
       <p>firebaseから!!</p>
-      {{ hobbeeData[0].title }}
+      {{ title }}
       {{ randomId }}
     </div>
   </div>
@@ -18,29 +18,30 @@ import firebase from "@/plugins/firebase.js";
 const db = firebase.firestore();
 
 export default {
-  async asyncData() {
-    let hobbeeData = [];
-    await db
-      .collection("hobbees")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((data) => {
-          hobbeeData.push(data.data());
-          console.debug("data.data(): ", data.data());
-        });
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-    return { hobbeeData: hobbeeData };
+  data() {
+    return {
+      hobbeeData: {},
+      randomId: -1,
+      title: "",
+    };
   },
 
-  computed: {
-    randomId() {
-      return this.hobbeeData[this.getRandomInt(0, this.hobbeeData.length - 1)]
-        .id;
-    },
+  created() {
+    this.$hobbiesData()
+      .then((result) => {
+        console.debug("created: ", result);
+        this.hobbeeData = result;
+        this.randomId = this.hobbeeData[
+          Object.keys(this.hobbeeData)[
+            this.getRandomInt(0, Object.keys(this.hobbeeData).length - 1)
+          ]
+        ].id;
+        this.title = this.hobbeeData[Object.keys(this.hobbeeData)[0]].title;
+      })
+      .catch((err) => {});
   },
+
+  computed: {},
 
   methods: {
     getRandomInt: function (min, max) {
