@@ -5,20 +5,44 @@
     <nuxt-link :to="randomId + '/graph/'">趣味を探す</nuxt-link>
     <nuxt-link to="/drafts/new">趣味を布教する</nuxt-link>
     <div class="columns"></div>
+    <div>
+      <p>firebaseから!!</p>
+      {{ title }}
+      {{ randomId }}
+    </div>
   </div>
 </template>
 
 <script>
+import firebase from "@/plugins/firebase.js";
+const db = firebase.firestore();
+
 export default {
   data() {
     return {
-      randomId: 1,
+      hobbeeData: {},
+      randomId: -1,
+      title: "",
     };
   },
+
   created() {
-    let nodeLength = Object.keys(this.$hobbiesData).length; //nodeRelationsオブジェクトの長さをとってくる
-    this.randomId = this.getRandomInt(1, nodeLength);
+    this.$hobbiesData()
+      .then((result) => {
+        console.debug("created: ", result);
+        this.hobbeeData = result;
+        this.randomId = this.hobbeeData[
+          Object.keys(this.hobbeeData)[
+            this.getRandomInt(0, Object.keys(this.hobbeeData).length - 1)
+          ]
+        ].id;
+        this.title = this.hobbeeData[Object.keys(this.hobbeeData)[0]].title;
+      })
+      .catch((err) => {});
   },
+
+  computed: {},
+
   methods: {
     getRandomInt: function (min, max) {
       console.debug(`rand: ${min} : ${max}`);

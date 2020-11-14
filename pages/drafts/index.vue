@@ -1,17 +1,15 @@
 <template>
-<div>
-    記事下書き一覧
-</div>
+  <div>記事下書き一覧</div>
 </template>
 
 <script>
 export default {
-    data() {
-        return{
-            articlesData:"afda"
-        }
-    }
-}
+  data() {
+    return {
+      articlesData: "afda",
+    };
+  },
+};
 </script>
 
 <style>

@@ -25,8 +25,13 @@ export default {
   },
 
   created() {
-    (this.title = "createdで書き換え"),
-      (this.content = this.$articlesData[this.$route.params.id].content);
+    // FIXME: db接続に書き換える
+    this.content = this.$articlesData(this.$route.params.id)
+      .then((result) => {
+        this.title = result.title;
+        this.content = result.content;
+      })
+      .catch((err) => {});
   },
   computed() {},
 };

@@ -11,7 +11,6 @@
       <div v-for="rNode in relativeNodes" :key="rNode.id">
         <HobbyNode :node="rNode" />
       </div>
-
     </div>
     <div v-else>
       <p>IDが不正です</p>
@@ -34,45 +33,40 @@ export default {
     };
   },
   created() {
-    this.targetNode = this.$hobbiesData[this.id];
-    if (this.targetNode) {
-      this.targetNode.relativeId.forEach((id) => {
-        this.relativeNodes.push(this.$hobbiesData[id]);
-        console.log(id)
-      });
-      //見栄えくするために、データの個数(nodeの個数）を９個する処理。
-      if (this.relativeNodes.length < 9) {
-        let lack = 9 - this.relativeNodes.length - 1
-        for (let i = 0; i < lack ; i++) {
-          this.relativeNodes.push(this.$hobbiesData[1])
-        }
-      }
-    }
+    this.$hobbiesData().then((data) => {
+      console.debug(
+        JSON.stringify(data),
+        data[this.id].id,
+        data[this.id].title
+      );
+      this.targetNode = data[this.id];
+      // FIXME: relativeNodesに関連する趣味を追加する
+    });
   },
 };
 </script>
 
 <style>
-  a{
-    text-decoration:none;
-    color: #05668d;
-  }
-  .node_now_div{
-    width: 33vw;
-    height: 33vw;
-    border-radius: 50%;
-    border: solid 1px black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background-color:#f0f3bd;
-    border: solid 5px #f0f3bd;
-  }
-  .flex_wrap{
-    display: flex;
-    flex-wrap: wrap;
-    width: 100vw;
-    height: 100vw;
-  }
+a {
+  text-decoration: none;
+  color: #05668d;
+}
+.node_now_div {
+  width: 33vw;
+  height: 33vw;
+  border-radius: 50%;
+  border: solid 1px black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f0f3bd;
+  border: solid 5px #f0f3bd;
+}
+.flex_wrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100vw;
+  height: 100vw;
+}
 </style>
