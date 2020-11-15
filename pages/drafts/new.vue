@@ -1,15 +1,17 @@
 <template>
-  <div class="container">
-    <h1>記事投稿画面</h1>
-    <input class="input" placeholder="タイトル" v-model="title" />
-    <!-- <textarea v-model="content" placeholder="本文" class="textarea" /> -->
-    <mavon-editor
-      v-model="content"
-      :toolbars="markdownOption"
-      language="ja"
-      placeholder="編集を始めてね！"
-    />
-    <button v-on:click="submit" class="button is-success">submit</button>
+  <div>
+    <div class="section">
+      <h1 class="title  is-3">記事投稿画面</h1>
+      <nuxt-link to="/">トップへ戻る</nuxt-link>
+      <input class="input" placeholder="タイトル" v-model="title" />
+      <mavon-editor
+        v-model="content"
+        :toolbars="markdownOption"
+        language="ja"
+        placeholder="編集を始めてね！"
+      />
+      <button v-on:click="submit" class="button is-success">submit</button>
+    </div>
   </div>
 </template>
 
@@ -42,15 +44,15 @@ export default {
         fullscreen: false,
         readmodel: true,
         htmlcode: true,
-        help: true,
-      },
+        help: true
+      }
     };
   },
   methods: {
-    submit: function (event) {
+    submit: function(event) {
       alert(this.content);
-    },
-  },
+    }
+  }
   // TODO: 記事を投稿する（dbに登録する）
 };
 </script>
