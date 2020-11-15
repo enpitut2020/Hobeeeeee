@@ -1,14 +1,16 @@
 <template>
-  <div>
-    <Logo />
-    <h1 class="title">hobeeeeee</h1>
-    <nuxt-link :to="randomId + '/graph/'">趣味を探す</nuxt-link>
-    <nuxt-link to="/drafts/new">趣味を布教する</nuxt-link>
-    <div class="columns"></div>
+  <div class="container">
     <div>
-      <p>firebaseから!!</p>
-      {{ title }}
-      {{ randomId }}
+      <Logo />
+      <h1 class="title">hobeeeeee</h1>
+      <nuxt-link :to="randomId + '/graph/'">趣味を探す</nuxt-link>
+      <nuxt-link to="/drafts/new">趣味を布教する</nuxt-link>
+      <div class="columns"></div>
+      <div>
+        <p>firebaseから!!</p>
+        {{ title }}
+        {{ randomId }}
+      </div>
     </div>
   </div>
 </template>
@@ -22,13 +24,13 @@ export default {
     return {
       hobbeeData: {},
       randomId: -1,
-      title: "",
+      title: ""
     };
   },
 
   created() {
     this.$hobbiesData()
-      .then((result) => {
+      .then(result => {
         console.debug("created: ", result);
         this.hobbeeData = result;
         this.randomId = this.hobbeeData[
@@ -38,19 +40,19 @@ export default {
         ].id;
         this.title = this.hobbeeData[Object.keys(this.hobbeeData)[0]].title;
       })
-      .catch((err) => {});
+      .catch(err => {});
   },
 
   computed: {},
 
   methods: {
-    getRandomInt: function (min, max) {
+    getRandomInt: function(min, max) {
       console.debug(`rand: ${min} : ${max}`);
       min = Math.ceil(min);
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-    },
-  },
+    }
+  }
 };
 </script>
 
