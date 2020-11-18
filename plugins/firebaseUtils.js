@@ -8,13 +8,13 @@ this.$hobbiesData.then(){
 みたいに使う
 */
 Vue.prototype.$hobbiesData = async function getHobbeeData() {
-  let hobbeeData = {};
+  let hobbeeData = [];
   await db
     .collection("hobbees")
     .get()
     .then((querySnapshot) => {
       querySnapshot.forEach((data) => {
-        hobbeeData[data.id] = data.data();
+        hobbeeData.push(data.data());
         // FIXME: Objectじゃなくてarrayにして hobbeeData.push(data.data())のほうが使いやすいかも
         // なるほど修正やりますか??
         // issue投げて今度だな それですね!!

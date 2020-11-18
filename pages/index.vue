@@ -34,11 +34,11 @@ export default {
         console.debug("created: ", result);
         this.hobbeeData = result;
         this.randomId = this.hobbeeData[
-          Object.keys(this.hobbeeData)[
-            this.getRandomInt(0, Object.keys(this.hobbeeData).length - 1)
-          ]
+          this.getRandomInt(0, this.hobbeeData.length - 1)
         ].id;
-        this.title = this.hobbeeData[Object.keys(this.hobbeeData)[0]].title;
+        /*
+        // this.title = this.hobbeeData[Object.keys(this.hobbeeData)[0]].title;
+        */
       })
       .catch(err => {});
   },
