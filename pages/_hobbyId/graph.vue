@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-if="targetNode" class="flex_wrap">
-      <div class="node_now_div">
         <h1>タイトル:{{ title }}</h1>
+      <div class="node_now_div">
         <h2 class="h2">{{ targetNode.title }}</h2>
         <nuxt-link :to="'/' + $route.params.hobbyId + '/list'"
           >記事を読む</nuxt-link
@@ -34,12 +34,15 @@ export default {
   },
   created() {
     this.$hobbiesData().then((data) => {
-      console.debug(
-        JSON.stringify(data),
-        data[this.id].id,
-        data[this.id].title
-      );
-      this.targetNode = data[this.id];
+
+    this.targetNode= data.filter(tmp => {
+      return tmp.id === this.id;
+    });
+    this.targetNode=this.targetNode[0]//これで解決
+    this.title=this.targetNode.title
+    this.relativeNodes=this.targetNode.relativeNodes
+    console.debug(`target : ${JSON.stringify(this.targetNode)}`)
+  
       // FIXME: relativeNodesに関連する趣味を追加する
     });
   },
