@@ -22,35 +22,32 @@ const db = firebase.firestore();
 export default {
   data() {
     return {
-      hobbeeData: {},
-      randomId: -1,
+      nodeData: {},
+      randomId: "",
       title: ""
     };
   },
 
   created() {
-    this.$hobbiesData()
+    this.$getNodesData()
       .then(result => {
-        console.debug("created: ", result);
-        this.hobbeeData = result;
-        this.randomId = this.hobbeeData[
-          this.getRandomInt(0, this.hobbeeData.length - 1)
+        this.nodeData = result;
+        this.randomId = this.nodeData[
+          this.getRandomInt(0, this.nodeData.length - 1)
         ].id;
-        /*
-        // this.title = this.hobbeeData[Object.keys(this.hobbeeData)[0]].title;
-        */
       })
-      .catch(err => {});
+      .catch(err => {
+        alert("データの取得でエラーが発生しました。")
+      });
   },
 
   computed: {},
 
   methods: {
     getRandomInt: function(min, max) {
-      console.debug(`rand: ${min} : ${max}`);
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+      const randNum = Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+      console.debug("rand : ", randNum);
+      return randNum;
     }
   }
 };

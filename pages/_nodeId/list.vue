@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1 class="title">{{ targetHobby.title }}の記事一覧です</h1>
-    <div v-if="Object.keys(articlesData).length !== 0">
+    <!-- TODO: title を取得<h1 class="title">{{ targetnode.title }}の記事一覧です</h1> -->
+    <div v-if="articlesData.length !== 0">
       <ul>
         <li v-for="article in articlesData" :key="article.id">
           <ArticleThumbnail :article="article" />
@@ -18,17 +18,15 @@
 export default {
   data() {
     return {
-      // targetHobby: this.$hobbiesData[this.$route.params.hobbyId],
-      targetHobby: {},
+      nodeId:this.$route.params.nodeId,
       articlesData: [],
     };
   },
   created() {
-    this.$hobbiesData().then((data) => {
+    //TODO
+    this.$getArticlesData(this.nodeId).then((data) => {
       this.articlesData = data;
-      this.targetHobby = data[this.$route.params.hobbyId];
     });
-    //TODO: articles取得
   },
 };
 </script>
