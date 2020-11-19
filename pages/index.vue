@@ -5,12 +5,6 @@
       <h1 class="title">hobeeeeee</h1>
       <nuxt-link :to="randomId + '/graph/'">趣味を探す</nuxt-link>
       <nuxt-link to="/drafts/new">趣味を布教する</nuxt-link>
-      <div class="columns"></div>
-      <div>
-        <p>firebaseから!!</p>
-        {{ title }}
-        {{ randomId }}
-      </div>
     </div>
   </div>
 </template>
@@ -47,10 +41,9 @@ export default {
 
   methods: {
     getRandomInt: function(min, max) {
-      console.debug(`rand: ${min} : ${max}`);
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+      const randNum = Math.floor(Math.random() * (max + 1 - min)) + min; //The maximum is exclusive and the minimum is inclusive
+      console.debug("rand : ", randNum);
+      return randNum;
     }
   }
 };
