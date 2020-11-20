@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-if="targetNode" class="flex_wrap">
-        <h1>タイトル:{{ title }}</h1>
+      <h1>趣味の名前:{{ name }}</h1>
       <div class="node_now_div">
-        <h2 class="h2">{{ targetNode.title }}</h2>
+        <h2 class="h2">{{ targetNode.name }}</h2>
         <nuxt-link :to="'/' + $route.params.hobbyId + '/list'"
           >記事を読む</nuxt-link
         >
@@ -26,24 +26,28 @@
 export default {
   data() {
     return {
-      title: "グラフ",
+      name: "グラフ",
       id: this.$route.params.hobbyId,
       targetNode: {},
       relativeNodes: [],
     };
   },
   created() {
-    this.$hobbiesData().then((data) => {
-
-    this.targetNode= data.filter(tmp => {
-      return tmp.id === this.id;
-    });
-    this.targetNode=this.targetNode[0]//これで解決
-    this.title=this.targetNode.title
-    this.relativeNodes=this.targetNode.relativeNodes
-    console.debug(`target : ${JSON.stringify(this.targetNode)}`)
-  
-      // FIXME: relativeNodesに関連する趣味を追加する
+    this.$getTags().then((data) => {
+      this.targetNode = data.filter((tmp) => {
+        return tmp.id === this.id;
+      });
+      this.targetNode = this.targetNode[0]; //これで解決
+      this.name = this.targetNode.name;
+      console.log("this.targetNode.id" + this.targetNode.id);
+      this.relativeNodes = this.$getRelativeTags(this.targetNode.id).then(
+        (tag) => {
+          console.debug(`tag relevance(graph.vue) : ${tag}`);
+          this.relativeNodes.push(tag.id);
+        }
+      );
+      console.debug(`target(graph.vue) : ${JSON.stringify(this.targetNode)}`);
+      console.debug(`relativeNodes(graph.vue) : ${this.relativeNodes}`);
     });
   },
 };

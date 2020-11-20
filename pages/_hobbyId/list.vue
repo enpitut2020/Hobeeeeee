@@ -18,17 +18,17 @@
 export default {
   data() {
     return {
-      // targetHobby: this.$hobbiesData[this.$route.params.hobbyId],
       targetHobby: {},
       articlesData: [],
     };
   },
   created() {
-    this.$hobbiesData().then((data) => {
+    this.$getArticles().then((data) => {
+      //TODO: articles取得
+      // DB構造を変更したから、アクセスの仕方が変わっているはず
       this.articlesData = data;
       this.targetHobby = data[this.$route.params.hobbyId];
     });
-    //TODO: articles取得
   },
 };
 </script>

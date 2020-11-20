@@ -18,34 +18,31 @@ export default {
     return {
       hobbeeData: {},
       randomId: -1,
-      title: ""
+      title: "",
     };
   },
 
   created() {
-    this.$hobbiesData()
-      .then(result => {
+    this.$getTags()
+      .then((result) => {
         console.debug("created: ", result);
         this.hobbeeData = result;
         this.randomId = this.hobbeeData[
           this.getRandomInt(0, this.hobbeeData.length - 1)
         ].id;
-        /*
-        // this.title = this.hobbeeData[Object.keys(this.hobbeeData)[0]].title;
-        */
       })
-      .catch(err => {});
+      .catch((err) => {});
   },
 
   computed: {},
 
   methods: {
-    getRandomInt: function(min, max) {
+    getRandomInt: function (min, max) {
       const randNum = Math.floor(Math.random() * (max + 1 - min)) + min; //The maximum is exclusive and the minimum is inclusive
       console.debug("rand : ", randNum);
       return randNum;
-    }
-  }
+    },
+  },
 };
 </script>
 
