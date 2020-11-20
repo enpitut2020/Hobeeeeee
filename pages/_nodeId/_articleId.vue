@@ -26,12 +26,7 @@ export default {
 
   created() {
     // FIXME: db接続に書き換える
-   this.$getArticlesData(this.$route.params.id)
-      .then((result) => {
-        this.title = result.title;
-        this.content = result.content;
-      })
-      .catch((err) => {});
+
   },
   computed() {},
 };

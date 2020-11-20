@@ -30,8 +30,8 @@ export default {
 
   created() {
     this.$getNodesData()
-      .then(result => {
-        this.nodeData = result;
+      .then(nodes => {
+        this.nodeData = nodes;
         this.randomId = this.nodeData[
           this.getRandomInt(0, this.nodeData.length - 1)
         ].id;

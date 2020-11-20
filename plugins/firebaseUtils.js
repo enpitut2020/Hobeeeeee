@@ -9,36 +9,36 @@ this.$getNodesData().then(){
 みたいに使う
 */
 Vue.prototype.$getNodesData = async()=> {
-  let nodeData = [];
+  let nodes = [];
   await db
     .collection("hobbees")
     .get()
     .then((querySnapshot) => {
-      querySnapshot.forEach((data) => {
-        nodeData.push(data.data());
+      querySnapshot.forEach((node) => {
+        nodes.push(node.data());
       });
     })
     .catch((e) => {
       console.error(e);
     });
-  console.debug("data reloaded : ", nodeData)
-  return nodeData
+  console.debug("data reloaded : ", nodes)
+  return nodes
 },
 
   Vue.prototype.$getArticlesData = async (nodeId)=> {
-    let articlesData = {};
+    let articles = [];
     await db
       .collection("hobbees")
       .doc(nodeId)
       .get()
       .then((querySnapshot) => {
-        querySnapshot.forEach((data) => {
-          articlesData.push(data.data())
+        querySnapshot.forEach((article) => {
+          articles.push(article.data())
         });
       })
       .catch((e) => {
         console.error(e);
       });
-    console.debug("data reloaded : ", articlesData)
-    return articlesData
+    console.debug("data reloaded : ", articles)
+    return articles
   }

@@ -32,16 +32,15 @@ export default {
       relativeNodes: []
     };
   },
+
   created() {
-    this.$getNodesData().then(data => {
-      console.debug(`target : ${JSON.stringify(data)}`);
-      this.targetNode = data.filter(tmp => {
+    this.$getNodesData().then(nodes => {
+      this.targetNode = nodes.filter(tmp => {
         return tmp.id === this.id;
       });
       this.targetNode=this.targetNode[0]
       this.title = this.targetNode.title;
       this.relativeNodes = this.targetNode.relativeNodes;
-
       // FIXME: relativeNodesに関連する趣味を追加する
     });
   }

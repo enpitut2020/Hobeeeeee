@@ -24,8 +24,8 @@ export default {
   },
   created() {
     //TODO
-    this.$getArticlesData(this.nodeId).then((data) => {
-      this.articlesData = data;
+    this.$getArticlesData(this.nodeId).then((articles) => {
+      this.articlesData = articles;
     });
   },
 };
