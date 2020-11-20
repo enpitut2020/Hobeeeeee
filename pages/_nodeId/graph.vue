@@ -1,15 +1,15 @@
 <template>
   <div>
     <div v-if="targetNode" class="flex_wrap">
-        <h1>タイトル:{{ title }}</h1>
+      <h1>タイトル:{{ title }}</h1>
       <div class="node_now_div">
         <h2 class="h2">{{ targetNode.title }}</h2>
-        <nuxt-link :to="'/' + $route.params.hobbyId + '/list'"
+        <nuxt-link :to="'/' + $route.params.nodeId + '/list'"
           >記事を読む</nuxt-link
         >
       </div>
       <div v-for="rNode in relativeNodes" :key="rNode.id">
-        <HobbyNode :node="rNode" />
+        <nodeNode :node="rNode" />
       </div>
     </div>
     <div v-else>
@@ -27,25 +27,23 @@ export default {
   data() {
     return {
       title: "グラフ",
-      id: this.$route.params.hobbyId,
+      id: this.$route.params.nodeId,
       targetNode: {},
-      relativeNodes: [],
+      relativeNodes: []
     };
   },
-  created() {
-    this.$hobbiesData().then((data) => {
 
-    this.targetNode= data.filter(tmp => {
-      return tmp.id === this.id;
-    });
-    this.targetNode=this.targetNode[0]//これで解決
-    this.title=this.targetNode.title
-    this.relativeNodes=this.targetNode.relativeNodes
-    console.debug(`target : ${JSON.stringify(this.targetNode)}`)
-  
+  created() {
+    this.$getNodesData().then(nodes => {
+      this.targetNode = nodes.filter(tmp => {
+        return tmp.id === this.id;
+      });
+      this.targetNode=this.targetNode[0]
+      this.title = this.targetNode.title;
+      this.relativeNodes = this.targetNode.relativeNodes;
       // FIXME: relativeNodesに関連する趣味を追加する
     });
-  },
+  }
 };
 </script>
 

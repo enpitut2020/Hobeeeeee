@@ -2,46 +2,43 @@ import Vue from 'vue'
 import firebase from "@/plugins/firebase.js";
 const db = firebase.firestore();
 /*
-//使うときは
-this.$hobbiesData.then(){
+使うときは
+this.$getNodesData().then(){
+  //処理
 }
 みたいに使う
 */
-Vue.prototype.$hobbiesData = async function getHobbeeData() {
-  let hobbeeData = [];
+Vue.prototype.$getNodesData = async()=> {
+  let nodes = [];
   await db
     .collection("hobbees")
     .get()
     .then((querySnapshot) => {
-      querySnapshot.forEach((data) => {
-        hobbeeData.push(data.data());
-        // FIXME: Objectじゃなくてarrayにして hobbeeData.push(data.data())のほうが使いやすいかも
-        // なるほど修正やりますか??
-        // issue投げて今度だな それですね!!
+      querySnapshot.forEach((node) => {
+        nodes.push(node.data());
       });
     })
     .catch((e) => {
       console.error(e);
     });
-  console.debug("data reloaded : ", hobbeeData)
-  return hobbeeData
+  console.debug("data reloaded : ", nodes)
+  return nodes
 },
 
-  Vue.prototype.$getArticlesData = async function getArticlesData(hobbeeId) {
-    let articlesData = {};
+  Vue.prototype.$getArticlesData = async (nodeId)=> {
+    let articles = [];
     await db
       .collection("hobbees")
-      .doc(hobbeeId)
+      .doc(nodeId)
       .get()
       .then((querySnapshot) => {
-        querySnapshot.forEach((data) => {
-          articlesData[data.id] = data.data();
-          // FIXME: Objectじゃなくてarrayにして hobbeeData.push(data.data())のほうが使いやすいかも
+        querySnapshot.forEach((article) => {
+          articles.push(article.data())
         });
       })
       .catch((e) => {
         console.error(e);
       });
-    console.debug("data reloaded : ", articlesData)
-    return articlesData
+    console.debug("data reloaded : ", articles)
+    return articles
   }
