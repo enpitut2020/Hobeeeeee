@@ -18,7 +18,6 @@ export default {
     return {
       hobbeeData: {},
       randomId: -1,
-      title: "",
     };
   },
 
