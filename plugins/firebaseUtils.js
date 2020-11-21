@@ -20,11 +20,12 @@ Vue.prototype.$getTags = async function getTags() {
     .catch((e) => {
       console.error(e);
     });
-  console.debug("tags(getTags) : ", tags)
+  console.debug(`tags (getTags() in firebaseUtils.js) : ${tags}`);
   return tags
 },
 
   Vue.prototype.$getRelativeTags = async function getRelativeTags(tagId) {
+    console.debug(`tagId (getRalativeTags() in firebaseUtils.js): ${tagId}`);
     let relativeTags = [];
     await db
       .collection("tags")
@@ -39,7 +40,7 @@ Vue.prototype.$getTags = async function getTags() {
       .catch((e) => {
         console.error(e);
       });
-    console.debug("tags(getRativeTags) : ", relativeTags)
+    console.debug(`tags (getRativeTags() in firebaseUtils.js) : ${relativeTags}`);
     return relativeTags
   },
 
@@ -52,9 +53,6 @@ Vue.prototype.$getTags = async function getTags() {
       .then((querySnapshot) => {
         querySnapshot.forEach((data) => {
           hobbeeData.push(data.data());
-          // FIXME: Objectじゃなくてarrayにして hobbeeData.push(data.data())のほうが使いやすいかも
-          // なるほど修正やりますか??
-          // issue投げて今度だな それですね!!
         });
       })
       .catch((e) => {

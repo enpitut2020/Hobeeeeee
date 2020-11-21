@@ -8,8 +8,8 @@
           >記事を読む</nuxt-link
         >
       </div>
-      <div v-for="rNode in relativeNodes" :key="rNode.id">
-        <HobbyNode :node="rNode" />
+      <div v-for="tag in relativeTags" :key="tag.id">
+        <HobbyNode :tag="tag" />
       </div>
     </div>
     <div v-else>
@@ -29,7 +29,7 @@ export default {
       name: "グラフ",
       id: this.$route.params.hobbyId,
       targetNode: {},
-      relativeNodes: [],
+      relativeTags: {},
     };
   },
   created() {
@@ -39,15 +39,15 @@ export default {
       });
       this.targetNode = this.targetNode[0]; //これで解決
       this.name = this.targetNode.name;
-      console.log("this.targetNode.id" + this.targetNode.id);
-      this.relativeNodes = this.$getRelativeTags(this.targetNode.id).then(
-        (tag) => {
-          console.debug(`tag relevance(graph.vue) : ${tag}`);
-          this.relativeNodes.push(tag.id);
-        }
-      );
-      console.debug(`target(graph.vue) : ${JSON.stringify(this.targetNode)}`);
-      console.debug(`relativeNodes(graph.vue) : ${this.relativeNodes}`);
+      console.debug(`this.name (created() in graph.vue): ${this.name}`);
+      console.debug(`this.targetNode.id (created() in graph.vue): ${this.targetNode.id}`);
+      console.debug(`this.target (created() in graph.vue) : ${JSON.stringify(this.targetNode)}`);
+    });
+    this.$getRelativeTags(this.id).then((tags) => {
+      this.relativeTags = tags;
+      console.debug(`tags (created() in graph.vue): ${tags}`);
+      console.debug(`Object.keys(tags) (created() in graph.vue): ${Object.keys(tags)}`);
+      console.debug(`this.relativeTags (created() in graph.vue) : ${this.relativeTags}`);
     });
   },
 };
