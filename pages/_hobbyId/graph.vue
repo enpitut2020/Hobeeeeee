@@ -4,7 +4,7 @@
       <h1>趣味の名前:{{ name }}</h1>
       <div class="node_now_div">
         <h2 class="h2">{{ targetNode.name }}</h2>
-        <nuxt-link :to="'/' + $route.params.hobbyId + '/list'"
+        <nuxt-link :to="'/' + $route.params.hobbyId + '/list?hobbyName=' + name"
           >記事を読む</nuxt-link
         >
       </div>

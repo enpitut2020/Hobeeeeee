@@ -22,63 +22,62 @@ Vue.prototype.$getTags = async function getTags() {
     });
   console.debug("tags(getTags) : ", tags)
   return tags
-},
+};
 
-  Vue.prototype.$getRelativeTags = async function getRelativeTags(tagId) {
-    let relativeTags = [];
-    await db
-      .collection("tags")
-      .doc(tagId)
-      .collection("relative")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((data) => {
-          relativeTags.push(data.data());
-        });
-      })
-      .catch((e) => {
-        console.error(e);
+Vue.prototype.$getRelativeTags = async function getRelativeTags(tagId) {
+  let relativeTags = [];
+  await db
+    .collection("tags")
+    .doc(tagId)
+    .collection("relative")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((data) => {
+        relativeTags.push(data.data());
       });
-    console.debug("tags(getRativeTags) : ", relativeTags)
-    return relativeTags
-  },
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+  console.debug("tags(getRativeTags) : ", relativeTags)
+  return relativeTags
+};
 
 
-  Vue.prototype.$hobbiesData = async function getHobbeeData() {
-    let hobbeeData = [];
-    await db
-      .collection("hobbees")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((data) => {
-          hobbeeData.push(data.data());
-          // FIXME: Objectじゃなくてarrayにして hobbeeData.push(data.data())のほうが使いやすいかも
-          // なるほど修正やりますか??
-          // issue投げて今度だな それですね!!
-        });
-      })
-      .catch((e) => {
-        console.error(e);
+Vue.prototype.$hobbiesData = async function getHobbeeData() {
+  let hobbeeData = [];
+  await db
+    .collection("hobbees")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((data) => {
+        hobbeeData.push(data.data());
+        // FIXME: Objectじゃなくてarrayにして hobbeeData.push(data.data())のほうが使いやすいかも
+        // なるほど修正やりますか??
+        // issue投げて今度だな それですね!!
       });
-    console.debug("data reloaded : ", hobbeeData)
-    return hobbeeData
-  },
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+  console.debug("data reloaded : ", hobbeeData)
+  return hobbeeData
+};
 
-  Vue.prototype.$getArticles = async function getArticles(hobbeeId) {
-    let articlesData = {};
-    await db
-      .collection("hobbees")
-      .doc(hobbeeId)
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((data) => {
-          articlesData[data.id] = data.data();
-          // FIXME: Objectじゃなくてarrayにして hobbeeData.push(data.data())のほうが使いやすいかも
-        });
-      })
-      .catch((e) => {
-        console.error(e);
+Vue.prototype.$getArticles = async function getArticles(tagId) {
+  let articles = [];
+  await db
+    .collection("articles")
+    .where("tags", "array-contains", tagId)
+    .get()
+    .then((docs) => {
+      docs.forEach((doc) => {
+        articles.push(doc.data());
       });
-    console.debug("data reloaded : ", articlesData)
-    return articlesData
-  }
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+  console.debug(`articles (getArticles() in firebaseUtils.js): ${articles}`);
+  return articles
+};
