@@ -20,9 +20,6 @@
 </template>
 
 <script>
-//TODO:それをグラフっぽく表示
-//TODO: volumeの反映
-//TODO:ないIDのエラーハンドリング
 export default {
   async asyncData({params, $getTags, $getRelativeTags})
   {
@@ -36,27 +33,10 @@ export default {
       relativeNodes,
     };
   },
-  // data() {
-  //   return {
-  //     id: this.$route.params.hobbyId,
-  //   };
-  // },
+  data() {
+    return {}
+  },
   created() {
-    // this.$getTags().then((data) => {
-    //   this.targetNode = data.filter((tmp) => {
-    //     return tmp.id === this.id;
-    //   });
-    //   this.targetNode = this.targetNode[0]; //これで解決
-    //   this.name = this.targetNode.name;
-    //   console.log("this.targetNode.id" + this.targetNode.id);
-    //   // this.$getRelativeTags(this.targetNode.id).then(
-    //   //   (tags) => {
-    //   //     this.relativeNodes = tags;
-    //   //   }
-    //   // );
-    //   console.debug(`target(graph.vue) : ${JSON.stringify(this.targetNode)}`);
-    //   console.debug(`relativeNodes(graph.vue) : ${this.relativeNodes}`);
-    // });
   },
 };
 </script>

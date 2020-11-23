@@ -52,9 +52,6 @@ Vue.prototype.$hobbiesData = async function getHobbeeData() {
     .then((querySnapshot) => {
       querySnapshot.forEach((data) => {
         hobbeeData.push(data.data());
-        // FIXME: Objectじゃなくてarrayにして hobbeeData.push(data.data())のほうが使いやすいかも
-        // なるほど修正やりますか??
-        // issue投げて今度だな それですね!!
       });
     })
     .catch((e) => {
