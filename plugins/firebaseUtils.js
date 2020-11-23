@@ -81,3 +81,8 @@ Vue.prototype.$getArticles = async function getArticles(tagId) {
   console.debug(`articles (getArticles() in firebaseUtils.js): ${articles}`);
   return articles
 };
+
+export default (context) => {
+  context.$getTags = Vue.prototype.$getTags;
+  context.$getRelativeTags = Vue.prototype.$getRelativeTags;
+}
