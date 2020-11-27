@@ -82,3 +82,25 @@ Vue.prototype.$getTags = async function getTags() {
     console.debug("data reloaded : ", articlesData)
     return articlesData
   }
+
+// DBに記事データを登録する
+Vue.prototype.$registerArticle = async function registerArticle(article) {
+  let ref = await db.collection("articles");
+  let idRegistered;
+  ref.add(article)
+    .then((newArticle) => {
+      ref.doc(newArticle.id).update({
+        id: newArticle.id
+      })
+      idRegistered = newArticle.id;
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+  console.debug(`Registerd: id: ${idRegistered} (registerArticle() in firebaseUtils.js)`);
+}
+
+// 現在時刻を取得する
+Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {
+  return firebase.firestore.Timestamp.fromDate(new Date());
+}
