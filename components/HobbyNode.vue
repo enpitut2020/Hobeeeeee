@@ -1,7 +1,7 @@
 <template>
   <div class="node_div">
     <nuxt-link :to="'/' + node.id + '/graph/'"
-      >関連の趣味 {{ node.title }}
+      >関連の趣味 {{ node.name }}
     </nuxt-link>
   </div>
 </template>

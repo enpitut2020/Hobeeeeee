@@ -1,17 +1,17 @@
 <template>
-<!--TODO:リンクを追加-->
-<div>
-      {{ article.title }}
-    {{ article.creatorName }}
-    {{ article.zbzb }}</div>
+  <!--TODO:リンクを追加-->
+  <div>
+    <div>title={{ article.title }}</div>
+    <div>author={{ article.author }}</div>
+    <div>body={{ article.body }}</div>
+  </div>
 </template>
 
 <script>
 export default {
-props:["article"]
-}
+  props: ["article"],
+};
 </script>
 
 <style>
-
 </style>

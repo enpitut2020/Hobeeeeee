@@ -4,7 +4,7 @@
       <h1>趣味の名前:{{ name }}</h1>
       <div class="node_now_div">
         <h2 class="h2">{{ targetNode.name }}</h2>
-        <nuxt-link :to="'/' + $route.params.hobbyId + '/list'"
+        <nuxt-link :to="'/' + $route.params.hobbyId + '/list?hobbyName=' + name"
           >記事を読む</nuxt-link
         >
       </div>
@@ -20,35 +20,23 @@
 </template>
 
 <script>
-//TODO:それをグラフっぽく表示
-//TODO: volumeの反映
-//TODO:ないIDのエラーハンドリング
 export default {
-  data() {
+  async asyncData({params, $getTags, $getRelativeTags})
+  {
+    const tags = await $getTags();
+    const targetNode = tags.find(tag => tag.id === params.hobbyId);
+    const name = targetNode.name ?? "グラフ";
+    const relativeNodes = await $getRelativeTags(targetNode.id);
     return {
-      name: "グラフ",
-      id: this.$route.params.hobbyId,
-      targetNode: {},
-      relativeNodes: [],
+      name,
+      targetNode,
+      relativeNodes,
     };
   },
+  data() {
+    return {}
+  },
   created() {
-    this.$getTags().then((data) => {
-      this.targetNode = data.filter((tmp) => {
-        return tmp.id === this.id;
-      });
-      this.targetNode = this.targetNode[0]; //これで解決
-      this.name = this.targetNode.name;
-      console.log("this.targetNode.id" + this.targetNode.id);
-      this.relativeNodes = this.$getRelativeTags(this.targetNode.id).then(
-        (tag) => {
-          console.debug(`tag relevance(graph.vue) : ${tag}`);
-          this.relativeNodes.push(tag.id);
-        }
-      );
-      console.debug(`target(graph.vue) : ${JSON.stringify(this.targetNode)}`);
-      console.debug(`relativeNodes(graph.vue) : ${this.relativeNodes}`);
-    });
   },
 };
 </script>
