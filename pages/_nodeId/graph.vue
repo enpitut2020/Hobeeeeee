@@ -22,41 +22,19 @@
 
 <script>
   export default {
-  //   async asyncData({ params, $getTags, $getRelativeTags }) {
-  //     const tags = await $getTags();
-  //     const targetNode = tags.find(tag => tag.id === params.hobbyId);
-  //     const name = targetNode.name ?? "グラフ";
-  //     const relativeNodes = await $getRelativeTags(targetNode.id);
-  //     return {
-  //       name,
-  //       targetNode,
-  //       relativeNodes,
-  //     };
-    // },
+    async asyncData({ params, $getTags, $getRelativeTags }) {
+      const tags = await $getTags();
+      const targetNode = tags.find(tag => tag.id === params.nodeId);
+      const name = targetNode.name ?? "グラフ";
+      const relativeNodes = await $getRelativeTags(targetNode.id);
+      return {
+        name,
+        targetNode,
+        relativeNodes,
+      };
+    },
     data() {
       return {
-        targetNodeName: "",
-        articlesCount: 50,
-        id: "dSDFgk3jri54s54kSDFd",
-        name: "ボルダリング",
-        relative: [{ // 関連するタグの配列
-          id: "L45OR01sdfsdfIT40",
-          name: "山登り",//とりあえず書いてるだけ
-          relevance: 60,  // 関連度
-          articlesCount: 100,
-        },
-        {
-          id: "L45OR01sdfsdfIT40",
-          name: "山登り",//とりあえず書いてるだけ
-          relevance: 70,  // 関連度
-          articlesCount: 60,
-        },
-        {
-          id: "L45OR01sdfsdfIT40",
-          name: "山登り",//とりあえず書いてるだけ
-          relevance: 80,  // 関連度
-          articlesCount: 10,
-        }]
       };
     },
     created() {
@@ -65,7 +43,7 @@
       draw(radius) {
         this.ctx.beginPath()
         this.ctx.clearRect(0, 0, 1000, 1000)
-        this.drawCircle(500, 500, 50, "rgba(255,0,0,0.1)", "rgba(255,0,0,1)")
+        this.drawCircle(500, 500, 100, "rgba(255,0,0,0.5)", "rgba(255,0,0,1)")
         this.ctx.fillText(this.name, 500, 500)
         //TODO:relativeの描画
       },
