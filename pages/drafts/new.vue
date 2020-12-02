@@ -1,15 +1,17 @@
 <template>
   <div>
     <div class="section">
-      <h1 class="title  is-3">記事投稿画面</h1>
+      <h1 class="title is-3">記事投稿画面</h1>
       <nuxt-link to="/">トップへ戻る</nuxt-link>
       <input class="input" placeholder="タイトル" v-model="title" />
+      <input class="input" placeholder="タグ" v-model="tags" />
       <mavon-editor
         v-model="content"
         :toolbars="markdownOption"
         language="ja"
         placeholder="編集を始めてね！"
       />
+      <!-- FIXME: 送信したら投稿した記事の画面に遷移するようにする -->
       <button v-on:click="submit" class="button is-success">submit</button>
     </div>
   </div>
@@ -44,15 +46,29 @@ export default {
         fullscreen: false,
         readmodel: true,
         htmlcode: true,
-        help: true
-      }
+        help: true,
+      },
     };
   },
   methods: {
-    submit: function(event) {
-      alert(this.content);
-    }
-  }
-  // TODO: 記事を投稿する（dbに登録する）
+    submit: async function (event) {
+      let timestamp = await this.$getFirebaseTimestamp();
+      let article = {
+        // registerArticle()を呼ぶとidが自動的に振られるようになっている
+        id: null,
+        title: this.title,
+        body: this.content,
+        // FIXME: 著者名を入力フォームから取得する
+        author: "名無しさん",
+        createdAt: timestamp,
+        updatedAt: timestamp,
+        // FIXME: 入力フォームから取得したタグ名を元にタグIDを取得して配列に格納する
+        // 仮データとしてサッカーのタグを選択している
+        tags: ["4qqOzg7eEx2vsBIcjTTq"],
+      };
+      alert(`以下の内容で送信しますか？\n${this.content}`);
+      await this.$registerArticle(article);
+    },
+  },
 };
 </script>
