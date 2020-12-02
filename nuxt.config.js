@@ -55,5 +55,10 @@ export default {
         }
       }
     }
-  }
+  },
+
+  // 再読込エラーの解消
+  generate: {
+    fallback: true
+  },
 }
