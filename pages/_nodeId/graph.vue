@@ -1,15 +1,15 @@
 <template>
   <div>
     <div v-if="targetNode" class="flex_wrap">
-      <h1>タイトル:{{ title }}</h1>
+      <h1>趣味の名前:{{ name }}</h1>
       <div class="node_now_div">
-        <h2 class="h2">{{ targetNode.title }}</h2>
-        <nuxt-link :to="'/' + $route.params.nodeId + '/list'"
+        <h2 class="h2">{{ targetNode.name }}</h2>
+        <nuxt-link :to="'/' + $route.params.hobbyId + '/list?hobbyName=' + name"
           >記事を読む</nuxt-link
         >
       </div>
-      <div v-for="rNode in relativeNodes" :key="rNode.id">
-        <nodeNode :node="rNode" />
+      <div v-for="tag in relativeTags" :key="tag.id">
+        <HobbyNode :tag="tag" />
       </div>
     </div>
     <div v-else>
@@ -20,30 +20,24 @@
 </template>
 
 <script>
-//TODO:それをグラフっぽく表示
-//TODO: volumeの反映
-//TODO:ないIDのエラーハンドリング
 export default {
-  data() {
+  async asyncData({params, $getTags, $getRelativeTags})
+  {
+    const tags = await $getTags();
+    const targetNode = tags.find(tag => tag.id === params.hobbyId);
+    const name = targetNode.name ?? "グラフ";
+    const relativeNodes = await $getRelativeTags(targetNode.id);
     return {
-      title: "グラフ",
-      id: this.$route.params.nodeId,
-      targetNode: {},
-      relativeNodes: []
+      name,
+      targetNode,
+      relativeNodes,
     };
   },
-
+  data() {
+    return {}
+  },
   created() {
-    this.$getNodesData().then(nodes => {
-      this.targetNode = nodes.filter(tmp => {
-        return tmp.id === this.id;
-      });
-      this.targetNode=this.targetNode[0]
-      this.title = this.targetNode.title;
-      this.relativeNodes = this.targetNode.relativeNodes;
-      // FIXME: relativeNodesに関連する趣味を追加する
-    });
-  }
+  },
 };
 </script>
 

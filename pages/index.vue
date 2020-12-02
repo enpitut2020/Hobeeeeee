@@ -16,34 +16,33 @@ const db = firebase.firestore();
 export default {
   data() {
     return {
-      nodeData: {},
-      randomId: "",
-      title: ""
+      hobbeeData: {},
+      randomId: -1,
+      title: "",
     };
   },
 
   created() {
-    this.$getNodesData()
-      .then(nodes => {
-        this.nodeData = nodes;
-        this.randomId = this.nodeData[
-          this.getRandomInt(0, this.nodeData.length - 1)
+    this.$getTags()
+      .then((result) => {
+        console.debug("created: ", result);
+        this.hobbeeData = result;
+        this.randomId = this.hobbeeData[
+          this.getRandomInt(0, this.hobbeeData.length - 1)
         ].id;
       })
-      .catch(err => {
-        alert("データの取得でエラーが発生しました。")
-      });
+      .catch((err) => {});
   },
 
   computed: {},
 
   methods: {
-    getRandomInt: function(min, max) {
+    getRandomInt: function (min, max) {
       const randNum = Math.floor(Math.random() * (max + 1 - min)) + min; //The maximum is exclusive and the minimum is inclusive
       console.debug("rand : ", randNum);
       return randNum;
-    }
-  }
+    },
+  },
 };
 </script>
 
