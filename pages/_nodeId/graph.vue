@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div v-if="targetNode" class="flex_wrap">
+    <div v-if="targetTag" class="flex_wrap">
       <h1>趣味の名前:{{ name }}</h1>
       <div class="node_now_div">
-        <h2 class="h2">{{ targetNode.name }}</h2>
-        <nuxt-link :to="'/' + $route.params.hobbyId + '/list?hobbyName=' + name"
+        <h2 class="h2">{{ name }}</h2>
+        <nuxt-link :to="'/' + $route.params.nodeId + '/list?hobbyName=' + name"
           >記事を読む</nuxt-link
         >
       </div>
@@ -24,13 +24,18 @@ export default {
   async asyncData({params, $getTags, $getRelativeTags})
   {
     const tags = await $getTags();
-    const targetNode = tags.find(tag => tag.id === params.hobbyId);
-    const name = targetNode.name ?? "グラフ";
-    const relativeNodes = await $getRelativeTags(targetNode.id);
+    console.debug("DEBUG1 :tags is.." + tags )//[Object,Object]
+    console.debug("DEBUG2 :tags[0] is.." + tags[0].id+"params.nodeId : "+params.nodeId +"===>",tags[0].id === params.nodeId)//これは動いてる
+    const targetTag = tags.find(tag => tag.id === params.nodeId);
+    console.debug("DEBUG3 :target node is" + JSON.stringify(targetTag))
+    const relativeTags = await $getRelativeTags(targetTag.id);
     return {
-      name,
-      targetNode,
-      relativeNodes,
+      // name: name,//
+      // targetTag,
+      // relativeTags,zw
+      name: targetTag.name,
+      targetTag:targetTag,
+      relativeTags:relativeTags
     };
   },
   data() {
