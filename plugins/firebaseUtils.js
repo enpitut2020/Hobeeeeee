@@ -72,14 +72,32 @@ Vue.prototype.$getArticles = async function getArticles(tagId) {
         articles.push(doc.data());
       });
     })
+  console.debug(`articles (getArticles() in firebaseUtils.js): ${articles}`);
+  return articles;
+}
+
+// DBに記事データを登録する
+Vue.prototype.$registerArticle = async function registerArticle(article) {
+  let ref = await db.collection("articles");
+  let idRegistered;
+  ref.add(article)
+    .then((newArticle) => {
+      ref.doc(newArticle.id).update({
+        id: newArticle.id
+      })
+      idRegistered = newArticle.id;
+    })
     .catch((e) => {
       console.error(e);
     });
-  console.debug(`articles (getArticles() in firebaseUtils.js): ${articles}`);
-  return articles
 };
 
 export default (context) => {
   context.$getTags = Vue.prototype.$getTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
 }
+// 現在時刻を取得する
+Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {
+  return firebase.firestore.Timestamp.fromDate(new Date());
+}
+
