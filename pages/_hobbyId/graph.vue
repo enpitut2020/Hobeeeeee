@@ -8,8 +8,8 @@
           >記事を読む</nuxt-link
         >
       </div>
-      <div v-for="rNode in relativeNodes" :key="rNode.id">
-        <HobbyNode :node="rNode" />
+      <div v-for="tag in relativeTags" :key="tag.id">
+        <HobbyNode :tag="tag" />
       </div>
     </div>
     <div v-else>

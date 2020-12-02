@@ -20,7 +20,7 @@ Vue.prototype.$getTags = async function getTags() {
     .catch((e) => {
       console.error(e);
     });
-  console.debug("tags(getTags) : ", tags)
+  console.debug(`tags (getTags() in firebaseUtils.js) : ${tags}`);
   return tags
 };
 
