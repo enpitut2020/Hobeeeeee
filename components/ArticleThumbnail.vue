@@ -1,7 +1,8 @@
 <template>
   <!--TODO:リンクを追加-->
   <div>
-    <div>title={{ article.title }}</div>
+    {{ article }}
+    <div>title={{ article }}</div>
     <div>author={{ article.author }}</div>
     <div>body={{ article.body }}</div>
   </div>
