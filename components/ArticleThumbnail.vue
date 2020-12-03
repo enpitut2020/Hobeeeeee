@@ -1,10 +1,10 @@
 <template>
   <!--TODO:リンクを追加-->
   <div>
-    {{ article }}
-    <div>title={{ article }}</div>
-    <div>author={{ article.author }}</div>
-    <div>body={{ article.body }}</div>
+  <div class="box">
+    <nuxt-link :to="'./' + article.id">{{ article.title }}</nuxt-link>
+  </div>
+ 
   </div>
 </template>
 
