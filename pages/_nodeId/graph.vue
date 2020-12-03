@@ -1,12 +1,7 @@
 <template>
   <div>
-    <nuxt-link :to="'/'+targetTag.id+'/list'">{{ name }}の記事を読む</nuxt-link>
+    <nuxt-link to="/">トップへ戻る</nuxt-link>
     <GraphSvg 
-      :targetNode="targetTag"
-      :relativeNodes="relativeTags"
-      :name="name"
-    />
-    <GraphCanvas
       :targetNode="targetTag"
       :relativeNodes="relativeTags"
       :name="name"

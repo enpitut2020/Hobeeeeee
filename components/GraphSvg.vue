@@ -1,12 +1,19 @@
 <template>
   <div>
     <svg viewbox="0 0 1000 1000" :width="width" :height="height">
-      <circle @click="linkToList" :r="r" :cx="x" :cy="y" ></circle>
-      <text x="500" y="500" text-anchor = "middle" dominant-baseline = "central"
+      <circle @click="linkToList(targetNode.id)" :r="r" :cx="x" :cy="y" ></circle>
+      <text text-anchor = "middle" dominant-baseline = "central"
          style="font-size:20px; fill: #513e35;">
-         <tspan :x="x" :y="y - 10">{{ name }}</tspan>
-         <tspan :x="x" :y="y + 10">の沼を見る？?</tspan>
+         <tspan :x="x" :y="y-10">{{ name }}</tspan>
+         <tspan :x="x" :y="y+10">の沼を見る？</tspan>
       </text>
+      <g v-for="(node, index) in relativeNodes" :key="index">
+        <circle @click="linkToGraph(node.id)" :r="r" :cx="x + (index + 1) * 200" :cy="y + (index + 1) * 200" ></circle>
+        <text x="x + (index + 1) * 200" y="y + (index + 1) * 200" text-anchor = "middle" dominant-baseline = "central"
+          style="font-size:20px; fill: #513e35;">
+          <tspan :x="x + (index + 1) * 200" :y="y + (index + 1) * 200">{{ node.name }}</tspan>
+        </text>
+      </g>
     </svg>
   </div>
 </template>
@@ -20,9 +27,14 @@ export default {
       width: window.innerWidth,
       height: window.innerHeight,
       // 円のサイズ指定をcircle.r的な書き方にしたいんだけどやり方分からなかったやつ↓
-      r: 100,
-      x: this.width,
-      y: this.height,
+      r: 100, // magic num: 後々規模感で変わる可能性あり
+      x: 0,
+      y: 0,
+    }
+  },
+  computed: {
+    yi: function (deltaY) {
+      return this.y + deltaY;
     }
   },
   created() {
@@ -30,7 +42,7 @@ export default {
   },
   mounted() {
     console.log("******:")
-    console.log(this.width)
+    console.log(this.relativeNodes)
     console.log("******:")
     this.x = this.width/2
     this.y = this.height/2
@@ -39,8 +51,11 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    linkToList() {
-      this.$router.push('/'+this.targetNode.id+'/list')
+    linkToList(id) {
+      this.$router.push('/'+id+'/list')
+    },
+    linkToGraph(id) {
+      this.$router.push('/'+id+'/graph')
     },
     handleResize: function() {
       this.width = window.innerWidth;
