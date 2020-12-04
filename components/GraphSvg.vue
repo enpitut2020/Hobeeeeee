@@ -11,10 +11,10 @@
       </a>
       <g v-for="(node, index) in relativeNodes" :key="index">
       <!-- <a :v-attr="'xlink:href=/'+node.id+'/list'"> -->
-        <circle @click="linkToGraph(node.id)" :r="r" :cx="x + (index + 1) * 200" :cy="y + (index + 1) * 200" ></circle>
+        <circle @click="linkToGraph(node.id)" :r="r" :cx="x + 250 * Math.cos(2 * Math.PI * index / relativeNodes.length)" :cy="y + 250 * Math.sin(2 * Math.PI * index / relativeNodes.length)" ></circle>
         <text x="x + (index + 1) * 200" y="y + (index + 1) * 200" text-anchor = "middle" dominant-baseline = "central"
           style="font-size:24px; fill: #513e35;">
-          <tspan :x="x + (index + 1) * 200" :y="y + (index + 1) * 200">{{ node.name }}</tspan>
+          <tspan :x="x + 250 * Math.cos(2 * Math.PI * index / relativeNodes.length)" :y="y + 250 * Math.sin(2 * Math.PI * index / relativeNodes.length)">{{ node.name }}</tspan>
         </text>
       <!-- </a> -->
       </g>
@@ -48,8 +48,8 @@ export default {
     console.log("******:")
     console.log(this.relativeNodes)
     console.log("******:")
-    this.x = this.width/5
-    this.y = this.height/5
+    this.x = this.width / 2
+    this.y = this.height / 2
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleResize)
