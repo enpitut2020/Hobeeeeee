@@ -1,18 +1,22 @@
 <template>
   <div>
     <svg viewbox="0 0 1000 1000" :width="width" :height="height">
+      <a :v-attr="'xlink:href=/'+targetNode.id+'/list'">
       <circle @click="linkToList(targetNode.id)" :r="r" :cx="x" :cy="y" ></circle>
       <text text-anchor = "middle" dominant-baseline = "central"
          style="font-size:20px; fill: #513e35;">
          <tspan :x="x" :y="y-10">{{ name }}</tspan>
          <tspan :x="x" :y="y+10">の沼を見る？</tspan>
       </text>
+      </a>
       <g v-for="(node, index) in relativeNodes" :key="index">
+      <!-- <a :v-attr="'xlink:href=/'+node.id+'/list'"> -->
         <circle @click="linkToGraph(node.id)" :r="r" :cx="x + (index + 1) * 200" :cy="y + (index + 1) * 200" ></circle>
         <text x="x + (index + 1) * 200" y="y + (index + 1) * 200" text-anchor = "middle" dominant-baseline = "central"
           style="font-size:20px; fill: #513e35;">
           <tspan :x="x + (index + 1) * 200" :y="y + (index + 1) * 200">{{ node.name }}</tspan>
         </text>
+      <!-- </a> -->
       </g>
     </svg>
   </div>
