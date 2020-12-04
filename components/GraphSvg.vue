@@ -1,18 +1,14 @@
 <template>
   <div>
     <svg viewbox="0 0 1000 1000" :width="width" :height="height">
-      <nuxt-link :to="'/' + targetNode.id + '/list'">
-        <circle :r="r" :cx="x" :cy="y"></circle>
-        <text
-          text-anchor="middle"
-          dominant-baseline="central"
-          style="font-size:24px; fill: #513e35;"
-        >
-          <tspan :x="x" :y="y - 10">{{ name }}</tspan>
-          <tspan :x="x" :y="y + 15">の沼を見る？</tspan>
-        </text>
-      </nuxt-link>
       <g v-for="(node, index) in relativeNodes" :key="index">
+        <line
+          :x1="x"
+          :y1="y"
+          :x2="x + 250 * Math.cos((2 * Math.PI * index) / relativeNodes.length)"
+          :y2="y + 250 * Math.sin((2 * Math.PI * index) / relativeNodes.length)"
+          stroke="#e74c3c"
+        />
         <nuxt-link :to="'/' + node.id + '/graph'">
           <circle
             :r="r"
@@ -43,6 +39,17 @@
           </text>
         </nuxt-link>
       </g>
+       <nuxt-link :to="'/' + targetNode.id + '/list'">
+        <circle :r="r" :cx="x" :cy="y"></circle>
+        <text
+          text-anchor="middle"
+          dominant-baseline="central"
+          style="font-size:24px; fill: #513e35;"
+        >
+          <tspan :x="x" :y="y - 10">{{ name }}</tspan>
+          <tspan :x="x" :y="y + 15">の沼を見る？</tspan>
+        </text>
+      </nuxt-link>
     </svg>
   </div>
 </template>
