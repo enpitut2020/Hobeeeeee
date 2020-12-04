@@ -4,16 +4,16 @@
       <a :v-attr="'xlink:href=/'+targetNode.id+'/list'">
       <circle @click="linkToList(targetNode.id)" :r="r" :cx="x" :cy="y" ></circle>
       <text text-anchor = "middle" dominant-baseline = "central"
-         style="font-size:20px; fill: #513e35;">
+         style="font-size:24px; fill: #513e35;">
          <tspan :x="x" :y="y-10">{{ name }}</tspan>
-         <tspan :x="x" :y="y+10">の沼を見る？</tspan>
+         <tspan :x="x" :y="y+15">の沼を見る？</tspan>
       </text>
       </a>
       <g v-for="(node, index) in relativeNodes" :key="index">
       <!-- <a :v-attr="'xlink:href=/'+node.id+'/list'"> -->
         <circle @click="linkToGraph(node.id)" :r="r" :cx="x + (index + 1) * 200" :cy="y + (index + 1) * 200" ></circle>
         <text x="x + (index + 1) * 200" y="y + (index + 1) * 200" text-anchor = "middle" dominant-baseline = "central"
-          style="font-size:20px; fill: #513e35;">
+          style="font-size:24px; fill: #513e35;">
           <tspan :x="x + (index + 1) * 200" :y="y + (index + 1) * 200">{{ node.name }}</tspan>
         </text>
       <!-- </a> -->
@@ -48,8 +48,8 @@ export default {
     console.log("******:")
     console.log(this.relativeNodes)
     console.log("******:")
-    this.x = this.width/2
-    this.y = this.height/2
+    this.x = this.width/5
+    this.y = this.height/5
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleResize)
@@ -64,8 +64,8 @@ export default {
     handleResize: function() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
-      this.x = this.width/2
-      this.y = this.height/2
+      this.x = this.width/5
+      this.y = this.height/5
     }
   },
 }
