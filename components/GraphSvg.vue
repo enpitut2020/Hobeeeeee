@@ -7,7 +7,8 @@
           :y1="y"
           :x2="x + 250 * Math.cos((2 * Math.PI * index) / relativeNodes.length)"
           :y2="y + 250 * Math.sin((2 * Math.PI * index) / relativeNodes.length)"
-          stroke="#e74c3c"
+          stroke="#333333"
+          :stroke-width="node.relevance+ 'px'"
         />
         <nuxt-link :to="'/' + node.id + '/graph'">
           <circle
@@ -39,7 +40,7 @@
           </text>
         </nuxt-link>
       </g>
-       <nuxt-link :to="'/' + targetNode.id + '/list'">
+      <nuxt-link :to="'/' + targetNode.id + '/list'">
         <circle :r="r" :cx="x" :cy="y"></circle>
         <text
           text-anchor="middle"
