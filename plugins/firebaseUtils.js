@@ -95,6 +95,7 @@ Vue.prototype.$registerArticle = async function registerArticle(article) {
 export default (context) => {
   context.$getTags = Vue.prototype.$getTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
+  context.$getArticles = Vue.prototype.$getArticles;
 }
 // 現在時刻を取得する
 Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {
