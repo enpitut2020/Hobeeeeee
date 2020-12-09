@@ -113,4 +113,3 @@ export default (context) => {
 Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {
   return firebase.firestore.Timestamp.fromDate(new Date());
 }
-
