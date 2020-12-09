@@ -3,12 +3,14 @@
   <div class="container">
     <div class="my-title-container">
       <h1 class="title">{{ title }}</h1>
+      <div class="is-divider"></div>
       <nuxt-link
         :to="'/' + tag.id + '/graph'"
         v-for="tag in tags"
         :key="tag.id"
+        class="tag"
       >
-        {{ tag.name }}
+        {{ tag.name }}({{tag.volume}})
       </nuxt-link>
       <mavon-editor
         v-model="content"
@@ -20,7 +22,7 @@
         defaultOpen="preview"
         previewBackground="#fff"
       />
-      <nuxt-link :to="'/' + tagId + '/list'">記事一覧へ戻る</nuxt-link>
+      <nuxt-link :to="'/' + currentTagId + '/list'">記事一覧へ戻る</nuxt-link>
       <!-- <button class="button is-success" v-on:click="zbzb_count += 1">
         {{ zbzb_count }} ずぶずぶ！
       </button> -->
@@ -40,7 +42,7 @@ export default {
       content: "",
       zbzb_count: 64,
       articleId: null,
-      tagId: null,
+      currentTagId: null,
       markdownOption: {
         bold: true,
         italic: true,
@@ -60,8 +62,8 @@ export default {
         fullscreen: false,
         readmodel: true,
         htmlcode: true,
-        help: true,
-      },
+        help: true
+      }
     };
   },
 
@@ -73,11 +75,18 @@ export default {
       `記事ID (created() in _articleId.vue): ${this.$route.params.articleId}`
     );
     this.articleId = this.$route.params.articleId;
-    this.tagId = this.$route.params.nodeId;
+    this.currentTagId = this.$route.params.nodeId;
     const article = await this.$getArticle(this.articleId);
     this.content = article.body;
     this.title = article.title;
-    this.tags = article.tags;
-  },
+    const getTagsInfo = [];
+    article.tags.forEach(tag => {
+      getTagsInfo.push(this.$getTag(tag));
+    });
+    Promise.all(getTagsInfo).then(values => {
+      this.tags = values;
+      console.log(values);
+    });
+  }
 };
 </script>
