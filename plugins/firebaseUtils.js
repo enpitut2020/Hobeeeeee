@@ -108,14 +108,43 @@ Vue.prototype.$existTag = async function existTag(query) {
   return tagId
 }
 
+//趣味の記事が増えた、かつ趣味が新規の時、趣味データを作成
+Vue.prototype.$createTag = async function createTag(tagName) {
+  let ref = db.collection("tags").doc()
+  ref.set({
+    articlesCount: 1,
+    id: ref.id,
+    name: tagName,
+    volume:100
+  })
+  .then(function() {
+    console.log("Document successfully written!");
+  })
+  .catch(function(error) {
+    console.error("Error writing document: ", error);
+  });
+}
 
-
+//既存趣味の記事が増えた時、tagのvolumeを更新
+Vue.prototype.$updateTag = async function updateTag(tagId) {
+  db.collection("tags").doc(tagId).update({
+    volume: firebase.firestore.FieldValue.increment(1),
+  })
+  .then(function() {
+    console.log("Document successfully updated!");
+  })
+  .catch(function(error) {
+    console.error("Error updating document: ", error);
+  });
+}
 
 export default (context) => {
   context.$getTags = Vue.prototype.$getTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
   context.$getArticles = Vue.prototype.$getArticles;
   context.$existTag = Vue.prototype.$existTag;
+  context.$createTag = Vue.prototype.$createTag;
+  context.$updateTag = Vue.prototype.$updateTag;
 }
 // 現在時刻を取得する
 Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {
