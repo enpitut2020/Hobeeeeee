@@ -92,10 +92,30 @@ Vue.prototype.$registerArticle = async function registerArticle(article) {
     });
 };
 
+Vue.prototype.$existTag = async function existTag(query) {
+  var tagId = null
+  await db.collection("tags").where("name", "==", query)
+  .get()
+  .then(function(querySnapshot) {
+    //[document1,document2]
+    querySnapshot.forEach(function(doc) {
+      tagId = doc.id
+    });
+  })
+  .catch(function(error) {
+    console.log("Error getting documents: ", error);
+  });
+  return tagId
+}
+
+
+
+
 export default (context) => {
   context.$getTags = Vue.prototype.$getTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
   context.$getArticles = Vue.prototype.$getArticles;
+  context.$existTag = Vue.prototype.$existTag;
 }
 // 現在時刻を取得する
 Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {
