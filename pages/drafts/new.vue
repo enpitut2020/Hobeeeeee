@@ -64,7 +64,8 @@ export default {
         updatedAt: timestamp,
         // FIXME: 入力フォームから取得したタグ名を元にタグIDを取得して配列に格納する
         // 仮データとしてサッカーのタグを選択している
-        tags: ["4qqOzg7eEx2vsBIcjTTq"],
+        // tags: ["4qqOzg7eEx2vsBIcjTTq"],
+       tags: [{ id: "4qqOzg7eEx2vsBIcjTTq", name: "サッカー" }],
       };
       alert(`以下の内容で送信しますか？\n${this.content}`);
       await this.$registerArticle(article);
