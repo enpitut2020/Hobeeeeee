@@ -76,6 +76,18 @@ Vue.prototype.$getArticles = async function getArticles(tagId) {
   return articles;
 }
 
+Vue.prototype.$getArticle = async function getArticle(articleId) {
+  let article = await db
+    .collection("articles")
+    .doc(articleId)
+    .get()
+    .then((doc) => {
+      return doc.data();
+    })
+  console.debug(`article (getArticle() in firebaseUtils.js): ${JSON.stringify(article)}`);
+  return article;
+}
+
 // DBに記事データを登録する
 Vue.prototype.$registerArticle = async function registerArticle(article) {
   let ref = await db.collection("articles");
