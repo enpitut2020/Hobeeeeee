@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title">{{ $route.query.hobbyName }}の記事一覧です</h1>
+    <h1 class="title">{{ name }}の記事一覧です</h1>
     <div v-if="articles.length === 0">
       <p>まだ記事がありません。</p>
     </div>
@@ -16,17 +16,16 @@
 
 <script>
 export default {
-  data() {
+  async asyncData({ params, $getTags, $getRelativeTags, $getArticles }) {
+    const tags = await $getTags();
+    const targetTag = tags.find(tag => tag.id === params.nodeId);
+    const articles = await $getArticles(targetTag.id);
     return {
-      articles: [],
+      name: targetTag.name,
+      targetTag: targetTag,
+      articles: articles
     };
-  },
-  created() {
-    let tagId = this.$route.params.hobbyId;
-    this.$getArticles(tagId).then((articles) => {
-      this.articles = articles;
-    });
-  },
+  }
 };
 </script>
 
