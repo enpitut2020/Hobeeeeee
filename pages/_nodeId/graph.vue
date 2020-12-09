@@ -1,7 +1,7 @@
 <template>
   <div>
     <nuxt-link to="/">トップへ戻る</nuxt-link>
-    <GraphSvg 
+    <GraphSvg
       :targetNode="targetTag"
       :relativeNodes="relativeTags"
       :name="name"
@@ -20,6 +20,14 @@ export default {
       targetTag: targetTag,
       relativeTags: relativeTags
     };
+  },
+
+  async created() {
+    const fromTagId = this.$route.query.from;
+    if (fromTagId) {
+      const fromTag = await this.$getTag(fromTagId);
+      await this.$incrementRelevance(fromTag, this.targetTag);
+    }
   }
 };
 </script>

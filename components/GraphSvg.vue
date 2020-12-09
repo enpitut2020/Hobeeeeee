@@ -10,7 +10,7 @@
           stroke="#333333"
           :stroke-width="node.relevance+ 'px'"
         />
-        <nuxt-link :to="'/' + node.id + '/graph'">
+        <nuxt-link :to="'/' + node.id + '/graph?from='+targetNode.id">
           <circle
             :r="r"
             :cx="
