@@ -1,0 +1,7 @@
+export default {
+  "RADIUS": 100,
+  "DISTANCE": 250,
+  "TEXT_SHIFT_HEIGHT": 15,
+  "LINE_WEIGHT": 10,
+  "MAX_STROKE_WIDTH_RATIO": 5,
+}
