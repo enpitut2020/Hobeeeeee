@@ -123,6 +123,7 @@ export default {
     strokeWidth: function (target) {
       let max = Math.max(...this.relativeNodes.map((node) => node.relevance));
       let min = Math.min(...this.relativeNodes.map((node) => node.relevance));
+      let ratio = max === min ? 0 : (target.relevance - min) / (max - min);
       // 関連趣味のrelevanceが[13, 43, 28, 134, 55]、基本の太さが10、最大で5倍まで太くなるとすると
       // (relevance=43の趣味との線の太さ)
       // = 基本の太さ + 最大で何倍の太さを加えるか * 関連趣味の中での相対的な割合
@@ -135,10 +136,9 @@ export default {
       // 以上の計算で太さが10〜60の間に収まる
       return (
         this.nodeParam.LINE_WEIGHT +
-        (this.nodeParam.LINE_WEIGHT *
+        this.nodeParam.LINE_WEIGHT *
           this.nodeParam.MAX_STROKE_WIDTH_RATIO *
-          (target.relevance - min)) /
-          (max - min)
+          ratio
       );
     },
   },
