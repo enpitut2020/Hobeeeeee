@@ -24,6 +24,14 @@ Vue.prototype.$getTags = async function getTags() {
   return tags;
 };
 
+Vue.prototype.$getRandomTagId = async () => {
+  return await Vue.prototype.$getTags().then(tags => {
+    const randNum = Math.floor(Math.random() * tags.length); //The maximum is exclusive and the minimum is inclusive
+    console.debug("rand : " + randNum + tags[randNum].name + tags[randNum].id);
+    return tags[randNum].id;
+  });
+};
+
 Vue.prototype.$getTag = async function getTag(tagId) {
   return await db
     .collection("tags")
@@ -119,7 +127,6 @@ Vue.prototype.$registerArticle = async function registerArticle(article) {
 };
 
 Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
-
   const fromCurrentTagRelativeRef = db
     .collection("tags")
     .doc(fromTag.id)
@@ -134,17 +141,18 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
   const currentFromTagRelation = await currentFromTagRelativeRef
     .get()
     .then(res => {
-      return res.data();//ここでreturnすると次のthenに引数で入る
-    }).then((relation)=>{
-      if (relation){
+      return res.data(); //ここでreturnすると次のthenに引数で入る
+    })
+    .then(relation => {
+      if (relation) {
         // console.debug("インクリメントします")
         fromCurrentTagRelativeRef.update({
-          relevance: firebase.firestore.FieldValue.increment(1),
+          relevance: firebase.firestore.FieldValue.increment(1)
         });
         currentFromTagRelativeRef.update({
-          relevance: firebase.firestore.FieldValue.increment(1),
+          relevance: firebase.firestore.FieldValue.increment(1)
         });
-      }else{
+      } else {
         // console.debug("リレーションがないので追加します")
         fromCurrentTagRelativeRef.set({
           relevance: firebase.firestore.FieldValue.increment(1),
@@ -158,11 +166,12 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
         });
       }
     });
- 
 };
 
 export default context => {
+  //asyncDateではthisが使えないけどこれで登録すれば引数に取ればthisなしで使えるっぽい
   context.$getTags = Vue.prototype.$getTags;
+  context.$getRandomTagId = Vue.prototype.$getRandomTagId;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
   context.$getArticles = Vue.prototype.$getArticles;
 };
