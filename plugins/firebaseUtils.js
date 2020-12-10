@@ -118,6 +118,49 @@ Vue.prototype.$registerArticle = async function registerArticle(article) {
     });
 };
 
+Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
+
+  const fromCurrentTagRelativeRef = db
+    .collection("tags")
+    .doc(fromTag.id)
+    .collection("relative")
+    .doc(currentTag.id);
+  const currentFromTagRelativeRef = db
+    .collection("tags")
+    .doc(currentTag.id)
+    .collection("relative")
+    .doc(fromTag.id);
+
+  const currentFromTagRelation = await currentFromTagRelativeRef
+    .get()
+    .then(res => {
+      return res.data();//ここでreturnすると次のthenに引数で入る
+    }).then((relation)=>{
+      if (relation){
+        // console.debug("インクリメントします")
+        fromCurrentTagRelativeRef.update({
+          relevance: firebase.firestore.FieldValue.increment(1),
+        });
+        currentFromTagRelativeRef.update({
+          relevance: firebase.firestore.FieldValue.increment(1),
+        });
+      }else{
+        // console.debug("リレーションがないので追加します")
+        fromCurrentTagRelativeRef.set({
+          relevance: firebase.firestore.FieldValue.increment(1),
+          name: currentTag.name,
+          id: currentTag.id
+        });
+        currentFromTagRelativeRef.set({
+          relevance: firebase.firestore.FieldValue.increment(1),
+          id: fromTag.id,
+          name: fromTag.name
+        });
+      }
+    });
+ 
+};
+
 export default context => {
   context.$getTags = Vue.prototype.$getTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
