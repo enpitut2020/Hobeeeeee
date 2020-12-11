@@ -47,10 +47,15 @@ Vue.prototype.$getTags = async function getTags() {
 Vue.prototype.$getRandomTags = async (count = 1, notContain = []) => {
   return await Vue.prototype.$getTags().then(tags => {
     tags = tags.filter(tag => !notContain.includes(tag.id));
+    if (tags.length < count) {
+      console.warn("ランダムのノードを取得できません");
+      return [];
+    }
     const randTags = [];
-    for (var i = 0; i < count; i++) {
-      const randNum = Math.floor(Math.random() * tags.length); //TODO:同じ場合の処理
-      randTags.push(tags[randNum]);
+    while (true) {
+      const randNum = Math.floor(Math.random() * tags.length);
+      if (!randTags.includes(tags[randNum])) randTags.push(tags[randNum]);
+      if (randTags.length >= count) break;
     }
     return randTags;
   });
