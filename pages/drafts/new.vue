@@ -69,9 +69,9 @@ export default {
       if (existingTag == null) {
         //新規登録
         console.log("existing tag is null")
-        // let documentRef = await this.$createTag(this.tags)
-        // console.log("documentRef is .." +  documentRef)
-        // article["tags"] = [{id: documentRef.id, name: this.tags}]
+        let documentRefId = await this.$createTag(this.tags)
+        console.log("documentRefid .." + documentRefId)
+        article["tags"] = [{id: documentRefId, name: this.tags}]
         
       }else{
         article["tags"] = [{ id: existingTag.id, name: existingTag.name }];
@@ -84,6 +84,7 @@ export default {
       }
 
       await this.$registerArticle(article);
+      this.$router.push('/');
     },
   },
 };

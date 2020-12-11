@@ -108,7 +108,7 @@ Vue.prototype.$registerArticle = async function registerArticle(article) {
   ref
     .add(article)
     .then(newArticle => {
-      con
+      // con
       ref.doc(newArticle.id).update({
         id: newArticle.id
       });
@@ -140,17 +140,19 @@ Vue.prototype.$getExistingTag = async function getExistingTag(query) {
 
 //趣味の記事が増えた、かつ趣味が新規の時、趣味データを作成
 Vue.prototype.$createTag = async function createTag(tagName) {
-  let ref = db.collection("tags").doc();
-  ref
+  // ref = db.collection("tags").doc();
+  let refId = db.collection("tags").doc().id;
+  return await db.collection("tags")
+    .doc(refId)
     .set({
       articlesCount: 1,
-      id: ref.id,
+      id: refId,
       name: tagName,
       volume: 100
     })
-    .then(function() {
+    .then(function(docRef) {
       console.log("Document successfully written!");
-      return ref;
+      return refId;
     })
     .catch(function(error) {
       console.error("Error writing document: ", error);
