@@ -11,9 +11,8 @@
 
 <script>
 export default {
-  async asyncData({ params, $getTags, $getRelativeTags, $getRandomTags }) {
-    const tags = await $getTags();
-    const targetTag = tags.find(tag => tag.id === params.nodeId);
+  async asyncData({ params, $getTag, $getRelativeTags, $getRandomTags }) {
+    const targetTag =  await $getTag(params.nodeId);
     const relativeTags = await $getRelativeTags(targetTag.id);
     const randomTags = await $getRandomTags(2);
     return {

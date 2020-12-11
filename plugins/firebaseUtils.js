@@ -195,6 +195,7 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
 export default context => {
   //asyncDateではthisが使えないけどこれで登録すれば引数に取ればthisなしで使えるっぽい
   context.$getTags = Vue.prototype.$getTags;
+  context.$getTag = Vue.prototype.$getTag;
   context.$getRandomTags = Vue.prototype.$getRandomTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
   context.$getArticles = Vue.prototype.$getArticles;
