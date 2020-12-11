@@ -23,7 +23,8 @@ export default {
   },
 
   async created() {
-    this.randomId = await this.$getRandomTagId();
+    let tags = await this.$getRandomTags();
+    this.randomId = tags[0].id;
   }
 };
 </script>

@@ -1,6 +1,9 @@
 import Vue from "vue";
 import firebase from "@/plugins/firebase.js";
 const db = firebase.firestore();
+db.enablePersistence({ experimentalTabSynchronization: true }).then(() => {
+  console.log("マルチタブでオフラインデータが使えるよ！");
+});
 /*
 //使うときは
 this.$hobbiesData.then(){
@@ -8,27 +11,48 @@ this.$hobbiesData.then(){
 みたいに使う
 */
 Vue.prototype.$getTags = async function getTags() {
-  let tags = [];
-  await db
+  const tags = await db
     .collection("tags")
-    .get()
+    .get({ source: "cache" })
     .then(querySnapshot => {
+      console.debug("キャッシュからデータを取得しました");
+      const tags = [];
       querySnapshot.forEach(data => {
         tags.push(data.data());
       });
+      return tags;
     })
-    .catch(e => {
-      console.error(e);
+    .catch(async () => {
+      return await db
+        .collection("tags")
+        .get({ source: "server" })
+        .then(querySnapshot => {
+          console.debug("サーバーからデータを取得しました");
+          const tags = [];
+          querySnapshot.forEach(data => {
+            tags.push(data.data());
+          });
+          return tags;
+        })
+        .catch(e => {
+          console.error(e);
+        });
     });
   console.debug(`tags (getTags() in firebaseUtils.js) : ${tags}`);
   return tags;
 };
-
-Vue.prototype.$getRandomTagId = async () => {
+//@return Array
+Vue.prototype.$getRandomTags = async (count = 1) => {
   return await Vue.prototype.$getTags().then(tags => {
-    const randNum = Math.floor(Math.random() * tags.length); //The maximum is exclusive and the minimum is inclusive
-    console.debug("rand : " + randNum + tags[randNum].name + tags[randNum].id);
-    return tags[randNum].id;
+    const randTags = [];
+    for (var i = 0; i < count; i++) {
+      const randNum = Math.floor(Math.random() * tags.length); //TODO:同じ場合の処理
+      console.debug(
+        "rand : " + randNum + tags[randNum].name + tags[randNum].id
+      );
+      randTags.push(tags[randNum]);
+    }
+    return randTags;
   });
 };
 
@@ -171,7 +195,7 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
 export default context => {
   //asyncDateではthisが使えないけどこれで登録すれば引数に取ればthisなしで使えるっぽい
   context.$getTags = Vue.prototype.$getTags;
-  context.$getRandomTagId = Vue.prototype.$getRandomTagId;
+  context.$getRandomTags = Vue.prototype.$getRandomTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
   context.$getArticles = Vue.prototype.$getArticles;
 };
