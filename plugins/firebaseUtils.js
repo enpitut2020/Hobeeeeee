@@ -41,15 +41,15 @@ Vue.prototype.$getTags = async function getTags() {
   console.debug(`tags (getTags() in firebaseUtils.js) : ${tags}`);
   return tags;
 };
-//@return Array
-Vue.prototype.$getRandomTags = async (count = 1) => {
+
+//param いくつほしいか。含まないID
+//@return Promise[array]
+Vue.prototype.$getRandomTags = async (count = 1, notContain = []) => {
   return await Vue.prototype.$getTags().then(tags => {
+    tags = tags.filter(tag => !notContain.includes(tag.id));
     const randTags = [];
     for (var i = 0; i < count; i++) {
       const randNum = Math.floor(Math.random() * tags.length); //TODO:同じ場合の処理
-      console.debug(
-        "rand : " + randNum + tags[randNum].name + tags[randNum].id
-      );
       randTags.push(tags[randNum]);
     }
     return randTags;
