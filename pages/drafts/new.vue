@@ -4,7 +4,10 @@
       <h1 class="title is-3">記事投稿画面</h1>
       <nuxt-link to="/">トップへ戻る</nuxt-link>
       <input class="input" placeholder="タイトル" v-model="title" />
-      <input class="input" placeholder="タグ" v-model="tags" />
+      <input class="input" placeholder="タグ" name="yourarea" autocomplete="on" list="suggestList" v-model="searchText"/>  
+      <datalist id="suggestList">  
+        <option v-for="n in tagSuggestions" :key="n">{{n}}</option>
+      </datalist>
       <mavon-editor
         v-model="content"
         :toolbars="markdownOption"
@@ -21,12 +24,18 @@
 import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 
+import Vue from "vue";
+import firebase from "@/plugins/firebase.js";
+const myDb = firebase.firestore();
+
 export default {
   data() {
     return {
       title: "",
       content: "",
       tags: [],
+      innerSearchText: '',
+      tagSuggestions: [],
       markdownOption: {
         bold: true,
         italic: true,
@@ -50,6 +59,20 @@ export default {
       },
     };
   },
+  async asyncData ({ params, $getSuggestions }) {
+    let data = await $getSuggestions()
+    return {tagSuggestions: data.tagSuggestions};
+  },
+  computed: {
+    searchText: {
+      get () {
+        return this.innerSearchText
+      },
+      set (value) {
+        this.innerSearchText = value
+      }
+    }
+  },
   methods: {
     submit: async function (event) {
       let timestamp = await this.$getFirebaseTimestamp();
@@ -61,15 +84,17 @@ export default {
           author: "名無しさん",
           createdAt: timestamp,
           updatedAt: timestamp}
-      let existingTag = await this.$getExistingTag(this.tags)
-      console.log(existingTag)
+      let existingTag = await this.$getExistingTag(this.searchText)
 
       alert(`以下の内容で投稿しますか？\n${this.title}`);
 
       if (existingTag == null) {
         //新規登録
-        console.log("existing tag is null")
-        let documentRefId = await this.$createTag(this.tags)
+
+        let newTagSuggestions = this.tagSuggestions
+        newTagSuggestions.push(this.searchText)
+        let documentRefId = await this.$createTag(this.searchText)
+        await this.$addTagSuggestions(newTagSuggestions)
         article["tags"] = [documentRefId]
         
       }else{

@@ -218,6 +218,33 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
     });
 };
 
+Vue.prototype.$getSuggestions = async function getSuggestions() {
+  return await db
+    .collection("tagSuggestions")
+    .doc("suggestions")
+    .get()
+    .then(data => {
+      return data.data();
+    })
+    .catch(e => {
+      console.error(e);
+    });
+};
+
+Vue.prototype.$addTagSuggestions = async function addTagSuggestions(newTagSuggestions){
+  db.collection("tagSuggestions")
+  .doc("suggestions")
+  .set({
+    tagSuggestions: newTagSuggestions
+  })
+  .then(function (){
+    console.log("newTagSuggestions write success!")
+  })
+  .catch(e => {
+    console.error(e);
+  });
+}
+
 export default context => {
   context.$getTags = Vue.prototype.$getTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
@@ -225,6 +252,8 @@ export default context => {
   context.$getExistingTag = Vue.prototype.$getExistingTag;
   context.$createTag = Vue.prototype.$createTag;
   context.$incrementArticlesCount = Vue.prototype.$incrementArticlesCount;
+  context.$getSuggestions = Vue.prototype.$getSuggestions;
+  context.$addTagSuggestions = Vue.prototype.$addTagSuggestions;
 };
 // 現在時刻を取得する
 Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {
