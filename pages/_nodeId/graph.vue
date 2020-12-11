@@ -5,20 +5,25 @@
       :targetNode="targetTag"
       :relativeNodes="relativeTags"
       :name="name"
+      :randomTags="randomTags"
     />
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData({ params, $getTags, $getRelativeTags }) {
-    const tags = await $getTags();
-    const targetTag = tags.find(tag => tag.id === params.nodeId);
+  async asyncData({ params, $getTag, $getRelativeTags, $getRandomTags }) {
+    const targetTag = await $getTag(params.nodeId);
     const relativeTags = await $getRelativeTags(targetTag.id);
+    const randomTags = await $getRandomTags(
+      2,
+      relativeTags.concat([targetTag]).map(tag => tag.id)
+    );
     return {
       name: targetTag.name,
       targetTag: targetTag,
-      relativeTags: relativeTags
+      relativeTags: relativeTags,
+      randomTags: randomTags
     };
   },
 
