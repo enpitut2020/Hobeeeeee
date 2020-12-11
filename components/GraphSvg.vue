@@ -76,11 +76,11 @@
       </nuxt-link>
       <!-- ランダムのノード -->
       <g v-for="(node, index) in randomTags" :key="index">
-        <nuxt-link :to="'/' + node.id + '/graph'">
+        <nuxt-link :to="'/' + node.id + '/graph?from='+targetNode.id">
           <circle
             :r="nodeParam.RADIUS"
-            :cx="x + index * 600"
-            :cy="y + 500"
+            :cx="x + (index + 1) * 250"
+            :cy="y + 300"
             class="randomTags"
           ></circle>
           <text
@@ -88,7 +88,7 @@
             dominant-baseline="central"
             style="font-size: 24px; fill: #513e35"
           >
-            <tspan :x="x + index * 600" :y="y + 500">
+            <tspan :x="x + (index + 1) * 250" :y="y + 300">
               {{ node.name }}
             </tspan>
           </text>
@@ -174,7 +174,7 @@ circle {
   stroke-width: 0px;
 }
 
-.randomTags{
-  fill: rgb(211, 23, 170)
+.randomTags {
+  fill: rgb(211, 23, 170);
 }
 </style>
