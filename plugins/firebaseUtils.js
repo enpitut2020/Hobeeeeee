@@ -13,7 +13,7 @@ this.$hobbiesData.then(){
 Vue.prototype.$getTags = async function getTags() {
   const tags = await db
     .collection("tags")
-    .get({ source: "cache" })
+    .get()
     .then(querySnapshot => {
       console.debug("キャッシュからデータを取得しました");
       const tags = [];
@@ -22,21 +22,8 @@ Vue.prototype.$getTags = async function getTags() {
       });
       return tags;
     })
-    .catch(async () => {
-      return await db
-        .collection("tags")
-        .get({ source: "server" })
-        .then(querySnapshot => {
-          console.debug("サーバーからデータを取得しました");
-          const tags = [];
-          querySnapshot.forEach(data => {
-            tags.push(data.data());
-          });
-          return tags;
-        })
-        .catch(e => {
-          console.error(e);
-        });
+    .catch(()=>{
+      alert("firestoreからのデータの取得でエラーが発生しました")
     });
   console.debug(`tags (getTags() in firebaseUtils.js) : ${tags}`);
   return tags;
