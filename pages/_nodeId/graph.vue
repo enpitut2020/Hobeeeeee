@@ -17,13 +17,18 @@ export default {
     const relativeTags = await $getRelativeTags(targetTag.id);
     const randomTags = await $getRandomTags(
       2,
-      relativeTags.concat([targetTag]).map(tag => tag.id)
+      relativeTags.concat([targetTag]).map((tag) => tag.id)
     );
+    // TODO: 表示するノードを制限する
+    // 同心円は複数用意する
+    // 関連度のあるやつ: 内側から順に並べていく、外に行くに連れて関連度(低)、個数(多)
+    // 内側から4, 8, 16, ...個みたいに
+    // 関連度のないやつ: 2個、円状に並べない
     return {
       name: targetTag.name,
       targetTag: targetTag,
       relativeTags: relativeTags,
-      randomTags: randomTags
+      randomTags: randomTags,
     };
   },
 
@@ -33,7 +38,7 @@ export default {
       const fromTag = await this.$getTag(fromTagId);
       await this.$incrementRelevance(fromTag, this.targetTag);
     }
-  }
+  },
 };
 </script>
 
