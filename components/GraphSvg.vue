@@ -9,13 +9,13 @@
           :y1="y"
           :x2="
             x +
-            nodeParam.DISTANCE *
-              Math.cos((2 * Math.PI * index) / relativeNodes.length)
+              nodeParam.DISTANCE *
+                Math.cos((2 * Math.PI * index) / relativeNodes.length)
           "
           :y2="
             y +
-            nodeParam.DISTANCE *
-              Math.sin((2 * Math.PI * index) / relativeNodes.length)
+              nodeParam.DISTANCE *
+                Math.sin((2 * Math.PI * index) / relativeNodes.length)
           "
           stroke="#333333"
           :stroke-width="`${strokeWidth(node)}px`"
@@ -26,13 +26,13 @@
             :r="nodeParam.RADIUS"
             :cx="
               x +
-              nodeParam.DISTANCE *
-                Math.cos((2 * Math.PI * index) / relativeNodes.length)
+                nodeParam.DISTANCE *
+                  Math.cos((2 * Math.PI * index) / relativeNodes.length)
             "
             :cy="
               y +
-              nodeParam.DISTANCE *
-                Math.sin((2 * Math.PI * index) / relativeNodes.length)
+                nodeParam.DISTANCE *
+                  Math.sin((2 * Math.PI * index) / relativeNodes.length)
             "
           ></circle>
           <text
@@ -46,13 +46,13 @@
             <tspan
               :x="
                 x +
-                nodeParam.DISTANCE *
-                  Math.cos((2 * Math.PI * index) / relativeNodes.length)
+                  nodeParam.DISTANCE *
+                    Math.cos((2 * Math.PI * index) / relativeNodes.length)
               "
               :y="
                 y +
-                nodeParam.DISTANCE *
-                  Math.sin((2 * Math.PI * index) / relativeNodes.length)
+                  nodeParam.DISTANCE *
+                    Math.sin((2 * Math.PI * index) / relativeNodes.length)
               "
             >
               {{ node.name }}
@@ -74,6 +74,26 @@
           </tspan>
         </text>
       </nuxt-link>
+      <!-- ランダムのノード -->
+      <g v-for="(node, index) in randomTags" :key="index">
+        <nuxt-link :to="'/' + node.id + '/graph'">
+          <circle
+            :r="nodeParam.RADIUS"
+            :cx="x + index * 600"
+            :cy="y + 500"
+            class="randomTags"
+          ></circle>
+          <text
+            text-anchor="middle"
+            dominant-baseline="central"
+            style="font-size: 24px; fill: #513e35"
+          >
+            <tspan :x="x + index * 600" :y="y + 500">
+              {{ node.name }}
+            </tspan>
+          </text>
+        </nuxt-link>
+      </g>
     </svg>
   </div>
 </template>
@@ -82,23 +102,23 @@
 import graphParameters from "@/consts/graphParameters";
 
 export default {
-  props: ["targetNode", "relativeNodes", "name"],
+  props: ["targetNode", "relativeNodes", "name", "randomTags"],
   data() {
     return {
       active: false,
       width: window.innerWidth,
       height: window.innerHeight,
       x: 0,
-      y: 0,
+      y: 0
     };
   },
   computed: {
-    yi: function (deltaY) {
+    yi: function(deltaY) {
       return this.y + deltaY;
     },
     nodeParam() {
       return graphParameters;
-    },
+    }
   },
   created() {
     window.addEventListener("resize", this.handleResize);
@@ -110,19 +130,19 @@ export default {
     this.x = this.width / 2;
     this.y = this.height / 2;
   },
-  beforeDestroy: function () {
+  beforeDestroy: function() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    handleResize: function () {
+    handleResize: function() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
       this.x = this.width / 5;
       this.y = this.height / 5;
     },
-    strokeWidth: function (target) {
-      let max = Math.max(...this.relativeNodes.map((node) => node.relevance));
-      let min = Math.min(...this.relativeNodes.map((node) => node.relevance));
+    strokeWidth: function(target) {
+      let max = Math.max(...this.relativeNodes.map(node => node.relevance));
+      let min = Math.min(...this.relativeNodes.map(node => node.relevance));
       let ratio = max === min ? 0 : (target.relevance - min) / (max - min);
       // 関連趣味のrelevanceが[13, 43, 28, 134, 55]、基本の太さが10、最大で5倍まで太くなるとすると
       // (relevance=43の趣味との線の太さ)
@@ -140,8 +160,8 @@ export default {
           this.nodeParam.MAX_STROKE_WIDTH_RATIO *
           ratio
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -152,5 +172,9 @@ circle {
   transition: all 0.4s cubic-bezier(0.96, 0.04, 0.04, 0.96);
   stroke: #513e35;
   stroke-width: 0px;
+}
+
+.randomTags{
+  fill: rgb(211, 23, 170)
 }
 </style>

@@ -5,6 +5,7 @@
       :targetNode="targetTag"
       :relativeNodes="relativeTags"
       :name="name"
+      :randomTags="randomTags"
     />
   </div>
 </template>
