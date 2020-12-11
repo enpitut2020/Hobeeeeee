@@ -118,7 +118,7 @@ Vue.prototype.$registerArticle = async function registerArticle(article) {
     });
 };
 
-Vue.prototype.$existTag = async function existTag(query) {
+Vue.prototype.$getExistingTag = async function getExistingTag(query) {
   var tagId = null
   await db.collection("tags").where("name", "==", query)
   .get()
@@ -168,7 +168,7 @@ export default (context) => {
   context.$getTags = Vue.prototype.$getTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
   context.$getArticles = Vue.prototype.$getArticles;
-  context.$existTag = Vue.prototype.$existTag;
+  context.$getExistingTag = Vue.prototype.$getExistingTag;
   context.$createTag = Vue.prototype.$createTag;
   context.$updateTag = Vue.prototype.$updateTag;
 }
