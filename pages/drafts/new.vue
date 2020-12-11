@@ -54,20 +54,35 @@ export default {
     submit: async function (event) {
       let timestamp = await this.$getFirebaseTimestamp();
       let article = {
-        // registerArticle()を呼ぶとidが自動的に振られるようになっている
-        id: null,
-        title: this.title,
-        body: this.content,
-        // FIXME: 著者名を入力フォームから取得する
-        author: "名無しさん",
-        createdAt: timestamp,
-        updatedAt: timestamp,
-        // FIXME: 入力フォームから取得したタグ名を元にタグIDを取得して配列に格納する
-        // 仮データとしてサッカーのタグを選択している
-        // tags: ["4qqOzg7eEx2vsBIcjTTq"],
-       tags: [{ id: "4qqOzg7eEx2vsBIcjTTq", name: "サッカー" }],
-      };
-      alert(`以下の内容で送信しますか？\n${this.content}`);
+          id: null,
+          title: this.title,
+          body: this.content,
+          // FIXME: 著者名を入力フォームから取得する
+          author: "名無しさん",
+          createdAt: timestamp,
+          updatedAt: timestamp}
+      let existingTag = await this.$getExistingTag(this.tags)
+      console.log(existingTag)
+
+      alert(`以下の内容で投稿しますか？\n${this.title}`);
+
+      if (existingTag == null) {
+        //新規登録
+        console.log("existing tag is null")
+        // let documentRef = await this.$createTag(this.tags)
+        // console.log("documentRef is .." +  documentRef)
+        // article["tags"] = [{id: documentRef.id, name: this.tags}]
+        
+      }else{
+        article["tags"] = [{ id: existingTag.id, name: existingTag.name }];
+        console.log("article tags is...." + article.tags);
+          // FIXME: 入力フォームから取得したタグ名を元にタグIDを取得して配列に格納する
+          // 仮データとしてサッカーのタグを選択している
+          // tags: ["4qqOzg7eEx2vsBIcjTTq"],
+        //tagのvolumeを増やす
+        this.$incrementArticlesCount(existingTag.id)
+      }
+
       await this.$registerArticle(article);
     },
   },
