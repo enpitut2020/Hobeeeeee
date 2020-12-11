@@ -1,6 +1,9 @@
 import Vue from "vue";
 import firebase from "@/plugins/firebase.js";
 const db = firebase.firestore();
+db.enablePersistence({ experimentalTabSynchronization: true }).then(() => {
+  console.log("マルチタブでオフラインデータが使えるよ！");
+});
 /*
 //使うときは
 this.$hobbiesData.then(){
@@ -8,20 +11,41 @@ this.$hobbiesData.then(){
 みたいに使う
 */
 Vue.prototype.$getTags = async function getTags() {
-  let tags = [];
-  await db
+  const tags = await db
     .collection("tags")
     .get()
     .then(querySnapshot => {
+      console.debug("キャッシュからデータを取得しました");
+      const tags = [];
       querySnapshot.forEach(data => {
         tags.push(data.data());
       });
+      return tags;
     })
-    .catch(e => {
-      console.error(e);
+    .catch(()=>{
+      alert("firestoreからのデータの取得でエラーが発生しました")
     });
   console.debug(`tags (getTags() in firebaseUtils.js) : ${tags}`);
   return tags;
+};
+
+//param いくつほしいか。含まないID
+//@return Promise[array]
+Vue.prototype.$getRandomTags = async (count = 1, notContain = []) => {
+  return await Vue.prototype.$getTags().then(tags => {
+    tags = tags.filter(tag => !notContain.includes(tag.id));
+    if (tags.length < count) {
+      console.warn("ランダムのノードを取得できません");
+      return [];
+    }
+    const randTags = [];
+    while (true) {
+      const randNum = Math.floor(Math.random() * tags.length);
+      if (!randTags.includes(tags[randNum])) randTags.push(tags[randNum]);
+      if (randTags.length >= count) break;
+    }
+    return randTags;
+  });
 };
 
 Vue.prototype.$getTag = async function getTag(tagId) {
@@ -165,7 +189,6 @@ Vue.prototype.$updateTag = async function updateTag(tagId) {
 }
 
 Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
-
   const fromCurrentTagRelativeRef = db
     .collection("tags")
     .doc(fromTag.id)
@@ -180,17 +203,18 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
   const currentFromTagRelation = await currentFromTagRelativeRef
     .get()
     .then(res => {
-      return res.data();//ここでreturnすると次のthenに引数で入る
-    }).then((relation)=>{
-      if (relation){
+      return res.data(); //ここでreturnすると次のthenに引数で入る
+    })
+    .then(relation => {
+      if (relation) {
         // console.debug("インクリメントします")
         fromCurrentTagRelativeRef.update({
-          relevance: firebase.firestore.FieldValue.increment(1),
+          relevance: firebase.firestore.FieldValue.increment(1)
         });
         currentFromTagRelativeRef.update({
-          relevance: firebase.firestore.FieldValue.increment(1),
+          relevance: firebase.firestore.FieldValue.increment(1)
         });
-      }else{
+      } else {
         // console.debug("リレーションがないので追加します")
         fromCurrentTagRelativeRef.set({
           relevance: firebase.firestore.FieldValue.increment(1),
@@ -204,11 +228,13 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
         });
       }
     });
- 
 };
 
 export default context => {
+  //asyncDateではthisが使えないけどこれで登録すれば引数に取ればthisなしで使えるっぽい
   context.$getTags = Vue.prototype.$getTags;
+  context.$getTag = Vue.prototype.$getTag;
+  context.$getRandomTags = Vue.prototype.$getRandomTags;
   context.$getRelativeTags = Vue.prototype.$getRelativeTags;
   context.$getArticles = Vue.prototype.$getArticles;
   context.$getExistingTag = Vue.prototype.$getExistingTag;
