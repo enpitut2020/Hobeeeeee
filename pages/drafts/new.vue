@@ -70,12 +70,10 @@ export default {
         //新規登録
         console.log("existing tag is null")
         let documentRefId = await this.$createTag(this.tags)
-        console.log("documentRefid .." + documentRefId)
         article["tags"] = [documentRefId]
         
       }else{
         article["tags"] = [existingTag.id];
-        console.log("article tags is...." + article.tags);
           // FIXME: 入力フォームから取得したタグ名を元にタグIDを取得して配列に格納する
           // 仮データとしてサッカーのタグを選択している
           // tags: ["4qqOzg7eEx2vsBIcjTTq"],
