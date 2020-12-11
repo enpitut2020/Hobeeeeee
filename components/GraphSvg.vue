@@ -163,8 +163,8 @@ export default {
     handleResize: function () {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
-      this.x = this.width / 5;
-      this.y = this.height / 5;
+      this.x = this.width / 2;
+      this.y = this.height / 2;
     },
     // 関連を表す線の太さを計算する
     strokeWidth: function (target) {
