@@ -132,61 +132,73 @@ Vue.prototype.$registerArticle = async function registerArticle(article) {
   ref
     .add(article)
     .then(newArticle => {
+      // con
       ref.doc(newArticle.id).update({
         id: newArticle.id
       });
       idRegistered = newArticle.id;
     })
     .catch(e => {
+      console.log("refister article error");
       console.error(e);
     });
 };
 
 Vue.prototype.$getExistingTag = async function getExistingTag(query) {
-  var tagId = null
-  await db.collection("tags").where("name", "==", query)
-  .get()
-  .then(function(querySnapshot) {
-    //[document1,document2]
-    querySnapshot.forEach(function(doc) {
-      tagId = doc.id
+  var tagData = null;
+  await db
+    .collection("tags")
+    .where("name", "==", query)
+    .get()
+    .then(function(querySnapshot) {
+      //[document1,document2]
+      querySnapshot.forEach(function(doc) {
+        tagData = doc.data();
+      });
+    })
+    .catch(function(error) {
+      console.log("Error getting documents: ", error);
     });
-  })
-  .catch(function(error) {
-    console.log("Error getting documents: ", error);
-  });
-  return tagId
-}
+  return tagData;
+};
 
 //趣味の記事が増えた、かつ趣味が新規の時、趣味データを作成
 Vue.prototype.$createTag = async function createTag(tagName) {
-  let ref = db.collection("tags").doc()
-  ref.set({
-    articlesCount: 1,
-    id: ref.id,
-    name: tagName,
-    volume:100
-  })
-  .then(function() {
-    console.log("Document successfully written!");
-  })
-  .catch(function(error) {
-    console.error("Error writing document: ", error);
-  });
-}
+  // ref = db.collection("tags").doc();
+  let refId = db.collection("tags").doc().id;
+  return await db.collection("tags")
+    .doc(refId)
+    .set({
+      articlesCount: 1,
+      id: refId,
+      name: tagName,
+      volume: 100
+    })
+    .then(function(docRef) {
+      console.log("Document successfully written!");
+      return refId;
+    })
+    .catch(function(error) {
+      console.error("Error writing document: ", error);
+    });
+};
 
 //既存趣味の記事が増えた時、tagのvolumeを更新
-Vue.prototype.$updateTag = async function updateTag(tagId) {
-  db.collection("tags").doc(tagId).update({
-    volume: firebase.firestore.FieldValue.increment(1),
-  })
-  .then(function() {
-    console.log("Document successfully updated!");
-  })
-  .catch(function(error) {
-    console.error("Error updating document: ", error);
-  });
-}
+Vue.prototype.$incrementArticlesCount = async function incrementArticlesCount(
+  tagId
+) {
+  db.collection("tags")
+    .doc(tagId)
+    .update({
+      articlesCount: firebase.firestore.FieldValue.increment(1)
+    })
+    .then(function() {
+      console.log("Document successfully updated!");
+    })
+    .catch(function(error) {
+      console.error("Error updating document: ", error);
+    });
+};
 
 Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
   const fromCurrentTagRelativeRef = db
@@ -230,6 +242,33 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
     });
 };
 
+Vue.prototype.$getSuggestions = async function getSuggestions() {
+  return await db
+    .collection("tagSuggestions")
+    .doc("suggestions")
+    .get()
+    .then(data => {
+      return data.data();
+    })
+    .catch(e => {
+      console.error(e);
+    });
+};
+
+Vue.prototype.$addTagSuggestions = async function addTagSuggestions(newTagSuggestions){
+  db.collection("tagSuggestions")
+  .doc("suggestions")
+  .set({
+    tagSuggestions: newTagSuggestions
+  })
+  .then(function (){
+    console.log("newTagSuggestions write success!")
+  })
+  .catch(e => {
+    console.error(e);
+  });
+}
+
 export default context => {
   //asyncDateではthisが使えないけどこれで登録すれば引数に取ればthisなしで使えるっぽい
   context.$getTags = Vue.prototype.$getTags;
@@ -239,8 +278,10 @@ export default context => {
   context.$getArticles = Vue.prototype.$getArticles;
   context.$getExistingTag = Vue.prototype.$getExistingTag;
   context.$createTag = Vue.prototype.$createTag;
-  context.$updateTag = Vue.prototype.$updateTag;
-}
+  context.$incrementArticlesCount = Vue.prototype.$incrementArticlesCount;
+  context.$getSuggestions = Vue.prototype.$getSuggestions;
+  context.$addTagSuggestions = Vue.prototype.$addTagSuggestions;
+};
 // 現在時刻を取得する
 Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {
   return firebase.firestore.Timestamp.fromDate(new Date());
