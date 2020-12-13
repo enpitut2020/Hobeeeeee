@@ -28,7 +28,7 @@
                 )
             "
             stroke="#eaffd0"
-            :stroke-width="`${strokeWidth(node)}px`"
+            :stroke-width="`${node.strokeWidth}px`"
           />
           <nuxt-link :to="'/' + node.id + '/graph?from=' + targetNode.id">
             <!-- 関連趣味のノード -->
@@ -150,6 +150,7 @@ export default {
   async created() {
     window.addEventListener("resize", this.handleResize);
     let _relativeNodes = await this.calcRadius(this.relativeNodes);
+    _relativeNodes = await this.calcStrokeWidth(_relativeNodes);
     this.splittedRelativeNodes = this.splitRelativeNodes(_relativeNodes);
   },
   mounted() {
@@ -168,26 +169,21 @@ export default {
       this.y = this.height / 2;
     },
     // 関連を表す線の太さを計算する
-    strokeWidth: function (target) {
-      let max = Math.max(...this.relativeNodes.map((node) => node.relevance));
-      let min = Math.min(...this.relativeNodes.map((node) => node.relevance));
-      let ratio = max === min ? 0 : (target.relevance - min) / (max - min);
-      // 関連趣味のrelevanceが[13, 43, 28, 134, 55]、基本の太さが10、最大で5倍まで太くなるとすると
-      // (relevance=43の趣味との線の太さ)
-      // = 基本の太さ + 最大で何倍の太さを加えるか * 関連趣味の中での相対的な割合
-      // = 10 + 最大で何倍の太さを加えるか * 関連趣味の中での相対的な割合
-      // = 10 + (10 * 5) * 関連趣味の中での相対的な割合
-      // = 10 + (10 * 5) * ((関連度 - 最小値) / (最大値 - 最小値))
-      // = 10 + (10 * 5) * ((43 - 13) / (134 - 13))
-      // = 10 + 50 * 1/5
-      // ≒ 22.4
-      // 以上の計算で太さが10〜60の間に収まる
-      return (
-        this.nodeParam.LINE_WEIGHT +
-        this.nodeParam.LINE_WEIGHT *
-          this.nodeParam.MAX_STROKE_WIDTH_RATIO *
-          ratio
+    calcStrokeWidth: async function (nodes) {
+      const max = Math.max(...nodes.map((node) => node.relevance));
+      const min = Math.min(...nodes.map((node) => node.relevance));
+      const _nodes = await Promise.all(
+        nodes.map(async (node) => {
+          const ratio = max === min ? 0 : (node.relevance - min) / (max - min);
+          node.strokeWidth =
+            this.nodeParam.LINE_WEIGHT +
+            this.nodeParam.LINE_WEIGHT *
+              this.nodeParam.MAX_STROKE_WIDTH_RATIO *
+              ratio;
+          return node;
+        })
       );
+      return _nodes;
     },
     // 全関連ノードの描画時の半径を計算する
     calcRadius: async function (nodes) {
