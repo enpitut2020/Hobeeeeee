@@ -33,7 +33,7 @@
           <nuxt-link :to="'/' + node.id + '/graph?from=' + targetNode.id">
             <!-- 関連趣味のノード -->
             <circle
-              :r="nodeParam.RADIUS"
+              :r="node.radius"
               :cx="
                 x +
                 nodeParam.DISTANCE *
@@ -147,9 +147,10 @@ export default {
       return graphParameters;
     },
   },
-  created() {
+  async created() {
     window.addEventListener("resize", this.handleResize);
-    this.splittedRelativeNodes = this.splitRelativeNodes(this.relativeNodes);
+    let _relativeNodes = await this.calcRadius(this.relativeNodes);
+    this.splittedRelativeNodes = this.splitRelativeNodes(_relativeNodes);
   },
   mounted() {
     this.x = this.width / 2;
@@ -187,6 +188,29 @@ export default {
           this.nodeParam.MAX_STROKE_WIDTH_RATIO *
           ratio
       );
+    },
+    // 全関連ノードの描画時の半径を計算する
+    calcRadius: async function (nodes) {
+      // tagドキュメントを全て取得
+      const allTags = await this.$getTags();
+      // volumeの最大・最小値を計算
+      const max = Math.max(...allTags.map((tag) => tag.volume));
+      const min = Math.min(...allTags.map((tag) => tag.volume));
+      // 各ノードについて半径を計算する
+      const _nodes = await Promise.all(
+        nodes.map(async (node) => {
+          const tag = await this.$getTag(node.id);
+          // min-max正規化
+          let increaseRatio =
+            max === min ? 0 : (tag.volume - min) / (max - min);
+          // volumeに応じて半径を計算
+          node.radius =
+            this.nodeParam.RADIUS +
+            this.nodeParam.MAX_DELTA_RADIUS * increaseRatio;
+          return node;
+        })
+      );
+      return _nodes;
     },
     // ノードを同心円上に配置するときの配置数を返すジェネレータ
     nodeNumGenerator: function* (totalNum) {
