@@ -1,5 +1,12 @@
 <template>
   <div width="2000px" :height="height * 3">
+    <form>
+
+  <label> x</label> <input v-model="viewBoxX" type="number" step="10">
+  <label> y </label><input v-model="viewBoxY" type="number" step="10">
+  <label> width</label> <input v-model="viewBoxWidth" type="number" step="10">
+  <label> height</label> <input v-model="viewBoxHeight" type="number" step="10">
+    </form>
     <svg
       :viewBox="
         viewBoxX + ' ' + viewBoxY + ' ' + viewBoxWidth + ' ' + viewBoxHeight
@@ -140,10 +147,10 @@ export default {
   data() {
     return {
       active: false,
-      viewBoxX:0, 
-      viewBoxY:-1000,
+      viewBoxX: -100,
+      viewBoxY: -1500,
       viewBoxWidth: 10,
-      viewBoxHeight:3000,
+      viewBoxHeight: 3000,
       width: window.innerWidth,
       height: window.innerHeight,
       x: 0,
@@ -155,6 +162,13 @@ export default {
     // 定数を取り出す算出プロパティ
     nodeParam() {
       return graphParameters;
+    },
+    getGraphSize() {
+      return (
+        this.splitRelativeNodes.length *
+        (this.nodeParam.DISTANCE + this.nodeParam.RADIUS * 2) *
+        2
+      );
     }
   },
   created() {
