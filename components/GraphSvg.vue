@@ -1,6 +1,12 @@
 <template>
   <div width="2000px" :height="height * 3">
-    <svg viewbox="0 0 1000 1000" :width="width" :height="height">
+    <svg
+      :viewBox="
+        viewBoxX + ' ' + viewBoxY + ' ' + viewBoxWidth + ' ' + viewBoxHeight
+      "
+      :width="width"
+      :height="height"
+    >
       <!-- 関連趣味に関する描画のループ -->
       <g
         v-for="(nodes, tierIndex) in splittedRelativeNodes"
@@ -13,19 +19,19 @@
             :y1="y"
             :x2="
               x +
-              nodeParam.DISTANCE *
-                reverseIndex(tierIndex) *
-                Math.cos(
-                  radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                )
+                nodeParam.DISTANCE *
+                  reverseIndex(tierIndex) *
+                  Math.cos(
+                    radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                  )
             "
             :y2="
               y +
-              nodeParam.DISTANCE *
-                reverseIndex(tierIndex) *
-                Math.sin(
-                  radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                )
+                nodeParam.DISTANCE *
+                  reverseIndex(tierIndex) *
+                  Math.sin(
+                    radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                  )
             "
             stroke="#eaffd0"
             :stroke-width="`${strokeWidth(node)}px`"
@@ -36,19 +42,19 @@
               :r="nodeParam.RADIUS"
               :cx="
                 x +
-                nodeParam.DISTANCE *
-                  reverseIndex(tierIndex) *
-                  Math.cos(
-                    radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                  )
+                  nodeParam.DISTANCE *
+                    reverseIndex(tierIndex) *
+                    Math.cos(
+                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                    )
               "
               :cy="
                 y +
-                nodeParam.DISTANCE *
-                  reverseIndex(tierIndex) *
-                  Math.sin(
-                    radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                  )
+                  nodeParam.DISTANCE *
+                    reverseIndex(tierIndex) *
+                    Math.sin(
+                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                    )
               "
             ></circle>
             <text
@@ -62,19 +68,19 @@
               <tspan
                 :x="
                   x +
-                  nodeParam.DISTANCE *
-                    reverseIndex(tierIndex) *
-                    Math.cos(
-                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                    )
+                    nodeParam.DISTANCE *
+                      reverseIndex(tierIndex) *
+                      Math.cos(
+                        radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                      )
                 "
                 :y="
                   y +
-                  nodeParam.DISTANCE *
-                    reverseIndex(tierIndex) *
-                    Math.sin(
-                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                    )
+                    nodeParam.DISTANCE *
+                      reverseIndex(tierIndex) *
+                      Math.sin(
+                        radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                      )
                 "
               >
                 {{ node.name }}
@@ -134,18 +140,22 @@ export default {
   data() {
     return {
       active: false,
+      viewBoxX:0, 
+      viewBoxY:-1000,
+      viewBoxWidth: 10,
+      viewBoxHeight:3000,
       width: window.innerWidth,
       height: window.innerHeight,
       x: 0,
       y: 0,
-      splittedRelativeNodes: null,
+      splittedRelativeNodes: null
     };
   },
   computed: {
     // 定数を取り出す算出プロパティ
     nodeParam() {
       return graphParameters;
-    },
+    }
   },
   created() {
     window.addEventListener("resize", this.handleResize);
@@ -156,20 +166,20 @@ export default {
     this.y = this.height / 2;
     window.resizeTo(5000, 5000);
   },
-  beforeDestroy: function () {
+  beforeDestroy: function() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    handleResize: function () {
+    handleResize: function() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
       this.x = this.width / 2;
       this.y = this.height / 2;
     },
     // 関連を表す線の太さを計算する
-    strokeWidth: function (target) {
-      let max = Math.max(...this.relativeNodes.map((node) => node.relevance));
-      let min = Math.min(...this.relativeNodes.map((node) => node.relevance));
+    strokeWidth: function(target) {
+      let max = Math.max(...this.relativeNodes.map(node => node.relevance));
+      let min = Math.min(...this.relativeNodes.map(node => node.relevance));
       let ratio = max === min ? 0 : (target.relevance - min) / (max - min);
       // 関連趣味のrelevanceが[13, 43, 28, 134, 55]、基本の太さが10、最大で5倍まで太くなるとすると
       // (relevance=43の趣味との線の太さ)
@@ -189,7 +199,7 @@ export default {
       );
     },
     // ノードを同心円上に配置するときの配置数を返すジェネレータ
-    nodeNumGenerator: function* (totalNum) {
+    nodeNumGenerator: function*(totalNum) {
       let remainingCount = totalNum;
       //for (let i = 1; i <= this.nodeParam.MAX_RELATIVE_NODE_CIRCLES; i++) {
       for (let i = 1; i <= 10; i++) {
@@ -205,7 +215,7 @@ export default {
     },
     // 関連ノードを分割して、ノードの2次元配列にする
     // e.g. splitRelativeNodes({ノード} * 13) -> {[ノード} * 4, ノード * 8, ノード * 1]
-    splitRelativeNodes: function (nodes) {
+    splitRelativeNodes: function(nodes) {
       let relativeNodesCopy = JSON.parse(JSON.stringify(nodes));
       // 関連度順に降順ソート
       relativeNodesCopy.sort((a, b) => b.relevance - a.relevance);
@@ -239,8 +249,8 @@ export default {
     reverseIndex(index) {
       return this.splittedRelativeNodes.length - index;
       // return 1,2,3,...
-    },
-  },
+    }
+  }
 };
 </script>
 
