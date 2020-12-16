@@ -14,4 +14,6 @@ export default {
   "MAX_RELATIVE_NODE_CIRCLES": 10,
   // 回転する幅
   "ROTATE_RADIAN": Math.PI / 6,
+  // ノードの半径の増加分の最大値
+  "MAX_DELTA_RADIUS": 100,
 }

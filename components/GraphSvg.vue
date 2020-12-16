@@ -28,12 +28,12 @@
                 )
             "
             stroke="#eaffd0"
-            :stroke-width="`${strokeWidth(node)}px`"
+            :stroke-width="`${node.strokeWidth}px`"
           />
           <nuxt-link :to="'/' + node.id + '/graph?from=' + targetNode.id">
             <!-- 関連趣味のノード -->
             <circle
-              :r="nodeParam.RADIUS"
+              :r="node.radius"
               :cx="
                 x +
                 nodeParam.DISTANCE *
@@ -147,9 +147,11 @@ export default {
       return graphParameters;
     },
   },
-  created() {
+  async created() {
     window.addEventListener("resize", this.handleResize);
-    this.splittedRelativeNodes = this.splitRelativeNodes(this.relativeNodes);
+    let _relativeNodes = await this.calcRadius(this.relativeNodes);
+    _relativeNodes = await this.calcStrokeWidth(_relativeNodes);
+    this.splittedRelativeNodes = this.splitRelativeNodes(_relativeNodes);
   },
   mounted() {
     this.x = this.width / 2;
@@ -167,26 +169,44 @@ export default {
       this.y = this.height / 2;
     },
     // 関連を表す線の太さを計算する
-    strokeWidth: function (target) {
-      let max = Math.max(...this.relativeNodes.map((node) => node.relevance));
-      let min = Math.min(...this.relativeNodes.map((node) => node.relevance));
-      let ratio = max === min ? 0 : (target.relevance - min) / (max - min);
-      // 関連趣味のrelevanceが[13, 43, 28, 134, 55]、基本の太さが10、最大で5倍まで太くなるとすると
-      // (relevance=43の趣味との線の太さ)
-      // = 基本の太さ + 最大で何倍の太さを加えるか * 関連趣味の中での相対的な割合
-      // = 10 + 最大で何倍の太さを加えるか * 関連趣味の中での相対的な割合
-      // = 10 + (10 * 5) * 関連趣味の中での相対的な割合
-      // = 10 + (10 * 5) * ((関連度 - 最小値) / (最大値 - 最小値))
-      // = 10 + (10 * 5) * ((43 - 13) / (134 - 13))
-      // = 10 + 50 * 1/5
-      // ≒ 22.4
-      // 以上の計算で太さが10〜60の間に収まる
-      return (
-        this.nodeParam.LINE_WEIGHT +
-        this.nodeParam.LINE_WEIGHT *
-          this.nodeParam.MAX_STROKE_WIDTH_RATIO *
-          ratio
+    calcStrokeWidth: async function (nodes) {
+      const max = Math.max(...nodes.map((node) => node.relevance));
+      const min = Math.min(...nodes.map((node) => node.relevance));
+      const _nodes = await Promise.all(
+        nodes.map(async (node) => {
+          const ratio = max === min ? 0 : (node.relevance - min) / (max - min);
+          node.strokeWidth =
+            this.nodeParam.LINE_WEIGHT +
+            this.nodeParam.LINE_WEIGHT *
+              this.nodeParam.MAX_STROKE_WIDTH_RATIO *
+              ratio;
+          return node;
+        })
       );
+      return _nodes;
+    },
+    // 全関連ノードの描画時の半径を計算する
+    calcRadius: async function (nodes) {
+      // tagドキュメントを全て取得
+      const allTags = await this.$getTags();
+      // volumeの最大・最小値を計算
+      const max = Math.max(...allTags.map((tag) => tag.volume));
+      const min = Math.min(...allTags.map((tag) => tag.volume));
+      // 各ノードについて半径を計算する
+      const _nodes = await Promise.all(
+        nodes.map(async (node) => {
+          const tag = await this.$getTag(node.id);
+          // min-max正規化
+          let increaseRatio =
+            max === min ? 0 : (tag.volume - min) / (max - min);
+          // volumeに応じて半径を計算
+          node.radius =
+            this.nodeParam.RADIUS +
+            this.nodeParam.MAX_DELTA_RADIUS * increaseRatio;
+          return node;
+        })
+      );
+      return _nodes;
     },
     // ノードを同心円上に配置するときの配置数を返すジェネレータ
     nodeNumGenerator: function* (totalNum) {
