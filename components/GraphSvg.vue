@@ -39,42 +39,57 @@
             :y1="y"
             :x2="
               x +
-              nodeParam.DISTANCE *
-                reverseIndex(tierIndex) *
-                Math.cos(
-                  radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                )
-            "
-            :y2="
-              y +
-              nodeParam.DISTANCE *
-                reverseIndex(tierIndex) *
-                Math.sin(
-                  radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                )
-            "
-            stroke="#eaffd0"
-            :stroke-width="`${node.strokeWidth}px`"
-          />
-          <nuxt-link :to="'/' + node.id + '/graph?from=' + targetNode.id">
-            <!-- 関連趣味のノード -->
-            <circle
-              :r="node.radius"
-              :cx="
-                x +
                 nodeParam.DISTANCE *
                   reverseIndex(tierIndex) *
                   Math.cos(
                     radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
                   )
-              "
-              :cy="
-                y +
+            "
+            :y2="
+              y +
                 nodeParam.DISTANCE *
                   reverseIndex(tierIndex) *
                   Math.sin(
                     radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
                   )
+            "
+            stroke="#eaffd0"
+            :stroke-width="`${node.strokeWidth}px`"
+          />
+          <nuxt-link
+            :to="
+              '/' +
+                node.id +
+                '/graph?from=' +
+                targetNode.id +
+                '&viewBoxX=' +
+                viewBoxX +
+                '&viewBoxY=' +
+                viewBoxY +
+                '&viewBoxWidth=' +
+                viewBoxWidth +
+                '&viewBoxHeight=' +
+                viewBoxHeight
+            "
+          >
+            <!-- 関連趣味のノード -->
+            <circle
+              :r="node.radius"
+              :cx="
+                x +
+                  nodeParam.DISTANCE *
+                    reverseIndex(tierIndex) *
+                    Math.cos(
+                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                    )
+              "
+              :cy="
+                y +
+                  nodeParam.DISTANCE *
+                    reverseIndex(tierIndex) *
+                    Math.sin(
+                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                    )
               "
             ></circle>
             <text
@@ -88,19 +103,19 @@
               <tspan
                 :x="
                   x +
-                  nodeParam.DISTANCE *
-                    reverseIndex(tierIndex) *
-                    Math.cos(
-                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                    )
+                    nodeParam.DISTANCE *
+                      reverseIndex(tierIndex) *
+                      Math.cos(
+                        radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                      )
                 "
                 :y="
                   y +
-                  nodeParam.DISTANCE *
-                    reverseIndex(tierIndex) *
-                    Math.sin(
-                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                    )
+                    nodeParam.DISTANCE *
+                      reverseIndex(tierIndex) *
+                      Math.sin(
+                        radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                      )
                 "
               >
                 {{ node.name }}
@@ -156,35 +171,49 @@
 import graphParameters from "@/consts/graphParameters";
 
 export default {
-  props: ["targetNode", "relativeNodes", "name", "randomTags"],
+  props: {
+    targetNode: { type: Object },
+    relativeNodes: { type: Array },
+    name: { type: String },
+    randomTags: { type: Array },
+    vbX: { type: Number, default: -100 },
+    vbY: { type: Number, default: -1500 },
+    vbWidth: { type: Number, default: 10 },
+    vbHeight: { type: Number, default: 3000 }
+  },
   data() {
     return {
       active: false,
       isMousedown: false,
-      viewBoxX: -100,
-      viewBoxY: -1500,
-      viewBoxWidth: 10,
-      viewBoxHeight: 3000,
+
       width: window.innerWidth,
       height: window.innerHeight,
       x: 0,
       y: 0,
+      viewBoxX: -100,
+      viewBoxY: -1500,
+      viewBoxWidth: 10,
+      viewBoxHeight: 3000,
       splittedRelativeNodes: null,
       mouseX: 0,
       mouseY: 0,
       prev_pos: {
         x: 0,
-        y: 0,
-      },
+        y: 0
+      }
     };
   },
   computed: {
     // 定数を取り出す算出プロパティ
     nodeParam() {
       return graphParameters;
-    },
+    }
   },
   async created() {
+    this.viewBoxX = this.vbX;
+    this.viewBoxY = this.vbY;
+    this.viewBoxWidth = this.vbWidth;
+    this.viewBoxHeight = this.vbHeight;
     window.addEventListener("resize", this.handleResize);
     let _relativeNodes = await this.calcRadius(this.relativeNodes);
     _relativeNodes = await this.calcStrokeWidth(_relativeNodes);
@@ -195,14 +224,14 @@ export default {
     this.y = this.height / 2;
     window.resizeTo(5000, 5000);
   },
-  beforeDestroy: function () {
+  beforeDestroy: function() {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
     clickEvent(event) {
       console.log(`Clicked (${event.clientX}, ${event.clientY})`);
     },
-    touchstart: function (event) {
+    touchstart: function(event) {
       this.isMousedown = true;
       console.log("touch start:%d,%d", event.offsetX, event.offsetY);
       this.prev_pos.x = event.offsetX;
@@ -210,7 +239,7 @@ export default {
       this.mouseX = event.offsetX;
       this.mouseY = event.offsetY;
     },
-    touchmove: function (event) {
+    touchmove: function(event) {
       // 押下中だったら
       if (this.isMousedown) {
         // 前回座標との差分を算出
@@ -226,11 +255,11 @@ export default {
         this.prev_pos.y = event.offsetY;
       }
     },
-    touchend: function (event) {
+    touchend: function(event) {
       this.isMousedown = false;
       console.log("touch end");
     },
-    mouseWheel: function (event) {
+    mouseWheel: function(event) {
       console.log(`mouse wheel ${event.deltaMode}`);
       if (event.deltaY > 0) {
         // zoom in
@@ -242,18 +271,18 @@ export default {
         this.viewBoxHeight = (this.viewBoxHeight * (500 - event.deltaY)) / 500;
       }
     },
-    handleResize: function () {
+    handleResize: function() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
       this.x = this.width / 2;
       this.y = this.height / 2;
     },
     // 関連を表す線の太さを計算する
-    calcStrokeWidth: async function (nodes) {
-      const max = Math.max(...nodes.map((node) => node.relevance));
-      const min = Math.min(...nodes.map((node) => node.relevance));
+    calcStrokeWidth: async function(nodes) {
+      const max = Math.max(...nodes.map(node => node.relevance));
+      const min = Math.min(...nodes.map(node => node.relevance));
       const _nodes = await Promise.all(
-        nodes.map(async (node) => {
+        nodes.map(async node => {
           const ratio = max === min ? 0 : (node.relevance - min) / (max - min);
           node.strokeWidth =
             this.nodeParam.LINE_WEIGHT +
@@ -266,15 +295,15 @@ export default {
       return _nodes;
     },
     // 全関連ノードの描画時の半径を計算する
-    calcRadius: async function (nodes) {
+    calcRadius: async function(nodes) {
       // tagドキュメントを全て取得
       const allTags = await this.$getTags();
       // volumeの最大・最小値を計算
-      const max = Math.max(...allTags.map((tag) => tag.volume));
-      const min = Math.min(...allTags.map((tag) => tag.volume));
+      const max = Math.max(...allTags.map(tag => tag.volume));
+      const min = Math.min(...allTags.map(tag => tag.volume));
       // 各ノードについて半径を計算する
       const _nodes = await Promise.all(
-        nodes.map(async (node) => {
+        nodes.map(async node => {
           const tag = await this.$getTag(node.id);
           // min-max正規化
           let increaseRatio =
@@ -289,7 +318,7 @@ export default {
       return _nodes;
     },
     // ノードを同心円上に配置するときの配置数を返すジェネレータ
-    nodeNumGenerator: function* (totalNum) {
+    nodeNumGenerator: function*(totalNum) {
       let remainingCount = totalNum;
       //for (let i = 1; i <= this.nodeParam.MAX_RELATIVE_NODE_CIRCLES; i++) {
       for (let i = 1; i <= 10; i++) {
@@ -305,7 +334,7 @@ export default {
     },
     // 関連ノードを分割して、ノードの2次元配列にする
     // e.g. splitRelativeNodes({ノード} * 13) -> {[ノード} * 4, ノード * 8, ノード * 1]
-    splitRelativeNodes: function (nodes) {
+    splitRelativeNodes: function(nodes) {
       let relativeNodesCopy = JSON.parse(JSON.stringify(nodes));
       // 関連度順に降順ソート
       relativeNodesCopy.sort((a, b) => b.relevance - a.relevance);
@@ -339,8 +368,8 @@ export default {
     reverseIndex(index) {
       return this.splittedRelativeNodes.length - index;
       // return 1,2,3,...
-    },
-  },
+    }
+  }
 };
 </script>
 

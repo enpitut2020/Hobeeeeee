@@ -6,6 +6,10 @@
       :relativeNodes="relativeTags"
       :name="name"
       :randomTags="randomTags"
+      :vbX="viewBoxX"
+      :vbY="viewBoxY"
+      :vbWidth="viewBoxWidth"
+      :vbHeight="viewBoxHeight"
     />
   </div>
 </template>
@@ -17,7 +21,7 @@ export default {
     const relativeTags = await $getRelativeTags(targetTag.id);
     const randomTags = await $getRandomTags(
       2,
-      relativeTags.concat([targetTag]).map((tag) => tag.id)
+      relativeTags.concat([targetTag]).map(tag => tag.id)
     );
     // TODO: 表示するノードを制限する
     // 同心円は複数用意する
@@ -28,17 +32,37 @@ export default {
       name: targetTag.name,
       targetTag: targetTag,
       relativeTags: relativeTags,
-      randomTags: randomTags,
+      randomTags: randomTags
+    };
+  },
+  data() {
+    return {
+      viewBoxX: null,
+      viewBoxY: null,
+      viewBoxWidth: null,
+      viewBoxHeight: null
     };
   },
 
   async created() {
     const fromTagId = this.$route.query.from;
+    this.viewBoxX = Number(this.$route.query.viewBoxX)
+      ? Number(this.$route.query.viewBoxX)
+      : -100;
+    this.viewBoxY = Number(this.$route.query.viewBoxY)
+      ? Number(this.$route.query.viewBoxY)
+      : -1500;
+    this.viewBoxWidth = Number(this.$route.query.viewBoxWidth)
+      ? Number(this.$route.query.viewBoxWidth)
+      : 10;
+    this.viewBoxHeight = Number(this.$route.query.viewBoxHeight)
+      ? Number(this.$route.query.viewBoxHeight)
+      : 3000;
     if (fromTagId) {
       const fromTag = await this.$getTag(fromTagId);
       await this.$incrementRelevance(fromTag, this.targetTag);
     }
-  },
+  }
 };
 </script>
 
