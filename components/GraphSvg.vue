@@ -1,100 +1,266 @@
 <template>
-  <div>
+  <div width="2000px" :height="height * 3">
     <svg viewbox="0 0 1000 1000" :width="width" :height="height">
-      <g v-for="(node, index) in relativeNodes" :key="index">
-        <line
-          :x1="x"
-          :y1="y"
-          :x2="x + 250 * Math.cos((2 * Math.PI * index) / relativeNodes.length)"
-          :y2="y + 250 * Math.sin((2 * Math.PI * index) / relativeNodes.length)"
-          stroke="#333333"
-          :stroke-width="node.relevance+ 'px'"
-        />
-        <nuxt-link :to="'/' + node.id + '/graph'">
+      <!-- 関連趣味に関する描画のループ -->
+      <g
+        v-for="(nodes, tierIndex) in splittedRelativeNodes"
+        :key="'t-' + tierIndex"
+      >
+        <g v-for="(node, nodeIndex) in nodes" :key="'n-' + nodeIndex">
+          <!-- ノード間をつなぐ線 -->
+          <line
+            :x1="x"
+            :y1="y"
+            :x2="
+              x +
+              nodeParam.DISTANCE *
+                reverseIndex(tierIndex) *
+                Math.cos(
+                  radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                )
+            "
+            :y2="
+              y +
+              nodeParam.DISTANCE *
+                reverseIndex(tierIndex) *
+                Math.sin(
+                  radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                )
+            "
+            stroke="#eaffd0"
+            :stroke-width="`${node.strokeWidth}px`"
+          />
+          <nuxt-link :to="'/' + node.id + '/graph?from=' + targetNode.id">
+            <!-- 関連趣味のノード -->
+            <circle
+              :r="node.radius"
+              :cx="
+                x +
+                nodeParam.DISTANCE *
+                  reverseIndex(tierIndex) *
+                  Math.cos(
+                    radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                  )
+              "
+              :cy="
+                y +
+                nodeParam.DISTANCE *
+                  reverseIndex(tierIndex) *
+                  Math.sin(
+                    radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                  )
+              "
+            ></circle>
+            <text
+              :x="x + (nodeIndex + 1) * 200"
+              :y="y + (nodeIndex + 1) * 200"
+              text-anchor="middle"
+              dominant-baseline="central"
+              style="font-size: 24px; fill: #111111"
+            >
+              <!-- 関連趣味名 -->
+              <tspan
+                :x="
+                  x +
+                  nodeParam.DISTANCE *
+                    reverseIndex(tierIndex) *
+                    Math.cos(
+                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                    )
+                "
+                :y="
+                  y +
+                  nodeParam.DISTANCE *
+                    reverseIndex(tierIndex) *
+                    Math.sin(
+                      radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                    )
+                "
+              >
+                {{ node.name }}
+              </tspan>
+            </text>
+          </nuxt-link>
+        </g>
+      </g>
+      <!-- 現在フォーカスしている趣味のノードと名前の描画 -->
+      <nuxt-link :to="'/' + targetNode.id + '/list'">
+        <circle
+          :r="nodeParam.RADIUS"
+          :cx="x"
+          :cy="y"
+          style="fill: #f38181"
+        ></circle>
+        <text
+          text-anchor="middle"
+          dominant-baseline="central"
+          style="font-size: 24px; fill: #111111"
+        >
+          <tspan :x="x" :y="y - nodeParam.TEXT_SHIFT_HEIGHT">{{ name }}</tspan>
+          <tspan :x="x" :y="y + nodeParam.TEXT_SHIFT_HEIGHT">
+            の沼を見る？
+          </tspan>
+        </text>
+      </nuxt-link>
+      <!-- ランダムのノード -->
+      <g v-for="(node, index) in randomTags" :key="index">
+        <nuxt-link :to="'/' + node.id + '/graph?from=' + targetNode.id">
           <circle
-            :r="r"
-            :cx="
-              x + 250 * Math.cos((2 * Math.PI * index) / relativeNodes.length)
-            "
-            :cy="
-              y + 250 * Math.sin((2 * Math.PI * index) / relativeNodes.length)
-            "
+            :r="nodeParam.RADIUS"
+            :cx="x + (index + 1) * 250"
+            :cy="y + 300"
+            class="randomTags"
           ></circle>
           <text
-            :x="x + (index + 1) * 200"
-            :y="y + (index + 1) * 200"
             text-anchor="middle"
             dominant-baseline="central"
-            style="font-size:24px; fill: #513e35;"
+            style="font-size: 24px; fill: #111111"
           >
-            <tspan
-              :x="
-                x + 250 * Math.cos((2 * Math.PI * index) / relativeNodes.length)
-              "
-              :y="
-                y + 250 * Math.sin((2 * Math.PI * index) / relativeNodes.length)
-              "
-            >
+            <tspan :x="x + (index + 1) * 250" :y="y + 300">
               {{ node.name }}
             </tspan>
           </text>
         </nuxt-link>
       </g>
-      <nuxt-link :to="'/' + targetNode.id + '/list'">
-        <circle :r="r" :cx="x" :cy="y"></circle>
-        <text
-          text-anchor="middle"
-          dominant-baseline="central"
-          style="font-size:24px; fill: #513e35;"
-        >
-          <tspan :x="x" :y="y - 10">{{ name }}</tspan>
-          <tspan :x="x" :y="y + 15">の沼を見る？</tspan>
-        </text>
-      </nuxt-link>
     </svg>
   </div>
 </template>
 
 <script>
+import graphParameters from "@/consts/graphParameters";
+
 export default {
-  props: ["targetNode", "relativeNodes", "name"],
+  props: ["targetNode", "relativeNodes", "name", "randomTags"],
   data() {
     return {
       active: false,
       width: window.innerWidth,
       height: window.innerHeight,
-      // 円のサイズ指定をcircle.r的な書き方にしたいんだけどやり方分からなかったやつ↓
-      r: 100, // magic num: 後々規模感で変わる可能性あり
       x: 0,
-      y: 0
+      y: 0,
+      splittedRelativeNodes: null,
     };
   },
   computed: {
-    yi: function(deltaY) {
-      return this.y + deltaY;
-    }
+    // 定数を取り出す算出プロパティ
+    nodeParam() {
+      return graphParameters;
+    },
   },
-  created() {
+  async created() {
     window.addEventListener("resize", this.handleResize);
+    let _relativeNodes = await this.calcRadius(this.relativeNodes);
+    _relativeNodes = await this.calcStrokeWidth(_relativeNodes);
+    this.splittedRelativeNodes = this.splitRelativeNodes(_relativeNodes);
   },
   mounted() {
-    console.log("******:");
-    console.log(this.relativeNodes);
-    console.log("******:");
     this.x = this.width / 2;
     this.y = this.height / 2;
+    window.resizeTo(5000, 5000);
   },
-  beforeDestroy: function() {
+  beforeDestroy: function () {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    handleResize: function() {
+    handleResize: function () {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
-      this.x = this.width / 5;
-      this.y = this.height / 5;
-    }
-  }
+      this.x = this.width / 2;
+      this.y = this.height / 2;
+    },
+    // 関連を表す線の太さを計算する
+    calcStrokeWidth: async function (nodes) {
+      const max = Math.max(...nodes.map((node) => node.relevance));
+      const min = Math.min(...nodes.map((node) => node.relevance));
+      const _nodes = await Promise.all(
+        nodes.map(async (node) => {
+          const ratio = max === min ? 0 : (node.relevance - min) / (max - min);
+          node.strokeWidth =
+            this.nodeParam.LINE_WEIGHT +
+            this.nodeParam.LINE_WEIGHT *
+              this.nodeParam.MAX_STROKE_WIDTH_RATIO *
+              ratio;
+          return node;
+        })
+      );
+      return _nodes;
+    },
+    // 全関連ノードの描画時の半径を計算する
+    calcRadius: async function (nodes) {
+      // tagドキュメントを全て取得
+      const allTags = await this.$getTags();
+      // volumeの最大・最小値を計算
+      const max = Math.max(...allTags.map((tag) => tag.volume));
+      const min = Math.min(...allTags.map((tag) => tag.volume));
+      // 各ノードについて半径を計算する
+      const _nodes = await Promise.all(
+        nodes.map(async (node) => {
+          const tag = await this.$getTag(node.id);
+          // min-max正規化
+          let increaseRatio =
+            max === min ? 0 : (tag.volume - min) / (max - min);
+          // volumeに応じて半径を計算
+          node.radius =
+            this.nodeParam.RADIUS +
+            this.nodeParam.MAX_DELTA_RADIUS * increaseRatio;
+          return node;
+        })
+      );
+      return _nodes;
+    },
+    // ノードを同心円上に配置するときの配置数を返すジェネレータ
+    nodeNumGenerator: function* (totalNum) {
+      let remainingCount = totalNum;
+      //for (let i = 1; i <= this.nodeParam.MAX_RELATIVE_NODE_CIRCLES; i++) {
+      for (let i = 1; i <= 10; i++) {
+        // 内側の円から4, 8, ...と個数が増えていく
+        const nextNum = i * 4;
+        if (nextNum >= remainingCount) {
+          // 4の倍数ずつ内側から配置していったときの余りを一番外側の円に配置する
+          return remainingCount;
+        }
+        remainingCount -= nextNum;
+        yield nextNum;
+      }
+    },
+    // 関連ノードを分割して、ノードの2次元配列にする
+    // e.g. splitRelativeNodes({ノード} * 13) -> {[ノード} * 4, ノード * 8, ノード * 1]
+    splitRelativeNodes: function (nodes) {
+      let relativeNodesCopy = JSON.parse(JSON.stringify(nodes));
+      // 関連度順に降順ソート
+      relativeNodesCopy.sort((a, b) => b.relevance - a.relevance);
+      const gen = this.nodeNumGenerator(nodes.length);
+      let splittedNodes = [];
+      while (true) {
+        let nodeNum = gen.next();
+        console.debug("nodeNum : " + nodeNum.value);
+        splittedNodes.push(relativeNodesCopy.splice(0, nodeNum.value));
+        if (nodeNum.done) {
+          // 最後のノード数を返すときにdoneプロパティがtrueになるのでそこで終了
+          break;
+        }
+      }
+      console.debug(
+        `Splitted relativeNodes (created() in GraphSvg.vue): ${JSON.stringify(
+          splittedNodes
+        )}`
+      );
+      // 外側に配置するノードから順にソートする
+      return splittedNodes.reverse();
+    },
+    // ノード数を考慮した角度を決める
+    radOfNode(nodeIndex, tierIndex, nodes) {
+      return (
+        (2 * Math.PI * nodeIndex + this.nodeParam.ROTATE_RADIAN * tierIndex) /
+        nodes.length
+      );
+    },
+    // インデックスを逆順にする
+    reverseIndex(index) {
+      return this.splittedRelativeNodes.length - index;
+      // return 1,2,3,...
+    },
+  },
 };
 </script>
 
@@ -103,7 +269,11 @@ export default {
 circle {
   fill: #67d5b5;
   transition: all 0.4s cubic-bezier(0.96, 0.04, 0.04, 0.96);
-  stroke: #513e35;
+  stroke: #111010;
   stroke-width: 0px;
+}
+
+.randomTags {
+  fill: #fce38a;
 }
 </style>
