@@ -23,8 +23,9 @@
         previewBackground="#fff"
       />
       <nuxt-link :to="'/' + currentTagId + '/list'">記事一覧へ戻る</nuxt-link>
-      <button class="button is-success" v-on:click="zbzbButton()">
-        {{ zbzb_count }} ずぶずぶ！
+      <button class="button" v-bind:class="{'is-success':isZbzbPushed==true}" v-on:click="zbzbButton()">
+        <span v-show="isZbzbPushed==false">{{ zbzb_count }} ずぶずぶ！</span>
+        <span v-show="isZbzbPushed==true">{{ zbzb_count }} ずぶった！</span>
       </button> 
     </div>
   </div>
