@@ -1,6 +1,21 @@
 <template>
   <div width="2000px" :height="height * 3">
-    <svg viewbox="0 0 1000 1000" :width="width" :height="height">
+    <form>
+      <span>中心座標=({{ x }},{{ y }})</span>
+      <label> x</label> <input v-model="viewBoxX" type="number" step="10" />
+      <label> y </label><input v-model="viewBoxY" type="number" step="10" />
+      <label> width</label>
+      <input v-model="viewBoxWidth" type="number" step="10" min="0" />
+      <label> height</label>
+      <input v-model="viewBoxHeight" type="number" step="10" min="0" />
+    </form>
+    <svg
+      :viewBox="
+        viewBoxX + ' ' + viewBoxY + ' ' + viewBoxWidth + ' ' + viewBoxHeight
+      "
+      :width="width"
+      :height="height"
+    >
       <!-- 関連趣味に関する描画のループ -->
       <g
         v-for="(nodes, tierIndex) in splittedRelativeNodes"
@@ -134,6 +149,10 @@ export default {
   data() {
     return {
       active: false,
+      viewBoxX: -100,
+      viewBoxY: -1500,
+      viewBoxWidth: 10,
+      viewBoxHeight: 3000,
       width: window.innerWidth,
       height: window.innerHeight,
       x: 0,
