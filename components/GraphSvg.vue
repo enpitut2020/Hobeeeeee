@@ -1,6 +1,32 @@
 <template>
   <div width="2000px" :height="height * 3">
-    <svg viewbox="0 0 1000 1000" :width="width" :height="height">
+    <form>
+      <!-- TODO:
+      ・マウスの座標を取得・表示する
+      ・マウスのイベント（ドラッグ）を取得する
+      ・マウスの座標を基にVieBoxの座標を決定する
+      -->
+      <span>中心座標=({{ x }},{{ y }})</span>
+      <span>マウス座標=({{ mouseX }}, {{ mouseY }})</span>
+      <label> x</label> <input v-model="viewBoxX" type="number" step="10" />
+      <label> y </label><input v-model="viewBoxY" type="number" step="10" />
+      <label> width</label>
+      <input v-model="viewBoxWidth" type="number" step="10" min="0" />
+      <label> height</label>
+      <input v-model="viewBoxHeight" type="number" step="10" min="0" />
+    </form>
+    <svg
+      :viewBox="
+        viewBoxX + ' ' + viewBoxY + ' ' + viewBoxWidth + ' ' + viewBoxHeight
+      "
+      :width="width"
+      :height="height"
+      @mousedown="touchstart($event)"
+      @mousemove="touchmove($event)"
+      @mouseup="touchend($event)"
+      @mouseleave="touchend($event)"
+      @wheel="mouseWheel($event)"
+    >
       <!-- 関連趣味に関する描画のループ -->
       <g
         v-for="(nodes, tierIndex) in splittedRelativeNodes"
@@ -134,11 +160,22 @@ export default {
   data() {
     return {
       active: false,
+      isMousedown: false,
+      viewBoxX: -100,
+      viewBoxY: -1500,
+      viewBoxWidth: 10,
+      viewBoxHeight: 3000,
       width: window.innerWidth,
       height: window.innerHeight,
       x: 0,
       y: 0,
       splittedRelativeNodes: null,
+      mouseX: 0,
+      mouseY: 0,
+      prev_pos: {
+        x: 0,
+        y: 0,
+      },
     };
   },
   computed: {
@@ -162,6 +199,49 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
+    clickEvent(event) {
+      console.log(`Clicked (${event.clientX}, ${event.clientY})`);
+    },
+    touchstart: function (event) {
+      this.isMousedown = true;
+      console.log("touch start:%d,%d", event.offsetX, event.offsetY);
+      this.prev_pos.x = event.offsetX;
+      this.prev_pos.y = event.offsetY;
+      this.mouseX = event.offsetX;
+      this.mouseY = event.offsetY;
+    },
+    touchmove: function (event) {
+      // 押下中だったら
+      if (this.isMousedown) {
+        // 前回座標との差分を算出
+        let moved_x = event.offsetX - this.prev_pos.x;
+        let moved_y = event.offsetY - this.prev_pos.y;
+
+        // 全要素に差分を適用
+        this.viewBoxX -= moved_x;
+        this.viewBoxY -= moved_y;
+
+        // 前回のクリック座標を更新
+        this.prev_pos.x = event.offsetX;
+        this.prev_pos.y = event.offsetY;
+      }
+    },
+    touchend: function (event) {
+      this.isMousedown = false;
+      console.log("touch end");
+    },
+    mouseWheel: function (event) {
+      console.log(`mouse wheel ${event.deltaMode}`);
+      if (event.deltaY > 0) {
+        // zoom in
+        this.viewBoxWidth = (this.viewBoxWidth * (500 - event.deltaY)) / 500;
+        this.viewBoxHeight = (this.viewBoxHeight * (500 - event.deltaY)) / 500;
+      } else {
+        // zoom out
+        this.viewBoxWidth = (this.viewBoxWidth * (500 - event.deltaY)) / 500;
+        this.viewBoxHeight = (this.viewBoxHeight * (500 - event.deltaY)) / 500;
+      }
+    },
     handleResize: function () {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
