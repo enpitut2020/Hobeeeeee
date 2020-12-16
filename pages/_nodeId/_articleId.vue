@@ -23,9 +23,9 @@
         previewBackground="#fff"
       />
       <nuxt-link :to="'/' + currentTagId + '/list'">記事一覧へ戻る</nuxt-link>
-      <!-- <button class="button is-success" v-on:click="zbzb_count += 1">
+      <button class="button is-success" v-on:click="zbzbButton()">
         {{ zbzb_count }} ずぶずぶ！
-      </button> -->
+      </button> 
     </div>
   </div>
 </template>
@@ -40,7 +40,8 @@ export default {
       title: "",
       tags: [],
       content: "",
-      zbzb_count: 64,
+      zbzb_count: null,
+      isZbzbPushed: false,
       articleId: null,
       currentTagId: null,
       markdownOption: {
@@ -79,6 +80,14 @@ export default {
     const article = await this.$getArticle(this.articleId);
     this.content = article.body;
     this.title = article.title;
+    if(article.zbzbCount == null)
+    {
+      this.zbzb_count = 0; 
+    }
+    else
+    {
+      this.zbzb_count = article.zbzbCount;
+    }
     const getTagsInfo = [];
     article.tags.forEach(tag => {
       getTagsInfo.push(this.$getTag(tag));
@@ -87,6 +96,28 @@ export default {
       this.tags = values;
       console.log(values);
     });
+  },
+
+  methods:{
+    zbzbButton(){
+      //ZBZBButtonが押されたときの処理
+      console.log("zbzb button pushed");
+      //isButtonPushedがfalseの時、ずぶずぶカウントが1増え、trueの時1減る
+      if(this.isZbzbPushed)
+      {
+        this.zbzb_count -= 1;
+        this.isZbzbPushed = false;
+        this.$updateZbzbCount(this.articleId, -1)
+      }
+      else
+      {
+        this.zbzb_count += 1;
+        this.isZbzbPushed = true;
+        this.$updateZbzbCount(this.articleId, 1)
+      }
+    
+    }
+ 
   }
 };
 </script>
