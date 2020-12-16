@@ -255,6 +255,17 @@ Vue.prototype.$getSuggestions = async function getSuggestions() {
     });
 };
 
+Vue.prototype.$updateZbzbCount = async function updateZbzbCount(
+  articleId, incrementNumber
+) {
+    db.collection("articles")
+    .doc(articleId)
+    .update({
+      zbzbCount: firebase.firestore.FieldValue.increment(incrementNumber)
+    })
+
+}
+
 Vue.prototype.$addTagSuggestions = async function addTagSuggestions(newTagSuggestions){
   db.collection("tagSuggestions")
   .doc("suggestions")
