@@ -14,6 +14,7 @@
       <datalist id="suggestList">
         <option v-for="n in tagSuggestions" :key="n">{{ n }}</option>
       </datalist>
+      <input class="input" placeholder="著者名" v-model="author" />
       <mavon-editor
         v-model="content"
         :toolbars="markdownOption"
@@ -42,6 +43,7 @@ export default {
       tags: [],
       innerSearchText: "",
       tagSuggestions: [],
+      author: "",
       markdownOption: {
         bold: true,
         italic: true,
@@ -87,12 +89,12 @@ export default {
         title: this.title,
         body: this.content,
         // FIXME: 著者名を入力フォームから取得する
-        author: "名無しさん",
+        author: this.author,
         createdAt: timestamp,
         updatedAt: timestamp,
       };
 
-      if (this.searchText === "" || this.title === "" || this.content === ""){
+      if (this.searchText === "" || this.title === "" || this.content === "" || this.author === ""){
         alert("未入力の項目があります")
         return
       }
