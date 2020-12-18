@@ -1,6 +1,5 @@
 <template>
   <div>
-    <nuxt-link to="/">トップへ戻る</nuxt-link>
     <GraphSvg
       :targetNode="targetTag"
       :relativeNodes="relativeTags"
