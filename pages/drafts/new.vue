@@ -117,7 +117,7 @@ export default {
       }
 
       await this.$registerArticle(article);
-      alert( "データを送信しました。") 
+      alert( "データを送信しました") 
       this.$router.push("/");
     },
   },
