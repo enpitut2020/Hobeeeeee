@@ -21,7 +21,7 @@
         placeholder="編集を始めてね！"
       />
       <!-- FIXME: 送信したら投稿した記事の画面に遷移するようにする -->
-      <button v-on:click="submit" class="button is-success">submit</button>
+      <button v-on:click="submit" type="button" class="button is-success">submit</button>
     </div>
   </div>
 </template>
@@ -91,9 +91,17 @@ export default {
         createdAt: timestamp,
         updatedAt: timestamp,
       };
+
+      if (this.searchText === "" || this.title === "" || this.content === ""){
+        alert("未入力の項目があります")
+        return
+      }
+      
       let existingTag = await this.$getExistingTag(this.searchText);
 
-      alert(`以下の内容で投稿しますか？\n${this.title}`);
+      if(!confirm(`以下の内容で投稿しますか？\n${this.title}`)) {
+        return
+      }
 
       if (existingTag == null) {
         // 新規登録
@@ -109,6 +117,7 @@ export default {
       }
 
       await this.$registerArticle(article);
+      alert( "データを送信しました。") 
       this.$router.push("/");
     },
   },
