@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1 class="title">{{ name }}の記事一覧です</h1>
+    <nuxt-link :to="`/${targetTag.id}/graph`">趣味探しに戻る</nuxt-link>
     <div v-if="articles.length === 0">
       <p>まだ記事がありません。</p>
     </div>
