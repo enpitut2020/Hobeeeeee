@@ -28,6 +28,12 @@
       <!-- ナビゲーションバーの要素はここで増やす -->
       <div class="navbar-start">
         <nuxt-link to="/" class="navbar-item"> ホーム </nuxt-link>
+        <nuxt-link
+          :to="`/${randomId}/graph/`"
+          class="navbar-item"
+          @click.native="reloadTargetTag"
+          >趣味を探す</nuxt-link
+        >
         <nuxt-link to="/drafts/new" class="navbar-item"> 記事を書く </nuxt-link>
       </div>
 
@@ -49,6 +55,22 @@
 </template>
 
 <script>
+export default {
+  data() {
+    return {
+      randomId: -1,
+    };
+  },
+  async created() {
+    await this.reloadTargetTag();
+  },
+  methods: {
+    async reloadTargetTag() {
+      let tags = await this.$getRandomTags();
+      this.randomId = tags[0].id;
+    },
+  },
+};
 </script>
 
 <style>
