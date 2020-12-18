@@ -18,21 +18,21 @@ export default {
     return {
       hobbeeData: {},
       randomId: -1,
-      title: ""
+      title: "",
     };
   },
 
   async created() {
     let tags = await this.$getRandomTags();
     this.randomId = tags[0].id;
-  }
+  },
 };
 </script>
 
 <style>
 .container {
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;

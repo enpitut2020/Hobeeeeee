@@ -1,5 +1,5 @@
 <template>
-  <div width="2000px" :height="height * 3">
+  <div>
     <form>
       <!-- TODO:
       ・マウスの座標を取得・表示する
@@ -161,10 +161,10 @@ export default {
     return {
       active: false,
       isMousedown: false,
-      viewBoxX: -100,
-      viewBoxY: -1500,
-      viewBoxWidth: 10,
-      viewBoxHeight: 3000,
+      viewBoxX: 0,
+      viewBoxY: -200,
+      viewBoxWidth: 2000,
+      viewBoxHeight: 1500,
       width: window.innerWidth,
       height: window.innerHeight,
       x: 0,

@@ -18,14 +18,14 @@
 export default {
   async asyncData({ params, $getTags, $getRelativeTags, $getArticles }) {
     const tags = await $getTags();
-    const targetTag = tags.find(tag => tag.id === params.nodeId);
+    const targetTag = tags.find((tag) => tag.id === params.nodeId);
     const articles = await $getArticles(targetTag.id);
     return {
       name: targetTag.name,
       targetTag: targetTag,
-      articles: articles
+      articles: articles,
     };
-  }
+  },
 };
 </script>
 
