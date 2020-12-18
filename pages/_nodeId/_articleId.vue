@@ -3,6 +3,7 @@
   <div class="container">
     <div class="my-title-container">
       <h1 class="title">{{ title }}</h1>
+      <h2 class="subtitle">かいたひと : {{authorName}}</h2>
       <div class="is-divider"></div>
       <nuxt-link
         :to="'/' + tag.id + '/graph'"
@@ -10,7 +11,7 @@
         :key="tag.id"
         class="tag"
       >
-        {{ tag.name }}({{ tag.volume }})
+        {{ tag.name }}({{ tag.articlesCount }})
       </nuxt-link>
       <mavon-editor
         v-model="content"
@@ -49,6 +50,7 @@ export default {
       isZbzbPushed: false,
       articleId: null,
       currentTagId: null,
+      authorName:"名無しさん",
       markdownOption: {
         bold: true,
         italic: true,
@@ -84,6 +86,7 @@ export default {
     this.currentTagId = this.$route.params.nodeId;
     const article = await this.$getArticle(this.articleId);
     this.content = article.body;
+    this.authorName=article.author?article.author:"名無しさん"
     this.title = article.title;
     if (article.zbzbCount == null) {
       this.zbzb_count = 0;

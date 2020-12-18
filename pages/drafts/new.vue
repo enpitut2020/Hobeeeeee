@@ -14,6 +14,7 @@
       <datalist id="suggestList">
         <option v-for="n in tagSuggestions" :key="n">{{ n }}</option>
       </datalist>
+      <input class="input" placeholder="著者名" v-model="author" />
       <mavon-editor
         v-model="content"
         :toolbars="markdownOption"
@@ -21,7 +22,7 @@
         placeholder="編集を始めてね！"
       />
       <!-- FIXME: 送信したら投稿した記事の画面に遷移するようにする -->
-      <button v-on:click="submit" class="button is-success">submit</button>
+      <button v-on:click="submit" type="button" class="button is-success">submit</button>
     </div>
   </div>
 </template>
@@ -42,6 +43,7 @@ export default {
       tags: [],
       innerSearchText: "",
       tagSuggestions: [],
+      author: "",
       markdownOption: {
         bold: true,
         italic: true,
@@ -87,13 +89,21 @@ export default {
         title: this.title,
         body: this.content,
         // FIXME: 著者名を入力フォームから取得する
-        author: "名無しさん",
+        author: this.author,
         createdAt: timestamp,
         updatedAt: timestamp,
       };
+
+      if (this.searchText === "" || this.title === "" || this.content === "" || this.author === ""){
+        alert("未入力の項目があります")
+        return
+      }
+      
       let existingTag = await this.$getExistingTag(this.searchText);
 
-      alert(`以下の内容で投稿しますか？\n${this.title}`);
+      if(!confirm(`以下の内容で投稿しますか？\n${this.title}`)) {
+        return
+      }
 
       if (existingTag == null) {
         // 新規登録
@@ -109,6 +119,7 @@ export default {
       }
 
       await this.$registerArticle(article);
+      alert( "データを送信しました") 
       this.$router.push("/");
     },
   },
