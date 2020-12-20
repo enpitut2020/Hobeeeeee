@@ -106,13 +106,10 @@
           this.$incrementArticlesCount(existingTag.id);
         }
 
-        await this.$registerArticle(article);
         alert("記事を投稿しました!")
+        let transitionArticleId = await this.$registerArticle(article);
         let transitionTagId = article["tags"]
-        // let transitionArticleId = article["id"]
-        // this.$router.push(`/${transitionTagId}/${transitionArticleId}`);
-        this.$router.push(`/${transitionTagId}/list`);
-
+        this.$router.push(`/${transitionTagId}/${transitionArticleId}`);
       },
     },
   };
