@@ -167,6 +167,7 @@
       let _relativeNodes = await this.calcRadius(this.relativeNodes);
       _relativeNodes = await this.calcStrokeWidth(_relativeNodes);
       this.splittedRelativeNodes = this.splitRelativeNodes(_relativeNodes);
+      this.noScroll();
     },
     mounted() {
       this.x = this.width / 2;
@@ -219,6 +220,15 @@
           this.viewBoxWidth = (this.viewBoxWidth * (500 - event.deltaY)) / 500;
           this.viewBoxHeight = (this.viewBoxHeight * (500 - event.deltaY)) / 500;
         }
+      },
+      scrollControl: function (event) {
+        event.preventDefault();
+      },
+      noScroll: function (event) {
+        window.addEventListener("wheel", this.scrollControl, { passive: false });
+        window.addEventListener("touchmove", this.scrollControl, { passive: false });
+        window.addEventListener("keydown", this.scrollControl, { passive: false });
+
       },
       handleResize: function () {
         this.width = window.innerWidth;
