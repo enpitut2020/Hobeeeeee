@@ -1,16 +1,7 @@
 <template>
-    <img src="/logo.gif" />
+  <div>
+    <img src="/logo.gif" id="logo" height="60%" width="60%" />
+  </div>
 </template>
 
-<style>
-.NuxtLogo {
-  animation: 1s appear;
-  margin: auto;
-}
-
-@keyframes appear {
-  0% {
-    opacity: 0;
-  }
-}
-</style>
+<style></style>
