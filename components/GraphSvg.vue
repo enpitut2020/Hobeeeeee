@@ -1,11 +1,7 @@
 <template>
   <div>
+    <!--
     <form>
-      <!-- TODO:
-      ・マウスの座標を取得・表示する
-      ・マウスのイベント（ドラッグ）を取得する
-      ・マウスの座標を基にVieBoxの座標を決定する
-      -->
       <span>中心座標=({{ x }},{{ y }})</span>
       <span>マウス座標=({{ mouseX }}, {{ mouseY }})</span>
       <label> x</label> <input v-model="viewBoxX" type="number" step="10" />
@@ -15,6 +11,7 @@
       <label> height</label>
       <input v-model="viewBoxHeight" type="number" step="10" min="0" />
     </form>
+    -->
     <svg :viewBox="
         viewBoxX + ' ' + viewBoxY + ' ' + viewBoxWidth + ' ' + viewBoxHeight
       " :width="width" :height="height" @mousedown="touchstart($event)" @mousemove="touchmove($event)"
