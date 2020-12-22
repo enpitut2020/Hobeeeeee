@@ -126,20 +126,19 @@ Vue.prototype.$getArticle = async function getArticle(articleId) {
 };
 
 // DBに記事データを登録する
+// 登録する記事のIDを返す
 Vue.prototype.$registerArticle = async function registerArticle(article) {
   let ref = await db.collection("articles");
-  let idRegistered;
-  ref
+  return ref
     .add(article)
     .then(newArticle => {
-      // con
       ref.doc(newArticle.id).update({
         id: newArticle.id
       });
-      idRegistered = newArticle.id;
+      return newArticle.id;
     })
     .catch(e => {
-      console.log("refister article error");
+      console.log("register article error");
       console.error(e);
     });
 };
