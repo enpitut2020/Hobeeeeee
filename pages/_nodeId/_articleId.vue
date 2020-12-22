@@ -3,7 +3,7 @@
   <div class="container">
     <div class="my-title-container">
       <h1 class="title">{{ title }}</h1>
-      <h2 class="subtitle">かいたひと : {{authorName}}</h2>
+      <h2 class="subtitle">かいたひと : {{ authorName }}</h2>
       <div class="is-divider"></div>
       <nuxt-link
         :to="'/' + tag.id + '/graph'"
@@ -32,6 +32,12 @@
         <span v-show="isZbzbPushed == false">{{ zbzb_count }} ずぶずぶ！</span>
         <span v-show="isZbzbPushed == true">{{ zbzb_count }} ずぶった！</span>
       </button>
+       <button
+        class="button"
+        @click="goTwitter()"
+      >Tweet
+      </button>
+    
     </div>
   </div>
 </template>
@@ -50,7 +56,8 @@ export default {
       isZbzbPushed: false,
       articleId: null,
       currentTagId: null,
-      authorName:"名無しさん",
+      authorName: "名無しさん",
+      shareUrl: "",
       markdownOption: {
         bold: true,
         italic: true,
@@ -70,8 +77,8 @@ export default {
         fullscreen: false,
         readmodel: true,
         htmlcode: true,
-        help: true,
-      },
+        help: true
+      }
     };
   },
 
@@ -86,7 +93,7 @@ export default {
     this.currentTagId = this.$route.params.nodeId;
     const article = await this.$getArticle(this.articleId);
     this.content = article.body;
-    this.authorName=article.author?article.author:"名無しさん"
+    this.authorName = article.author ? article.author : "名無しさん";
     this.title = article.title;
     if (article.zbzbCount == null) {
       this.zbzb_count = 0;
@@ -94,13 +101,12 @@ export default {
       this.zbzb_count = article.zbzbCount;
     }
     const getTagsInfo = [];
-    article.tags.forEach((tag) => {
+    article.tags.forEach(tag => {
       getTagsInfo.push(this.$getTag(tag));
     });
-    Promise.all(getTagsInfo).then((values) => {
-      this.tags = values;
-      console.log(values);
-    });
+    this.tags = await Promise.all(getTagsInfo);
+    const tweetText = `hobeeeeeeの「${this.title}」で${this.tags[0].name}の沼を覗こう!!`;
+    this.shareUrl = `https://twitter.com/share?text=${tweetText}&url=${location.href}`;
   },
 
   methods: {
@@ -118,6 +124,9 @@ export default {
         this.$updateZbzbCount(this.articleId, 1);
       }
     },
-  },
+    goTwitter(){
+      window.open(this.shareUrl)
+    }
+  }
 };
 </script>
