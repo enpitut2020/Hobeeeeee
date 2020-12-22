@@ -2,7 +2,6 @@
   <div class="container">
     <div>
       <Logo />
-      <h1 class="title">hobeeeeee</h1>
       <nuxt-link :to="randomId + '/graph/'">趣味を探す</nuxt-link>
       <nuxt-link to="/drafts/new">趣味を布教する</nuxt-link>
     </div>
