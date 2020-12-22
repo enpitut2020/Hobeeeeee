@@ -2,7 +2,7 @@ export default {
   // ノードの半径
   "RADIUS": 100,
   // ノードと1つ外側のノードの間の距離
-  "DISTANCE": 250,
+  "DISTANCE": 350,
   // ターゲットノードに表示する2行の文字列の中心からのずらし幅
   "TEXT_SHIFT_HEIGHT": 15,
   // ノード間をつなぐ線の幅
