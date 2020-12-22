@@ -1,16 +1,14 @@
 <template>
   <div>
     <div class="section">
-      <h1 class="title is-3">記事投稿画面</h1>
       <input class="input" placeholder="タイトル" v-model="title" />
       <input class="input" placeholder="タグ" name="yourarea" autocomplete="on" list="suggestList" v-model="searchText" />
       <datalist id="suggestList">
         <option v-for="n in tagSuggestions" :key="n">{{ n }}</option>
       </datalist>
-      <input class="input" placeholder="かいたひと" v-model="author" />
-      <mavon-editor v-model="content" :toolbars="markdownOption" language="ja" placeholder="記事をかいてね！" />
-      <!-- FIXME: 送信したら投稿した記事の画面に遷移するようにする -->
-      <button v-on:click="submit" type="button" class="button is-success">submit</button>
+      <input class="input" placeholder="書いた人" v-model="author" />
+      <mavon-editor v-model="content" :toolbars="markdownOption" language="ja" placeholder="記事を書いてね！" />
+      <button v-on:click="submit" type="button" class="button is-success">投稿する</button>
     </div>
   </div>
 </template>
@@ -76,8 +74,7 @@
           id: null,
           title: this.title,
           body: this.content,
-          // FIXME: 著者名を入力フォームから取得する
-          author: this.author,
+          author: this.author ? this.author : "ほびーさん",
           createdAt: timestamp,
           updatedAt: timestamp,
         };

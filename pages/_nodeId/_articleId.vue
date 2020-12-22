@@ -3,7 +3,7 @@
   <div class="container">
     <div class="my-title-container">
       <h1 class="title">{{ title }}</h1>
-      <h2 class="subtitle">かいたひと : {{ authorName }}</h2>
+      <h2 class="subtitle">書いた人: {{ authorName }}</h2>
       <div class="is-divider"></div>
       <nuxt-link
         :to="'/' + tag.id + '/graph'"
@@ -51,7 +51,7 @@ export default {
       isZbzbPushed: false,
       articleId: null,
       currentTagId: null,
-      authorName: "名無しさん",
+      authorName: "ほびーさん",
       shareUrl: "",
       markdownOption: {
         bold: true,
@@ -88,7 +88,7 @@ export default {
     this.currentTagId = this.$route.params.nodeId;
     const article = await this.$getArticle(this.articleId);
     this.content = article.body;
-    this.authorName = article.author ? article.author : "名無しさん";
+    this.authorName = article.author ? article.author : "ほびーさん";
     this.title = article.title;
     if (article.zbzbCount == null) {
       this.zbzb_count = 0;
@@ -100,7 +100,7 @@ export default {
       getTagsInfo.push(this.$getTag(tag));
     });
     this.tags = await Promise.all(getTagsInfo);
-    const tweetText = `hobeeeeeeの「${this.title}」で${this.tags[0].name}の沼を覗こう!!`;
+    const tweetText = `Hobeeeeee!!の「${this.title}」で${this.tags[0].name}の沼を覗こう!!`;
     this.shareUrl = `https://twitter.com/share?text=${tweetText}&url=${location.href}`;
   },
 

@@ -95,7 +95,7 @@
         <text text-anchor="middle" dominant-baseline="central" style="font-size: 24px; fill: #111111">
           <tspan :x="x" :y="y - nodeParam.TEXT_SHIFT_HEIGHT">{{ name }}</tspan>
           <tspan :x="x" :y="y + nodeParam.TEXT_SHIFT_HEIGHT">
-            の沼を見る？
+            の沼を覗く？
           </tspan>
         </text>
       </nuxt-link>

@@ -2,8 +2,8 @@
   <div class="container">
     <div>
       <Logo />
-      <nuxt-link :to="randomId + '/graph/'">趣味を探す</nuxt-link>
-      <nuxt-link to="/drafts/new">趣味を布教する</nuxt-link>
+      <nuxt-link :to="randomId + '/graph/'" class="button find-hobby">趣味を見つける</nuxt-link>
+      <nuxt-link to="/drafts/new" class="button find-hobby">趣味を広める</nuxt-link>
     </div>
   </div>
 </template>
@@ -58,5 +58,9 @@ export default {
 
 .links {
   padding-top: 15px;
+}
+
+.find-hobby {
+  margin: 1em;
 }
 </style>
