@@ -14,17 +14,23 @@
 
       <a
         role="button"
-        class="navbar-burger"
+        class="navbar-burger burger"
+        :class="{ 'is-active': isMenuOpen }"
         aria-label="menu"
         aria-expanded="false"
         data-target="navbarBasicExample"
+        @click="toggleMenu()"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </a>
     </div>
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div
+      id="navbarBasicExample"
+      class="navbar-menu"
+      :class="{ 'is-active': isMenuOpen }"
+    >
       <!-- ナビゲーションバーの要素はここで増やす -->
       <div class="navbar-start">
         <nuxt-link to="/" class="navbar-item"> ホーム </nuxt-link>
@@ -59,6 +65,7 @@ export default {
   data() {
     return {
       randomId: -1,
+      isMenuOpen: false
     };
   },
   async created() {
@@ -69,9 +76,16 @@ export default {
       let tags = await this.$getRandomTags();
       this.randomId = tags[0].id;
     },
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+    }
   },
+  watch: {
+    $route() {
+      this.isMenuOpen = false;
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>
