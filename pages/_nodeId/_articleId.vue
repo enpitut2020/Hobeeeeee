@@ -23,7 +23,7 @@
         defaultOpen="preview"
         previewBackground="#fff"
       />
-      <nuxt-link :to="'/' + currentTagId + '/list'">記事一覧へ戻る</nuxt-link>
+      <nuxt-link :to="'/' + currentTagId + '/list'" class="button">記事一覧へ戻る</nuxt-link>
       <button
         class="button"
         v-bind:class="{ 'is-success': isZbzbPushed == true }"
@@ -32,12 +32,7 @@
         <span v-show="isZbzbPushed == false">{{ zbzb_count }} ずぶずぶ！</span>
         <span v-show="isZbzbPushed == true">{{ zbzb_count }} ずぶった！</span>
       </button>
-       <button
-        class="button"
-        @click="goTwitter()"
-      >Tweet
-      </button>
-    
+      <button class="button share-button" @click="goTwitter()">Tweet</button>
     </div>
   </div>
 </template>
@@ -124,9 +119,16 @@ export default {
         this.$updateZbzbCount(this.articleId, 1);
       }
     },
-    goTwitter(){
-      window.open(this.shareUrl)
+    goTwitter() {
+      window.open(this.shareUrl);
     }
   }
 };
 </script>
+
+<style scoped>
+.share-button {
+  background-color:#00acee;
+  color: #eee;
+}
+</style>
