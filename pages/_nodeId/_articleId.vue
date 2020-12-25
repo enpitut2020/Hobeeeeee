@@ -100,7 +100,8 @@ export default {
       getTagsInfo.push(this.$getTag(tag));
     });
     this.tags = await Promise.all(getTagsInfo);
-    const tweetText = `Hobeeeeee!!の「${this.title}」で${this.tags[0].name}の沼を覗こう!!`;
+    let hashtag = "%23Hobeeeeee";
+    const tweetText = `Hobeeeeee!!の「${this.title}」で${this.tags[0].name}の沼を覗こう!! ${hashtag}`;
     this.shareUrl = `https://twitter.com/share?text=${tweetText}&url=${location.href}`;
   },
 
