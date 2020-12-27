@@ -10,9 +10,10 @@
     async asyncData({ params, $getTag, $getRelativeTags, $getRandomTags }) {
       const targetTag = await $getTag(params.nodeId);
       const relativeTags = await $getRelativeTags(targetTag.id);
-      let minAllTags = 12;
+      const minAllTags = 12;
+      const minRandomTags = 3;
       const randomTags = await $getRandomTags(
-        relativeTags.length < minAllTags ? minAllTags - relativeTags.length : 3,
+        relativeTags.length <= minAllTags - minRandomTags ? minAllTags - relativeTags.length : minRandomTags,
         relativeTags.concat([targetTag]).map(tag => tag.id)
       );
       return {
