@@ -65,8 +65,13 @@ export default {
   data() {
     return {
       randomId: -1,
-      isMenuOpen: false
+      isMenuOpen: false,
     };
+  },
+  watch: {
+    $route() {
+      this.isMenuOpen = false;
+    },
   },
   async created() {
     await this.reloadTargetTag();
@@ -78,13 +83,8 @@ export default {
     },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
-    }
+    },
   },
-  watch: {
-    $route() {
-      this.isMenuOpen = false;
-    }
-  }
 };
 </script>
 
