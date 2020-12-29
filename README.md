@@ -45,7 +45,7 @@
 
 ## 公開先
 
-[hobeeeeee](https://hobbeeeeee.netlify.app/)
+[hobeeeeee](https://hobeeeeee.netlify.app/)
 
 ## メンバー
 
