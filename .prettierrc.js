@@ -5,4 +5,6 @@ module.exports = {
   singleQuote: false,
   // 末尾のカンマはes5に準拠させる
   trailingComma: "es5",
+  // 改行コード
+  endOfLine: "auto",
 };
