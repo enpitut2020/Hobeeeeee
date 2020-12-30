@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  async asyncData({ params, $getTags, $getRelativeTags, $getArticles }) {
+  async asyncData({ params, $getTags, $getArticles }) {
     const tags = await $getTags();
     const targetTag = tags.find((tag) => tag.id === params.nodeId);
     const articles = await $getArticles(targetTag.id);
@@ -30,5 +30,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

@@ -2,16 +2,17 @@
   <div class="container">
     <div>
       <Logo />
-      <nuxt-link :to="randomId + '/graph/'" class="button find-hobby">趣味を見つける</nuxt-link>
-      <nuxt-link to="/drafts/new" class="button find-hobby">趣味を広める</nuxt-link>
+      <nuxt-link :to="randomId + '/graph/'" class="button find-hobby"
+        >趣味を見つける</nuxt-link
+      >
+      <nuxt-link to="/drafts/new" class="button find-hobby"
+        >趣味を広める</nuxt-link
+      >
     </div>
   </div>
 </template>
 
 <script>
-import firebase from "@/plugins/firebase.js";
-const db = firebase.firestore();
-
 export default {
   data() {
     return {

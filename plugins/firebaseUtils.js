@@ -14,16 +14,16 @@ Vue.prototype.$getTags = async function getTags() {
   const tags = await db
     .collection("tags")
     .get()
-    .then(querySnapshot => {
+    .then((querySnapshot) => {
       console.debug("キャッシュからデータを取得しました");
       const tags = [];
-      querySnapshot.forEach(data => {
+      querySnapshot.forEach((data) => {
         tags.push(data.data());
       });
       return tags;
     })
-    .catch(()=>{
-      alert("firestoreからのデータの取得でエラーが発生しました")
+    .catch(() => {
+      alert("firestoreからのデータの取得でエラーが発生しました");
     });
   console.debug(`tags (getTags() in firebaseUtils.js) : ${tags}`);
   return tags;
@@ -32,17 +32,18 @@ Vue.prototype.$getTags = async function getTags() {
 //param いくつほしいか。含まないID
 //@return Promise[array]
 Vue.prototype.$getRandomTags = async (count = 1, notContain = []) => {
-  return await Vue.prototype.$getTags().then(tags => {
-    tags = tags.filter(tag => !notContain.includes(tag.id));
+  return await Vue.prototype.$getTags().then((tags) => {
+    tags = tags.filter((tag) => !notContain.includes(tag.id));
     if (tags.length < count) {
       console.warn("ランダムのノードを取得できません");
       return [];
     }
     const randTags = [];
-    while (true) {
+    while (count < randTags.length) {
       const randNum = Math.floor(Math.random() * tags.length);
-      if (!randTags.includes(tags[randNum])) randTags.push(tags[randNum]);
-      if (randTags.length >= count) break;
+      if (!randTags.includes(tags[randNum])) {
+        randTags.push(tags[randNum]);
+      }
     }
     return randTags;
   });
@@ -53,10 +54,10 @@ Vue.prototype.$getTag = async function getTag(tagId) {
     .collection("tags")
     .doc(tagId)
     .get()
-    .then(data => {
+    .then((data) => {
       return data.data();
     })
-    .catch(e => {
+    .catch((e) => {
       console.error(e);
     });
 };
@@ -67,12 +68,12 @@ Vue.prototype.$getRelativeTags = async function getRelativeTags(tagId) {
     .doc(tagId)
     .collection("relative")
     .get()
-    .then(querySnapshot => {
-      querySnapshot.forEach(data => {
+    .then((querySnapshot) => {
+      querySnapshot.forEach((data) => {
         relativeTags.push(data.data());
       });
     })
-    .catch(e => {
+    .catch((e) => {
       console.error(e);
     });
   console.debug("tags(getRativeTags) : ", relativeTags);
@@ -84,12 +85,12 @@ Vue.prototype.$hobbiesData = async function getHobbeeData() {
   await db
     .collection("hobbees")
     .get()
-    .then(querySnapshot => {
-      querySnapshot.forEach(data => {
+    .then((querySnapshot) => {
+      querySnapshot.forEach((data) => {
         hobbeeData.push(data.data());
       });
     })
-    .catch(e => {
+    .catch((e) => {
       console.error(e);
     });
   console.debug("data reloaded : ", hobbeeData);
@@ -102,8 +103,8 @@ Vue.prototype.$getArticles = async function getArticles(tagId) {
     .collection("articles")
     .where("tags", "array-contains", tagId)
     .get()
-    .then(docs => {
-      docs.forEach(doc => {
+    .then((docs) => {
+      docs.forEach((doc) => {
         articles.push(doc.data());
       });
     });
@@ -116,7 +117,7 @@ Vue.prototype.$getArticle = async function getArticle(articleId) {
     .collection("articles")
     .doc(articleId)
     .get()
-    .then(doc => {
+    .then((doc) => {
       return doc.data();
     });
   console.debug(
@@ -131,13 +132,13 @@ Vue.prototype.$registerArticle = async function registerArticle(article) {
   let ref = await db.collection("articles");
   return ref
     .add(article)
-    .then(newArticle => {
+    .then((newArticle) => {
       ref.doc(newArticle.id).update({
-        id: newArticle.id
+        id: newArticle.id,
       });
       return newArticle.id;
     })
-    .catch(e => {
+    .catch((e) => {
       console.log("register article error");
       console.error(e);
     });
@@ -149,13 +150,13 @@ Vue.prototype.$getExistingTag = async function getExistingTag(query) {
     .collection("tags")
     .where("name", "==", query)
     .get()
-    .then(function(querySnapshot) {
+    .then(function (querySnapshot) {
       //[document1,document2]
-      querySnapshot.forEach(function(doc) {
+      querySnapshot.forEach(function (doc) {
         tagData = doc.data();
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log("Error getting documents: ", error);
     });
   return tagData;
@@ -165,19 +166,20 @@ Vue.prototype.$getExistingTag = async function getExistingTag(query) {
 Vue.prototype.$createTag = async function createTag(tagName) {
   // ref = db.collection("tags").doc();
   let refId = db.collection("tags").doc().id;
-  return await db.collection("tags")
+  return await db
+    .collection("tags")
     .doc(refId)
     .set({
       articlesCount: 1,
       id: refId,
       name: tagName,
-      volume: 100
+      volume: 100,
     })
-    .then(function(docRef) {
+    .then(function () {
       console.log("Document successfully written!");
       return refId;
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.error("Error writing document: ", error);
     });
 };
@@ -189,12 +191,12 @@ Vue.prototype.$incrementArticlesCount = async function incrementArticlesCount(
   db.collection("tags")
     .doc(tagId)
     .update({
-      articlesCount: firebase.firestore.FieldValue.increment(1)
+      articlesCount: firebase.firestore.FieldValue.increment(1),
     })
-    .then(function() {
+    .then(function () {
       console.log("Document successfully updated!");
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.error("Error updating document: ", error);
     });
 };
@@ -211,31 +213,31 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
     .collection("relative")
     .doc(fromTag.id);
 
-  const currentFromTagRelation = await currentFromTagRelativeRef
+  await currentFromTagRelativeRef
     .get()
-    .then(res => {
+    .then((res) => {
       return res.data(); //ここでreturnすると次のthenに引数で入る
     })
-    .then(relation => {
+    .then((relation) => {
       if (relation) {
         // console.debug("インクリメントします")
         fromCurrentTagRelativeRef.update({
-          relevance: firebase.firestore.FieldValue.increment(1)
+          relevance: firebase.firestore.FieldValue.increment(1),
         });
         currentFromTagRelativeRef.update({
-          relevance: firebase.firestore.FieldValue.increment(1)
+          relevance: firebase.firestore.FieldValue.increment(1),
         });
       } else {
         // console.debug("リレーションがないので追加します")
         fromCurrentTagRelativeRef.set({
           relevance: firebase.firestore.FieldValue.increment(1),
           name: currentTag.name,
-          id: currentTag.id
+          id: currentTag.id,
         });
         currentFromTagRelativeRef.set({
           relevance: firebase.firestore.FieldValue.increment(1),
           id: fromTag.id,
-          name: fromTag.name
+          name: fromTag.name,
         });
       }
     });
@@ -246,40 +248,42 @@ Vue.prototype.$getSuggestions = async function getSuggestions() {
     .collection("tagSuggestions")
     .doc("suggestions")
     .get()
-    .then(data => {
+    .then((data) => {
       return data.data();
     })
-    .catch(e => {
+    .catch((e) => {
       console.error(e);
     });
 };
 
 Vue.prototype.$updateZbzbCount = async function updateZbzbCount(
-  articleId, incrementNumber
+  articleId,
+  incrementNumber
 ) {
-    db.collection("articles")
+  db.collection("articles")
     .doc(articleId)
     .update({
-      zbzbCount: firebase.firestore.FieldValue.increment(incrementNumber)
-    })
+      zbzbCount: firebase.firestore.FieldValue.increment(incrementNumber),
+    });
+};
 
-}
-
-Vue.prototype.$addTagSuggestions = async function addTagSuggestions(newTagSuggestions){
+Vue.prototype.$addTagSuggestions = async function addTagSuggestions(
+  newTagSuggestions
+) {
   db.collection("tagSuggestions")
-  .doc("suggestions")
-  .set({
-    tagSuggestions: newTagSuggestions
-  })
-  .then(function (){
-    console.log("newTagSuggestions write success!")
-  })
-  .catch(e => {
-    console.error(e);
-  });
-}
+    .doc("suggestions")
+    .set({
+      tagSuggestions: newTagSuggestions,
+    })
+    .then(function () {
+      console.log("newTagSuggestions write success!");
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+};
 
-export default context => {
+export default (context) => {
   //asyncDateではthisが使えないけどこれで登録すれば引数に取ればthisなしで使えるっぽい
   context.$getTags = Vue.prototype.$getTags;
   context.$getTag = Vue.prototype.$getTag;
