@@ -1,13 +1,25 @@
 <template>
-    <canvas width="1000" height="1000" class="canvas" ref="graph-canvas"></canvas>
-  
+  <canvas ref="graph-canvas" width="1000" height="1000" class="canvas"></canvas>
 </template>
 
 <script>
 export default {
-props: ["targetNode","relativeNodes","name"],
+  props: {
+    targetNode: JSON,
+    relativeNodes: JSON,
+    name: { type: String, default: "" },
+  },
+
+  mounted() {
+    this.ctx = this.$el.getContext("2d");
+    console.debug("this.ctx" + JSON.stringify(this.ctx));
+    this.ctx.font = "48px serif";
+    this.ctx.textAlign = "center";
+    this.ctx.textBaseline = "middle";
+    this.draw(this.articlesCount);
+  },
   methods: {
-    draw(radius) {
+    draw() {
       this.ctx.beginPath();
       this.ctx.clearRect(0, 0, 1000, 1000);
       this.drawCircle(500, 500, 100, "rgba(255,0,0,0.5)", "rgba(255,0,0,1)");
@@ -19,8 +31,7 @@ props: ["targetNode","relativeNodes","name"],
       y,
       r = 100,
       fillRGB = "rgba(0,0,0,0)",
-      lineRGB = "rgba(0,0,0,0)",
-      lineWidth = 8
+      lineRGB = "rgba(0,0,0,0)"
     ) {
       console.debug("円の描画");
       this.ctx.beginPath();
@@ -37,20 +48,9 @@ props: ["targetNode","relativeNodes","name"],
       this.ctx.strokeStyle = RGB; // 線の色
       this.ctx.lineWidth = lineWidth;
       this.ctx.stroke();
-    }
+    },
   },
-
-  mounted() {
-    this.ctx = this.$el.getContext('2d');
-    console.debug("this.ctx" + JSON.stringify(this.ctx));
-    this.ctx.font = "48px serif";
-    this.ctx.textAlign = "center";
-    this.ctx.textBaseline = "middle";
-    this.draw(this.articlesCount);
-  }
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

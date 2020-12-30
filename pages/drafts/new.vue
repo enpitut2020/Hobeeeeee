@@ -1,113 +1,127 @@
 <template>
   <div>
     <div class="section">
-      <input class="input" placeholder="タイトル" v-model="title" />
-      <input class="input" placeholder="タグ" name="yourarea" autocomplete="on" list="suggestList" v-model="searchText" />
+      <input v-model="title" class="input" placeholder="タイトル" />
+      <input
+        v-model="searchText"
+        class="input"
+        placeholder="タグ"
+        name="yourarea"
+        autocomplete="on"
+        list="suggestList"
+      />
       <datalist id="suggestList">
         <option v-for="n in tagSuggestions" :key="n">{{ n }}</option>
       </datalist>
-      <input class="input" placeholder="書いた人" v-model="author" />
-      <mavon-editor v-model="content" :toolbars="markdownOption" language="ja" placeholder="記事を書いてね！" />
-      <button v-on:click="submit" type="button" class="button is-success">投稿する</button>
+      <input v-model="author" class="input" placeholder="書いた人" />
+      <mavon-editor
+        v-model="content"
+        :toolbars="markdownOption"
+        language="ja"
+        placeholder="記事を書いてね！"
+      />
+      <button type="button" class="button is-success" @click="submit">
+        投稿する
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-  import mavonEditor from "mavon-editor";
-  import "mavon-editor/dist/css/index.css";
+import "mavon-editor/dist/css/index.css";
 
-  import Vue from "vue";
-  import firebase from "@/plugins/firebase.js";
-  const myDb = firebase.firestore();
-
-  export default {
-    data() {
-      return {
-        title: "",
-        content: "",
-        tags: [],
-        innerSearchText: "",
-        tagSuggestions: [],
-        author: "",
-        markdownOption: {
-          bold: true,
-          italic: true,
-          header: true,
-          underline: true,
-          strikethrough: true,
-          mark: true,
-          superscript: true,
-          subscript: true,
-          quote: true,
-          ol: true,
-          ul: true,
-          link: true,
-          imagelink: true,
-          code: true,
-          table: true,
-          fullscreen: false,
-          readmodel: true,
-          htmlcode: true,
-          help: true,
-        },
+export default {
+  async asyncData({ $getSuggestions }) {
+    let data = await $getSuggestions();
+    return { tagSuggestions: data.tagSuggestions };
+  },
+  data() {
+    return {
+      title: "",
+      content: "",
+      tags: [],
+      innerSearchText: "",
+      tagSuggestions: [],
+      author: "",
+      markdownOption: {
+        bold: true,
+        italic: true,
+        header: true,
+        underline: true,
+        strikethrough: true,
+        mark: true,
+        superscript: true,
+        subscript: true,
+        quote: true,
+        ol: true,
+        ul: true,
+        link: true,
+        imagelink: true,
+        code: true,
+        table: true,
+        fullscreen: false,
+        readmodel: true,
+        htmlcode: true,
+        help: true,
+      },
+    };
+  },
+  computed: {
+    searchText: {
+      get() {
+        return this.innerSearchText;
+      },
+      set(value) {
+        this.innerSearchText = value;
+      },
+    },
+  },
+  methods: {
+    submit: async function () {
+      let timestamp = await this.$getFirebaseTimestamp();
+      let article = {
+        id: null,
+        title: this.title,
+        body: this.content,
+        author: this.author ? this.author : "ほびーさん",
+        createdAt: timestamp,
+        updatedAt: timestamp,
       };
+
+      if (
+        this.searchText === "" ||
+        this.title === "" ||
+        this.content === "" ||
+        this.author === ""
+      ) {
+        alert("未入力の項目があります");
+        return;
+      }
+
+      let existingTag = await this.$getExistingTag(this.searchText);
+
+      if (!confirm(`以下の内容で投稿しますか？\n${this.title}`)) {
+        return;
+      }
+
+      if (existingTag == null) {
+        // 新規登録
+        let newTagSuggestions = this.tagSuggestions;
+        newTagSuggestions.push(this.searchText);
+        let documentRefId = await this.$createTag(this.searchText);
+        await this.$addTagSuggestions(newTagSuggestions);
+        article["tags"] = [documentRefId];
+      } else {
+        article["tags"] = [existingTag.id];
+        // tagのvolumeを増やす
+        this.$incrementArticlesCount(existingTag.id);
+      }
+
+      alert("記事を投稿しました!");
+      let transitionArticleId = await this.$registerArticle(article);
+      let transitionTagId = article["tags"];
+      this.$router.push(`/${transitionTagId}/${transitionArticleId}`);
     },
-    async asyncData({ params, $getSuggestions }) {
-      let data = await $getSuggestions();
-      return { tagSuggestions: data.tagSuggestions };
-    },
-    computed: {
-      searchText: {
-        get() {
-          return this.innerSearchText;
-        },
-        set(value) {
-          this.innerSearchText = value;
-        },
-      },
-    },
-    methods: {
-      submit: async function (event) {
-        let timestamp = await this.$getFirebaseTimestamp();
-        let article = {
-          id: null,
-          title: this.title,
-          body: this.content,
-          author: this.author ? this.author : "ほびーさん",
-          createdAt: timestamp,
-          updatedAt: timestamp,
-        };
-
-        if (this.searchText === "" || this.title === "" || this.content === "" || this.author === "") {
-          alert("未入力の項目があります")
-          return
-        }
-
-        let existingTag = await this.$getExistingTag(this.searchText);
-
-        if (!confirm(`以下の内容で投稿しますか？\n${this.title}`)) {
-          return
-        }
-
-        if (existingTag == null) {
-          // 新規登録
-          let newTagSuggestions = this.tagSuggestions;
-          newTagSuggestions.push(this.searchText);
-          let documentRefId = await this.$createTag(this.searchText);
-          await this.$addTagSuggestions(newTagSuggestions);
-          article["tags"] = [documentRefId];
-        } else {
-          article["tags"] = [existingTag.id];
-          // tagのvolumeを増やす
-          this.$incrementArticlesCount(existingTag.id);
-        }
-
-        alert("記事を投稿しました!")
-        let transitionArticleId = await this.$registerArticle(article);
-        let transitionTagId = article["tags"]
-        this.$router.push(`/${transitionTagId}/${transitionArticleId}`);
-      },
-    },
-  };
+  },
+};
 </script>

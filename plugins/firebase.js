@@ -1,5 +1,5 @@
-import firebase from "firebase/app"
-import 'firebase/firestore'
+import firebase from "firebase/app";
+import "firebase/firestore";
 if (!firebase.apps.length) {
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
@@ -10,8 +10,8 @@ if (!firebase.apps.length) {
     storageBucket: "hobeeeeee-ab30e.appspot.com",
     messagingSenderId: "515820842650",
     appId: "1:515820842650:web:d9c43ac7b0d96342b87923",
-    measurementId: "G-SD22L2D8H0"
+    measurementId: "G-SD22L2D8H0",
   };
-  firebase.initializeApp(firebaseConfig)
+  firebase.initializeApp(firebaseConfig);
 }
-export default firebase
+export default firebase;

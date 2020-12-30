@@ -7,7 +7,9 @@
 </template>
 <script>
 export default {
-  props: ["tag"],
+  props: {
+    tag: JSON,
+  },
 };
 </script>
 

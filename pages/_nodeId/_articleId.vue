@@ -6,9 +6,9 @@
       <h2 class="subtitle">書いた人: {{ authorName }}</h2>
       <div class="is-divider"></div>
       <nuxt-link
-        :to="'/' + tag.id + '/graph'"
         v-for="tag in tags"
         :key="tag.id"
+        :to="'/' + tag.id + '/graph'"
         class="tag"
       >
         {{ tag.name }}({{ tag.articlesCount }})
@@ -18,16 +18,18 @@
         language="ja"
         :subfield="false"
         :editable="false"
-        :toolbarsFlag="false"
-        :boxShadow="false"
-        defaultOpen="preview"
-        previewBackground="#fff"
+        :toolbars-flag="false"
+        :box-shadow="false"
+        default-open="preview"
+        preview-background="#fff"
       />
-      <nuxt-link :to="'/' + currentTagId + '/list'" class="button">記事一覧へ戻る</nuxt-link>
+      <nuxt-link :to="'/' + currentTagId + '/list'" class="button"
+        >記事一覧へ戻る</nuxt-link
+      >
       <button
         class="button"
-        v-bind:class="{ 'is-success': isZbzbPushed == true }"
-        v-on:click="zbzbButton()"
+        :class="{ 'is-success': isZbzbPushed == true }"
+        @click="zbzbButton()"
       >
         <span v-show="isZbzbPushed == false">{{ zbzb_count }} ずぶずぶ！</span>
         <span v-show="isZbzbPushed == true">{{ zbzb_count }} ずぶった！</span>
@@ -38,7 +40,6 @@
 </template>
 
 <script>
-import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 
 export default {
@@ -72,8 +73,8 @@ export default {
         fullscreen: false,
         readmodel: true,
         htmlcode: true,
-        help: true
-      }
+        help: true,
+      },
     };
   },
 
@@ -96,7 +97,7 @@ export default {
       this.zbzb_count = article.zbzbCount;
     }
     const getTagsInfo = [];
-    article.tags.forEach(tag => {
+    article.tags.forEach((tag) => {
       getTagsInfo.push(this.$getTag(tag));
     });
     this.tags = await Promise.all(getTagsInfo);
@@ -122,14 +123,14 @@ export default {
     },
     goTwitter() {
       window.open(this.shareUrl);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .share-button {
-  background-color:#00acee;
+  background-color: #00acee;
   color: #eee;
 }
 </style>
