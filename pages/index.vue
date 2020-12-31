@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div>
+    <div v-if="randomId!==''">
       <Logo />
       <nuxt-link :to="randomId + '/graph/'" class="button find-hobby"
         >趣味を見つける</nuxt-link
@@ -9,6 +9,7 @@
         >趣味を広める</nuxt-link
       >
     </div>
+    <div v-else>Loading...</div>
   </div>
 </template>
 
@@ -17,14 +18,14 @@ export default {
   data() {
     return {
       hobbeeData: {},
-      randomId: -1,
+      randomId: "",
       title: "",
     };
   },
 
   async created() {
-    let tags = await this.$getRandomTags();
-    this.randomId = tags[0].id;
+    let tag = await this.$getRandomTags(1);
+    if (tag[0]) this.randomId = tag[0].id;
   },
 };
 </script>

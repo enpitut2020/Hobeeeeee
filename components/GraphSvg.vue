@@ -169,7 +169,7 @@ import graphParameters from "@/consts/graphParameters";
 
 export default {
   props: {
-    targetNode: JSON,
+    targetNode:  { type: Object ,default: new Object()},
     relativeNodes: { type: Array, default: new Array() },
     name: { type: String, default: "" },
     randomTags: { type: Array, default: new Array() },

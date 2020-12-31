@@ -39,12 +39,12 @@ Vue.prototype.$getRandomTags = async (count = 1, notContain = []) => {
       return [];
     }
     const randTags = [];
-    while (count < randTags.length) {
+    do {
       const randNum = Math.floor(Math.random() * tags.length);
       if (!randTags.includes(tags[randNum])) {
         randTags.push(tags[randNum]);
       }
-    }
+    } while (randTags.length < count);
     return randTags;
   });
 };

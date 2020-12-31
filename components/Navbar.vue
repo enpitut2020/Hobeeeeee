@@ -79,7 +79,7 @@ export default {
   methods: {
     async reloadTargetTag() {
       let tags = await this.$getRandomTags();
-      this.randomId = tags[0].id;
+      if (tags[0]) this.randomId = tags[0].id;
     },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
