@@ -16,10 +16,14 @@
 <script>
 export default {
   async asyncData({ params, $getTag, $getRelativeTags, $getRandomTags }) {
+    const minAllTags = 12;
+    const minRandomTags = 3;
     const targetTag = await $getTag(params.nodeId);
     const relativeTags = await $getRelativeTags(targetTag.id);
     const randomTags = await $getRandomTags(
-      2,
+      relativeTags.length <= minAllTags - minRandomTags
+        ? minAllTags - relativeTags.length
+        : minRandomTags,
       relativeTags.concat([targetTag]).map((tag) => tag.id)
     );
     return {

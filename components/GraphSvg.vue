@@ -25,10 +25,7 @@
       @wheel="mouseWheel($event)"
     >
       <!-- 関連趣味に関する描画のループ -->
-      <g
-        v-for="(nodes, tierIndex) in splittedRelativeNodes"
-        :key="'t-' + tierIndex"
-      >
+      <g v-for="(nodes, tierIndex) in scatteredNodes" :key="'t-' + tierIndex">
         <g v-for="(node, nodeIndex) in nodes" :key="'n-' + nodeIndex">
           <!-- ノード間をつなぐ線 -->
           <line
@@ -88,6 +85,7 @@
                     radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
                   )
               "
+              :class="{ randomTags: node.isRandom }"
             ></circle>
             <text
               :x="x + (nodeIndex + 1) * 200"
@@ -96,7 +94,7 @@
               dominant-baseline="central"
               style="font-size: 24px; fill: #111111"
             >
-              <!-- 関連趣味名 -->
+              <!-- 関連趣味名 .randomTags -->
               <tspan
                 :x="
                   x +
@@ -140,26 +138,6 @@
           </tspan>
         </text>
       </nuxt-link>
-      <!-- ランダムのノード -->
-      <g v-for="(node, index) in randomTags" :key="index">
-        <nuxt-link :to="'/' + node.id + '/graph?from=' + targetNode.id">
-          <circle
-            :r="nodeParam.RADIUS"
-            :cx="x + (index + 1) * 250"
-            :cy="y + 300"
-            class="randomTags"
-          ></circle>
-          <text
-            text-anchor="middle"
-            dominant-baseline="central"
-            style="font-size: 24px; fill: #111111"
-          >
-            <tspan :x="x + (index + 1) * 250" :y="y + 300">
-              {{ node.name }}
-            </tspan>
-          </text>
-        </nuxt-link>
-      </g>
     </svg>
   </div>
 </template>
@@ -169,7 +147,7 @@ import graphParameters from "@/consts/graphParameters";
 
 export default {
   props: {
-    targetNode:  { type: Object ,default: new Object()},
+    targetNode: { type: Object, default: new Object() },
     relativeNodes: { type: Array, default: new Array() },
     name: { type: String, default: "" },
     randomTags: { type: Array, default: new Array() },
@@ -190,7 +168,7 @@ export default {
       viewBoxY: -200,
       viewBoxWidth: 1500,
       viewBoxHeight: 1500,
-      splittedRelativeNodes: null,
+      scatteredNodes: null,
       mouseX: 0,
       mouseY: 0,
       prev_pos: {
@@ -211,9 +189,17 @@ export default {
     this.viewBoxWidth = this.vbWidth;
     this.viewBoxHeight = this.vbHeight;
     window.addEventListener("resize", this.handleResize);
-    let _relativeNodes = await this.calcRadius(this.relativeNodes);
+    let _randomTags = this.randomTags.map((randomTag) => {
+      randomTag["isRandom"] = true;
+      randomTag["relavance"] = 1;
+      return randomTag;
+    });
+    // console.debug("converted randomtags" + JSON.stringify(this.randomTags));
+    // relative randomをconcatしたい
+    let _relativeNodes = this.relativeNodes.concat(_randomTags);
+    _relativeNodes = await this.calcRadius(_relativeNodes);
     _relativeNodes = await this.calcStrokeWidth(_relativeNodes);
-    this.splittedRelativeNodes = this.splitRelativeNodes(_relativeNodes);
+    this.scatteredNodes = this.scatterNodes(_relativeNodes);
     this.noScroll();
   },
   mounted() {
@@ -349,18 +335,17 @@ export default {
       }
     },
     // 関連ノードを分割して、ノードの2次元配列にする
-    // e.g. splitRelativeNodes({ノード} * 13) -> {[ノード} * 4, ノード * 8, ノード * 1]
-    splitRelativeNodes: function (nodes) {
-      let relativeNodesCopy = JSON.parse(JSON.stringify(nodes));
+    // e.g. scatterNodes({ノード} * 13) -> {[ノード} * 4, ノード * 8, ノード * 1]
+    scatterNodes: function (nodes) {
+      let copyOfNodes = JSON.parse(JSON.stringify(nodes));
       // 関連度順に降順ソート
-      relativeNodesCopy.sort((a, b) => b.relevance - a.relevance);
+      copyOfNodes.sort((a, b) => b.relevance - a.relevance);
       const gen = this.nodeNumGenerator(nodes.length);
-      let splittedNodes = [];
-      // eslint-disable-next-line no-constant-condition
+      let _scatteredNodes = [];
       while (true) {
         let nodeNum = gen.next();
-        console.debug("nodeNum : " + nodeNum.value);
-        splittedNodes.push(relativeNodesCopy.splice(0, nodeNum.value));
+        // console.debug("nodeNum : " + nodeNum.value);
+        _scatteredNodes.push(copyOfNodes.splice(0, nodeNum.value));
         if (nodeNum.done) {
           // 最後のノード数を返すときにdoneプロパティがtrueになるのでそこで終了
           break;
@@ -368,11 +353,11 @@ export default {
       }
       console.debug(
         `Splitted relativeNodes (created() in GraphSvg.vue): ${JSON.stringify(
-          splittedNodes
+          _scatteredNodes
         )}`
       );
       // 外側に配置するノードから順にソートする
-      return splittedNodes.reverse();
+      return _scatteredNodes.reverse();
     },
     // ノード数を考慮した角度を決める
     radOfNode(nodeIndex, tierIndex, nodes) {
@@ -383,7 +368,7 @@ export default {
     },
     // インデックスを逆順にする
     reverseIndex(index) {
-      return this.splittedRelativeNodes.length - index;
+      return this.scatteredNodes.length - index;
       // return 1,2,3,...
     },
   },
