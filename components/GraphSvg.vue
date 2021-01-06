@@ -281,8 +281,16 @@ export default {
     },
     // 関連を表す線の太さを計算する
     calcStrokeWidth: async function (nodes) {
-      const max = Math.max(...nodes.map((node) => node.relevance));
-      const min = Math.min(...nodes.map((node) => node.relevance));
+      const max = Math.max(
+        ...nodes.map((node) => {
+          return node.relevance ? node.relevance : 0;
+        })
+      );
+      const min = Math.min(
+        ...nodes.map((node) => {
+          return node.relevance ? node.relevance : 0;
+        })
+      );
       const _nodes = await Promise.all(
         nodes.map(async (node) => {
           const ratio = max === min ? 0 : (node.relevance - min) / (max - min);
