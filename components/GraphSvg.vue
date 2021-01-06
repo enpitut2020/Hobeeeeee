@@ -197,9 +197,13 @@ export default {
     // console.debug("converted randomtags" + JSON.stringify(this.randomTags));
     // relative randomをconcatしたい
     let _relativeNodes = this.relativeNodes.concat(_randomTags);
+    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     _relativeNodes = await this.calcRadius(_relativeNodes);
+    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     _relativeNodes = await this.calcStrokeWidth(_relativeNodes);
+    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     this.scatteredNodes = this.scatterNodes(_relativeNodes);
+    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     this.noScroll();
   },
   mounted() {
@@ -283,6 +287,8 @@ export default {
     calcStrokeWidth: async function (nodes) {
       const max = Math.max(...nodes.map((node) => node.relevance));
       const min = Math.min(...nodes.map((node) => node.relevance));
+      // FIXME: ランダムなタグが関連度nullなので、nullの場合を考慮しないと線の太さがnullになる
+      // FIXME: 非同期処理する必要ないかも
       const _nodes = await Promise.all(
         nodes.map(async (node) => {
           const ratio = max === min ? 0 : (node.relevance - min) / (max - min);
