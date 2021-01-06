@@ -1,17 +1,5 @@
 <template>
   <div>
-    <!--
-    <form>
-      <span>中心座標=({{ x }},{{ y }})</span>
-      <span>マウス座標=({{ mouseX }}, {{ mouseY }})</span>
-      <label> x</label> <input v-model="viewBoxX" type="number" step="10" />
-      <label> y </label><input v-model="viewBoxY" type="number" step="10" />
-      <label> width</label>
-      <input v-model="viewBoxWidth" type="number" step="10" min="0" />
-      <label> height</label>
-      <input v-model="viewBoxHeight" type="number" step="10" min="0" />
-    </form>
-    -->
     <svg
       :viewBox="
         viewBoxX + ' ' + viewBoxY + ' ' + viewBoxWidth + ' ' + viewBoxHeight
@@ -194,16 +182,10 @@ export default {
       randomTag["relavance"] = 1;
       return randomTag;
     });
-    // console.debug("converted randomtags" + JSON.stringify(this.randomTags));
-    // relative randomをconcatしたい
     let _relativeNodes = this.relativeNodes.concat(_randomTags);
-    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     _relativeNodes = await this.calcRadius(_relativeNodes);
-    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     _relativeNodes = await this.calcStrokeWidth(_relativeNodes);
-    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     this.scatteredNodes = this.scatterNodes(_relativeNodes);
-    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     this.noScroll();
   },
   mounted() {
@@ -253,17 +235,12 @@ export default {
       this.isMousedown = false;
       console.log("touch end");
     },
+    // FIXME: マウスの移動量に応じてグラフの移動量を変更する（マウスの移動と同じだけグラフが移動するようにしたい）
+    // TODO: 拡大縮小の中心を変える（マウス基準か、画面の中心基準）
     mouseWheel: function (event) {
       console.log(`mouse wheel ${event.deltaMode}`);
-      if (event.deltaY > 0) {
-        // zoom in
-        this.viewBoxWidth = (this.viewBoxWidth * (500 - event.deltaY)) / 500;
-        this.viewBoxHeight = (this.viewBoxHeight * (500 - event.deltaY)) / 500;
-      } else {
-        // zoom out
-        this.viewBoxWidth = (this.viewBoxWidth * (500 - event.deltaY)) / 500;
-        this.viewBoxHeight = (this.viewBoxHeight * (500 - event.deltaY)) / 500;
-      }
+      this.viewBoxWidth = (this.viewBoxWidth * (500 + event.deltaY)) / 500;
+      this.viewBoxHeight = (this.viewBoxHeight * (500 + event.deltaY)) / 500;
     },
     scrollControl: function (event) {
       event.preventDefault();
