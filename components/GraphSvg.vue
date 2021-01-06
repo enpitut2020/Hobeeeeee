@@ -204,6 +204,22 @@ export default {
     });
   },
   methods: {
+    getEventPosition(event) {
+      let x, y;
+      if (event.offsetX) {
+        /*
+          Check the browser compatibility
+          https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/offsetX
+        */
+        x = event.offsetX;
+        y = event.offsetY;
+      } else {
+        const { left, top } = event.srcElement.getBoundingClientRect();
+        x = event.clientX - left;
+        y = event.clientY - top;
+      }
+      return { x, y };
+    },
     clickEvent(event) {
       console.log(`Clicked (${event.clientX}, ${event.clientY})`);
     },
@@ -215,6 +231,7 @@ export default {
       this.mouseX = event.offsetX;
       this.mouseY = event.offsetY;
     },
+    // FIXME: マウスの移動量に応じてグラフの移動量を変更する（マウスの移動と同じだけグラフが移動するようにしたい）
     touchmove: function (event) {
       // 押下中だったら
       if (this.isMousedown) {
@@ -235,12 +252,34 @@ export default {
       this.isMousedown = false;
       console.log("touch end");
     },
-    // FIXME: マウスの移動量に応じてグラフの移動量を変更する（マウスの移動と同じだけグラフが移動するようにしたい）
     // TODO: 拡大縮小の中心を変える（マウス基準か、画面の中心基準）
     mouseWheel: function (event) {
+      // 現在のマウスの座標
+      const point = this.getEventPosition(event);
+      console.debug(`point: ${JSON.stringify(point)}`);
+      // 0〜1に正規化
+      const sx = point.x / this.viewBoxWidth;
+      const sy = point.y / this.viewBoxHeight;
+      console.debug(`(sx, sy): (${sx}, ${sy})`);
+      // FIXME: this.viewBoxWidthで割って掛けてるので現状意味ない
+      const x = this.viewBoxX + this.viewBoxWidth * sx;
+      const y = this.viewBoxY + this.viewBoxHeight * sy;
+
+      let scale;
+      if (event.deltaY < 0) {
+        // FIXME: 定数を削除
+        scale = 0.97;
+        // const scale = (event.deltaY + 0.01 * event.deltaY) / event.deltaY;
+      } else {
+        scale = 1.03;
+        // const scale = (event.deltaY - 0.01 * event.deltaY) / event.deltaY;
+      }
+      // FIXME: マウス中心になっていない（左カーブしてる感じになる）
+      this.viewBoxWidth = this.viewBoxWidth * scale;
+      this.viewBoxHeight = this.viewBoxHeight * scale;
+      this.viewBoxX = x + scale * (this.viewBoxX - x);
+      this.viewBoxY = y + scale * (this.viewBoxY - y);
       console.log(`mouse wheel ${event.deltaMode}`);
-      this.viewBoxWidth = (this.viewBoxWidth * (500 + event.deltaY)) / 500;
-      this.viewBoxHeight = (this.viewBoxHeight * (500 + event.deltaY)) / 500;
     },
     scrollControl: function (event) {
       event.preventDefault();
