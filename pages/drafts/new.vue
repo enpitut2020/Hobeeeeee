@@ -2,14 +2,21 @@
   <div>
     <div class="section">
       <input v-model="title" class="input" placeholder="タイトル" />
-      <input
-        v-model="searchText"
-        class="input"
-        placeholder="タグ"
-        name="yourarea"
-        autocomplete="on"
-        list="suggestList"
-      />
+      <div
+        v-for="(searchText, index) in searchTexts"
+        :key="'serchText-' + index"
+      >
+        <input
+          v-model="searchTexts[index]"
+          class="input"
+          placeholder="タグ"
+          name="yourarea"
+          autocomplete="on"
+          list="suggestList"
+        />
+      </div>
+      <button @click="addTagSuggestBox()">+</button>
+      <button @click="deleteTagSuggestBox()">-</button>
       <datalist id="suggestList">
         <option v-for="n in tagSuggestions" :key="n">{{ n }}</option>
       </datalist>
@@ -41,8 +48,8 @@ export default {
       content: "",
       tags: [],
       innerSearchText: "",
-      tagSuggestions: [],
       author: "",
+        searchTexts: [""],
       markdownOption: {
         bold: true,
         italic: true,
@@ -66,17 +73,19 @@ export default {
       },
     };
   },
-  computed: {
-    searchText: {
-      get() {
-        return this.innerSearchText;
-      },
-      set(value) {
-        this.innerSearchText = value;
-      },
-    },
-  },
+
   methods: {
+    addTagSuggestBox(){
+      this.searchTexts.push("")
+    },
+
+    deleteTagSuggestBox(){
+      if(this.searchTexts.length > 1)
+      {
+        this.searchTexts.pop()
+      }
+    },
+
     submit: async function () {
       let timestamp = await this.$getFirebaseTimestamp();
       let article = {
@@ -89,7 +98,7 @@ export default {
       };
 
       if (
-        this.searchText === "" ||
+        this.searchTexts[0] === "" ||
         this.title === "" ||
         this.content === "" ||
         this.author === ""
@@ -98,17 +107,24 @@ export default {
         return;
       }
 
-      let existingTag = await this.$getExistingTag(this.searchText);
-
       if (!confirm(`以下の内容で投稿しますか？\n${this.title}`)) {
         return;
       }
 
+  let pagePath=""
+    await this.searchTexts.forEach(async (searchText,index) => {
+       
+    
+      let existingTag = await this.$getExistingTag(searchText);
+
+     
+//fix tagを複数。
       if (existingTag == null) {
         // 新規登録
         let newTagSuggestions = this.tagSuggestions;
-        newTagSuggestions.push(this.searchText);
-        let documentRefId = await this.$createTag(this.searchText);
+        newTagSuggestions.push(searchText);
+        let documentRefId = await this.$createTag(searchText);
+        //FIX一見追加に書き換え
         await this.$addTagSuggestions(newTagSuggestions);
         article["tags"] = [documentRefId];
       } else {
@@ -117,10 +133,17 @@ export default {
         this.$incrementArticlesCount(existingTag.id);
       }
 
-      alert("記事を投稿しました!");
+     //これをForのそとでやらないと記事がn件登録されちゃう
       let transitionArticleId = await this.$registerArticle(article);
-      let transitionTagId = article["tags"];
-      this.$router.push(`/${transitionTagId}/${transitionArticleId}`);
+        let transitionTagId = article["tags"];
+      if(index===0){
+        pagePath=`/${transitionTagId}/${transitionArticleId}`
+      }
+      
+       });
+
+        alert("記事を投稿しました!");
+        this.$router.push(pagePath);
     },
   },
 };
