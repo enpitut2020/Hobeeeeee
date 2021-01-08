@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div class="container">
+    <div v-if="randomId !== ''">
       <Logo />
-      <h1 class="title">hobeeeeee</h1>
-    <div class="columns">
-      <div v-for="article in articles" :key="article.id" class="column is-one-quarter">
-        <ArticleCard :article="article" />
-      </div>
+      <nuxt-link :to="randomId + '/graph/'" class="button find-hobby"
+        >趣味を見つける</nuxt-link
+      >
+      <nuxt-link to="/drafts/new" class="button find-hobby"
+        >趣味を広める</nuxt-link
+      >
     </div>
-    <nuxt-link :to="randomId + '/graph/'">趣味を探す</nuxt-link>
-    <nuxt-link to="/drafts/new">趣味を布教する</nuxt-link>
-    <div class="columns"></div>
+    <div v-else>Loading...</div>
   </div>
 </template>
 
@@ -17,20 +17,15 @@
 export default {
   data() {
     return {
-      randomId: 1,
+      hobbeeData: {},
+      randomId: "",
+      title: "",
     };
   },
-  created() {
-    let nodeLength = Object.keys(this.$hobbiesData).length; //nodeRelationsオブジェクトの長さをとってくる
-    this.randomId = this.getRandomInt(1, nodeLength);
-  },
-  methods: {
-    getRandomInt: function (min, max) {
-      console.debug(`rand: ${min} : ${max}`);
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-    },
+
+  async created() {
+    let tag = await this.$getRandomTags(1);
+    if (tag[0]) this.randomId = tag[0].id;
   },
 };
 </script>
@@ -38,7 +33,7 @@ export default {
 <style>
 .container {
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,5 +60,9 @@ export default {
 
 .links {
   padding-top: 15px;
+}
+
+.find-hobby {
+  margin: 1em;
 }
 </style>

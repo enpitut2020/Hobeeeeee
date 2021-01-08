@@ -1,17 +1,29 @@
 <template>
-<!--TODO:リンクを追加-->
-<div>
-      {{ article.title }}
-    {{ article.creatorName }}
-    {{ article.zbzb }}</div>
+  <div>
+    <div class="box">
+      <!-- TODO: サムネイル画像を追加する -->
+      <nuxt-link :to="`./${article.id}`" class="thumbnail">{{
+        article.title
+      }}</nuxt-link>
+      <div>
+        by {{ article.author ? article.author : "ほびーさん" }} at
+        {{ article.createdAt.toDate().toLocaleDateString() }}
+        {{ article.zbzbCount ? article.zbzbCount : 0 }}ずぶずぶ
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-props:["article"]
-}
+  props: {
+    article:{type:Object,default:()=>{}}
+  },
+};
 </script>
 
 <style>
-
+.thumbnail {
+  font-size: xx-large;
+}
 </style>
