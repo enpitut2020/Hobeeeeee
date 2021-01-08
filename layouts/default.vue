@@ -5,6 +5,16 @@
   </div>
 </template>
 
+<script>
+export default {
+  mounted() {
+    this.$nextTick(function () {
+      this.$adobeFonts(document)
+    })
+  },
+}
+</script>
+
 <style>
 html {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
