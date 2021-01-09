@@ -112,7 +112,7 @@
             article.tags.push(existingTag.id);
             // tagのvolumeを増やす
             console.debug("tag pushed :", article.tags)
-            this.$incrementArticlesCount(existingTag.id);
+            this.$incrementArticlesCount(existingTag.id, 1);
           }
         };
 
