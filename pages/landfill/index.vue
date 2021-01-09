@@ -39,12 +39,6 @@
         this.articleId = "";
       },
       deleteTag: async function () {
-        // ↓テスト用
-        // 1DXHJ3HRQORTg9oMg3Pz: 飲酒
-
-        // TODO: relativeサブコレクションのtags配列に含まれている該当タグを削除
-        // - 各タグのrelative内をidで検索して、参照を取得する
-        // TODO: タグ自体を削除
         await this.$deleteTag(this.targetNodeId);
         this.targetNodeId = "";
       },

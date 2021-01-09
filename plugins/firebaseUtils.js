@@ -187,12 +187,12 @@ Vue.prototype.$createTag = async function createTag(tagName) {
 
 //既存趣味の記事が増えた時、tagのvolumeを更新
 Vue.prototype.$incrementArticlesCount = async function incrementArticlesCount(
-  tagId
+  tagId, count
 ) {
   db.collection("tags")
     .doc(tagId)
     .update({
-      articlesCount: firebase.firestore.FieldValue.increment(1),
+      articlesCount: firebase.firestore.FieldValue.increment(count),
     })
     .then(function () {
       console.log("Document successfully updated!");
@@ -286,15 +286,29 @@ Vue.prototype.$addTagSuggestions = async function addTagSuggestions(
 
 // 記事を削除する
 Vue.prototype.$deleteArticle = async function deleteArticle(articleId) {
-  // TODO: articlesCountの更新
-  db.collection("articles")
-    .doc(articleId)
-    .delete()
-    .then(() => {
-      console.debug(`Article has been successfully deleted!: ${articleId}`);
-    }).catch((error) => {
-      console.error(`Error delete article: ${error}`);
-    })
+  const article = await Vue.prototype.$getArticle(articleId);
+  // 各tagIdについて
+  for await (let tagId of article.tags) {
+    // tagオブジェクトを取得
+    const tag = await Vue.prototype.$getTag(tagId);
+    if (tag.articlesCount === 1) {
+      // 1つしか記事がなかったらタグを削除する
+      // deleteTagをすると記事も消える
+      await Vue.prototype.$deleteTag(tagId);
+    } else {
+      // 記事数を1減らす
+      await Vue.prototype.$incrementArticlesCount(tagId, -1);
+      // 記事を削除する
+      await db.collection("articles")
+        .doc(articleId)
+        .delete()
+        .then(() => {
+          console.debug(`Article has been successfully deleted!: ${articleId}`);
+        }).catch((error) => {
+          console.error(`Error delete article: ${error}`);
+        });
+    }
+  }
 };
 
 // 全ての記事から該当タグを除外する
@@ -309,7 +323,6 @@ Vue.prototype.$deleteTagWithArticle = async function deleteTagWithArticle(target
         let article = doc.data();
         if (article.tags.length === 1) {
           // 該当タグしかついていなかったら、記事自体を削除する
-          // TODO: articlesCountの更新
           doc.ref.delete();
           console.debug(`Delete article (deleteTagWithArticle() in firebaseUtils.js): ${JSON.stringify(article)}`);
         } else {
