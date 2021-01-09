@@ -1,29 +1,13 @@
 <template>
   <div>
-    <!--
-    <form>
-      <span>中心座標=({{ x }},{{ y }})</span>
-      <span>マウス座標=({{ mouseX }}, {{ mouseY }})</span>
-      <label> x</label> <input v-model="viewBoxX" type="number" step="10" />
-      <label> y </label><input v-model="viewBoxY" type="number" step="10" />
-      <label> width</label>
-      <input v-model="viewBoxWidth" type="number" step="10" min="0" />
-      <label> height</label>
-      <input v-model="viewBoxHeight" type="number" step="10" min="0" />
-    </form>
-    -->
     <svg
       :viewBox="
         viewBoxX + ' ' + viewBoxY + ' ' + viewBoxWidth + ' ' + viewBoxHeight
       "
       :width="width"
       :height="height"
-      @mousedown="touchstart($event)"
-      @mousemove="touchmove($event)"
-      @mouseup="touchend($event)"
-      @mouseleave="touchend($event)"
-      @wheel="mouseWheel($event)"
     >
+    <g id = 'scene'>
       <!-- 関連趣味に関する描画のループ -->
       <g v-for="(nodes, tierIndex) in scatteredNodes" :key="'t-' + tierIndex">
         <g v-for="(node, nodeIndex) in nodes" :key="'n-' + nodeIndex">
@@ -138,6 +122,7 @@
           </tspan>
         </text>
       </nuxt-link>
+    </g>
     </svg>
   </div>
 </template>
@@ -159,7 +144,6 @@ export default {
   data() {
     return {
       active: false,
-      isMousedown: false,
       width: window.innerWidth,
       height: window.innerHeight,
       x: 0,
@@ -169,12 +153,6 @@ export default {
       viewBoxWidth: 1500,
       viewBoxHeight: 1500,
       scatteredNodes: null,
-      mouseX: 0,
-      mouseY: 0,
-      prev_pos: {
-        x: 0,
-        y: 0,
-      },
     };
   },
   computed: {
@@ -188,7 +166,6 @@ export default {
     this.viewBoxY = this.vbY;
     this.viewBoxWidth = this.vbWidth;
     this.viewBoxHeight = this.vbHeight;
-    window.addEventListener("resize", this.handleResize);
     let _randomTags = this.randomTags.map((randomTag) => {
       randomTag["isRandom"] = true;
       randomTag["relavance"] = 1;
@@ -197,92 +174,18 @@ export default {
     // console.debug("converted randomtags" + JSON.stringify(this.randomTags));
     // relative randomをconcatしたい
     let _relativeNodes = this.relativeNodes.concat(_randomTags);
-    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     _relativeNodes = await this.calcRadius(_relativeNodes);
-    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     _relativeNodes = await this.calcStrokeWidth(_relativeNodes);
-    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
     this.scatteredNodes = this.scatterNodes(_relativeNodes);
-    console.debug(`relativeNodes: ${JSON.stringify(_relativeNodes)}`);
-    this.noScroll();
   },
   mounted() {
     this.x = this.width / 2;
     this.y = this.height / 2;
-    window.resizeTo(5000, 5000);
-  },
-  beforeDestroy: function () {
-    window.removeEventListener("resize", this.handleResize);
-    window.removeEventListener("wheel", this.scrollControl, { passive: false });
-    window.removeEventListener("touchmove", this.scrollControl, {
-      passive: false,
-    });
-    window.removeEventListener("keydown", this.scrollControl, {
-      passive: false,
-    });
+    var panzoom = require('panzoom')
+    var element = document.getElementById('scene')
+    panzoom(element)
   },
   methods: {
-    clickEvent(event) {
-      console.log(`Clicked (${event.clientX}, ${event.clientY})`);
-    },
-    touchstart: function (event) {
-      this.isMousedown = true;
-      console.log("touch start:%d,%d", event.offsetX, event.offsetY);
-      this.prev_pos.x = event.offsetX;
-      this.prev_pos.y = event.offsetY;
-      this.mouseX = event.offsetX;
-      this.mouseY = event.offsetY;
-    },
-    touchmove: function (event) {
-      // 押下中だったら
-      if (this.isMousedown) {
-        // 前回座標との差分を算出
-        let moved_x = event.offsetX - this.prev_pos.x;
-        let moved_y = event.offsetY - this.prev_pos.y;
-
-        // 全要素に差分を適用
-        this.viewBoxX -= moved_x;
-        this.viewBoxY -= moved_y;
-
-        // 前回のクリック座標を更新
-        this.prev_pos.x = event.offsetX;
-        this.prev_pos.y = event.offsetY;
-      }
-    },
-    touchend: function () {
-      this.isMousedown = false;
-      console.log("touch end");
-    },
-    mouseWheel: function (event) {
-      console.log(`mouse wheel ${event.deltaMode}`);
-      if (event.deltaY > 0) {
-        // zoom in
-        this.viewBoxWidth = (this.viewBoxWidth * (500 - event.deltaY)) / 500;
-        this.viewBoxHeight = (this.viewBoxHeight * (500 - event.deltaY)) / 500;
-      } else {
-        // zoom out
-        this.viewBoxWidth = (this.viewBoxWidth * (500 - event.deltaY)) / 500;
-        this.viewBoxHeight = (this.viewBoxHeight * (500 - event.deltaY)) / 500;
-      }
-    },
-    scrollControl: function (event) {
-      event.preventDefault();
-    },
-    noScroll: function () {
-      window.addEventListener("wheel", this.scrollControl, { passive: false });
-      window.addEventListener("touchmove", this.scrollControl, {
-        passive: false,
-      });
-      window.addEventListener("keydown", this.scrollControl, {
-        passive: false,
-      });
-    },
-    handleResize: function () {
-      this.width = window.innerWidth;
-      this.height = window.innerHeight;
-      this.x = this.width / 2;
-      this.y = this.height / 2;
-    },
     // 関連を表す線の太さを計算する
     calcStrokeWidth: async function (nodes) {
       const max = Math.max(...nodes.map((node) => node.relevance));
