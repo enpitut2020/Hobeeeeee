@@ -346,16 +346,23 @@ export default {
       let copyOfNodes = JSON.parse(JSON.stringify(nodes));
       // 関連度順に降順ソート
       copyOfNodes.sort((a, b) => b.relevance - a.relevance);
+      // 4, 8, ...という数字を返すジェネレータ
       const gen = this.nodeNumGenerator(nodes.length);
+      // 分割後のノードの配列
       let _scatteredNodes = [];
-      while (true) {
-        let nodeNum = gen.next();
-        // console.debug("nodeNum : " + nodeNum.value);
+      let isFinished = false;
+      for (let nodeNum = gen.next(); !isFinished; nodeNum = gen.next()) {
+        // e.g.
+        // (value, done)
+        // (4, false)
+        // (8, false)
+        // (1, true)
+        // (null, null)
+
+        // nodeNum.valueの数だけ配列に格納する
         _scatteredNodes.push(copyOfNodes.splice(0, nodeNum.value));
-        if (nodeNum.done) {
-          // 最後のノード数を返すときにdoneプロパティがtrueになるのでそこで終了
-          break;
-        }
+        // 上の例だと(1, true)が返ってきたらループを抜ける
+        isFinished = nodeNum.done;
       }
       console.debug(
         `Splitted relativeNodes (created() in GraphSvg.vue): ${JSON.stringify(

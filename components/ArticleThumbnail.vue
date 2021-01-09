@@ -17,7 +17,7 @@
 <script>
 export default {
   props: {
-    article: JSON,
+    article:{type:Object,default:()=>{}}
   },
 };
 </script>
