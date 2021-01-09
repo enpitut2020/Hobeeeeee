@@ -25,7 +25,7 @@ Vue.prototype.$getTags = async function getTags() {
     .catch(() => {
       alert("firestoreからのデータの取得でエラーが発生しました");
     });
-  console.debug(`tags (getTags() in firebaseUtils.js) : ${tags}`);
+  console.debug(`tags (getTags() in firebaseUtils.js) : ${JSON.stringify(tags)}`);
   return tags;
 };
 
@@ -286,6 +286,7 @@ Vue.prototype.$addTagSuggestions = async function addTagSuggestions(
 
 // 記事を削除する
 Vue.prototype.$deleteArticle = async function deleteArticle(articleId) {
+  // TODO: articlesCountの更新
   db.collection("articles")
     .doc(articleId)
     .delete()
@@ -306,15 +307,17 @@ Vue.prototype.$deleteTagWithArticle = async function deleteTagWithArticle(target
     .then((queryResults) => {
       queryResults.forEach((doc) => {
         let article = doc.data();
-        console.debug(`Delete article (deleteTagWithArticle() in firebaseUtils.js): ${JSON.stringify(article)}`);
-        if (article.tags.length == 1) {
+        if (article.tags.length === 1) {
           // 該当タグしかついていなかったら、記事自体を削除する
+          // TODO: articlesCountの更新
           doc.ref.delete();
+          console.debug(`Delete article (deleteTagWithArticle() in firebaseUtils.js): ${JSON.stringify(article)}`);
         } else {
           // 該当タグだけ削除する
-          doc.update({
+          doc.ref.update({
             tags: firebase.firestore.FieldValue.arrayRemove(targetNodeId)
-          })
+          });
+          console.debug(`Remove tag (deleteTagWithArticle() in firebaseUtils.js): ${JSON.stringify(article)}`);
         }
       });
     })
@@ -342,6 +345,9 @@ Vue.prototype.$deleteTagInRelative = async function deleteTagInRelative(targetNo
 // タグの推薦リストから該当タグを削除する
 Vue.prototype.$removeTagFromSuggestions = async function removeTagFromSuggestions(targetNodeId) {
   const tag = await Vue.prototype.$getTag(targetNodeId);
+  if (!tag) {
+    return;
+  }
   await db
     .collection("tagSuggestions")
     .doc("suggestions")
