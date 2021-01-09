@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div v-if="randomId !== ''">
-      <Logo />
       <nuxt-link :to="randomId + '/graph/'" class="button find-hobby"
         >趣味を見つける</nuxt-link
       >
