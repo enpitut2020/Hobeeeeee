@@ -65,8 +65,6 @@ or
 $ npm install
 # localhost:3000でローカルサーバ立ち上げ
 $ yarn dev
-or
-$ npm run dev
 
 # build for production and launch server
 $ yarn build
