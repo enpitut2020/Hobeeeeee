@@ -1,14 +1,23 @@
 <template>
-  <div class="container">
-    <div v-if="randomId !== ''">
-      <nuxt-link :to="randomId + '/graph/'" class="button find-hobby"
+  <div>
+    <header class="full">
+      <h1 class="hero">Hobeeeeee!!</h1>
+      <nuxt-link v-scroll-to="{ el: 'top'}" to="#" class="button hero_button">more</nuxt-link>
+    </header>
+    <section>
+      <h1 class="h1">Hobeeeeee!!</h1>
+    </section>
+
+
+    <!-- <div v-if="randomId !== ''">
+      <nuxt-link :to="randomId + '/graph/'" class="button"
         >趣味を見つける</nuxt-link
       >
       <nuxt-link to="/drafts/new" class="button find-hobby"
         >趣味を広める</nuxt-link
       >
     </div>
-    <div v-else>Loading...</div>
+    <div v-else>Loading...</div> -->
   </div>
 </template>
 
@@ -39,6 +48,43 @@ export default {
   text-align: center;
 }
 
+.full {
+  position: relative;
+  min-height: 1255px;
+  background: url("/hero_image.png")
+    center top/cover no-repeat;
+}
+
+.hero {
+  margin: 0;
+  position: absolute;
+  top: calc(50% - 2em);
+  width: 100%;
+  text-align: center;
+  line-height: 1;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 8vw;
+  text-shadow: 10px 10px 0 #fff;
+}
+
+.hero_button {
+  margin: 0;
+  position: absolute;
+  top: calc(50% - 1.5em);
+  line-height: 1;
+}
+
+section {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+section h2 {
+  font-size: 5vw;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* 
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -63,5 +109,5 @@ export default {
 
 .find-hobby {
   margin: 1em;
-}
+} */
 </style>
