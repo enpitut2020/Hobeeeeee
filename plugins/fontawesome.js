@@ -10,6 +10,7 @@ const solid = [
     'faUpload',
     'faUser',
     'faPenNib',
+    'faPlus',
   ]
   
   // ここに追記するだけ

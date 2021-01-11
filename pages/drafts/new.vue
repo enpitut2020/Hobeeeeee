@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="section">
-      <h1 class="title"><font-awesome-icon icon="pen-nib"/> 記事を書く</h1>
+      <h1 class="title"><font-awesome-icon icon="pen-nib" /> 記事を書く</h1>
       <h2 class="subtitle">沼らせようぜ的な文</h2>
       <div class="field">
         <label class="label">タイトル</label>
         <div class="controll">
-          <input v-model="title" class="input" placeholder="タイトル" />
+          <input v-model="title" class="input" placeholder="記事のタイトル" />
         </div>
       </div>
       <div class="field">
@@ -21,17 +21,25 @@
               <input
                 v-model="searchTexts[index]"
                 class="input"
-                placeholder="タグ"
+                placeholder="記事に関するタグ"
                 name="yourarea"
                 autocomplete="on"
                 list="suggestList"
               />
+              <a
+                class="delete"
+                v-show="searchTexts.length > 1"
+                @click="deleteTagSuggestBox(index)"
+              ></a>
+            </div>
+            <div class="column is-full">
+              <button class="button is-rounded" @click="addTagSuggestBox()">
+                <font-awesome-icon icon="plus" />
+              </button>
             </div>
           </div>
         </div>
       </div>
-      <button class="button" @click="addTagSuggestBox()"><span class="icon"><i class="fas fa-home"></i></span></button>
-      <button @click="deleteTagSuggestBox()">-</button>
       <datalist id="suggestList">
         <option v-for="(n, index) in tagSuggestions" :key="n + index">
           {{ n }}
@@ -96,9 +104,9 @@ export default {
       this.searchTexts.push("");
     },
 
-    deleteTagSuggestBox() {
+    deleteTagSuggestBox(index) {
       if (this.searchTexts.length > 1) {
-        this.searchTexts.pop();
+        this.searchTexts.splice(index, 1);
       }
     },
 
