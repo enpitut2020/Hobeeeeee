@@ -2,7 +2,11 @@
   <div>
     <header class="full">
       <h1 class="hero">Hobeeeeee!!</h1>
-      <nuxt-link v-scroll-to="{ el: 'top'}" to="#" class="button hero_button">more</nuxt-link>
+      <div class="columns is-centered">
+        <div class="column is-harf is-mobile">
+          <nuxt-link v-scroll-to="{ el: 'top'}" to="#" class="button hero_button">more</nuxt-link>
+        </div>
+      </div>
     </header>
     <section>
       <h1 class="h1">Hobeeeeee!!</h1>
@@ -71,7 +75,6 @@ export default {
   margin: 0;
   position: absolute;
   top: calc(50% - 1.5em);
-  line-height: 1;
 }
 
 section {
