@@ -1,12 +1,33 @@
 <template>
   <div>
     <div class="section">
-      <input v-model="title" class="input" placeholder="タイトル" />
-      <div v-for="(searchText, index) in searchTexts" :key="'serchText-' + index">
-        <input v-model="searchTexts[index]" class="input" placeholder="タグ" name="yourarea" autocomplete="on"
-          list="suggestList" />
+      <div class="field">
+        <label class="label">タイトル</label>
+        <div class="controll">
+          <input v-model="title" class="input" placeholder="タイトル" />
+        </div>
       </div>
-      <button @click="addTagSuggestBox()">+</button>
+      <div class="field">
+        <label class="label">タグ</label>
+        <div class="controll">
+          <div class="columns is-multiline">
+            <div
+              class="column is-one-third"
+              v-for="(searchText, index) in searchTexts"
+              :key="'serchText-' + index"
+            >
+              <input
+                v-model="searchTexts[index]"
+                class="input"
+                placeholder="タグ"
+                name="yourarea"
+                autocomplete="on"
+                list="suggestList"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
       <button @click="deleteTagSuggestBox()">-</button>
       <datalist id="suggestList">
         <option v-for="(n,index) in tagSuggestions" :key="n+index">{{ n }}</option>
