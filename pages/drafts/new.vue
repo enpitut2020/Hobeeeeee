@@ -14,9 +14,9 @@
         <div class="control">
           <div class="columns is-multiline">
             <div
-              class="column is-one-third"
               v-for="(searchText, index) in searchTexts"
               :key="'serchText-' + index"
+              class="column is-one-third"
             >
               <input
                 v-model="searchTexts[index]"
@@ -27,8 +27,8 @@
                 list="suggestList"
               />
               <a
-                class="delete"
                 v-show="searchTexts.length > 1"
+                class="delete"
                 @click="deleteTagSuggestBox(index)"
               ></a>
             </div>

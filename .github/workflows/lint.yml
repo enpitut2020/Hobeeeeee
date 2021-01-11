@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.0.0
-      - name: Run eslint
-        run: yarn lint-fix
       - name: ESLint
         uses: reviewdog/action-eslint@v1.2.0
         with:
           github_token: ${{ secrets.TOKEN }}
+      - name: Run eslint
+        run: yarn lint-fix
