@@ -6,8 +6,8 @@
       <h2 class="subtitle">書いた人: {{ authorName }}</h2>
       <div class="is-divider"></div>
       <nuxt-link
-        v-for="tag in tags"
-        :key="tag.id"
+        v-for="(tag, index) in tags"
+        :key="tag.id + index"
         :to="'/' + tag.id + '/graph'"
         class="tag"
       >
