@@ -2,16 +2,16 @@
   <div>
     <div class="section">
       <h1 class="title"><font-awesome-icon icon="pen-nib" /> 記事を書く</h1>
-      <h2 class="subtitle">沼らせようぜ的な文</h2>
+      <h2 class="subtitle">沼る記事を書こう！的な文</h2>
       <div class="field">
         <label class="label">タイトル</label>
-        <div class="controll">
+        <div class="control">
           <input v-model="title" class="input" placeholder="記事のタイトル" />
         </div>
       </div>
       <div class="field">
         <label class="label">タグ</label>
-        <div class="controll">
+        <div class="control">
           <div class="columns is-multiline">
             <div
               class="column is-one-third"
@@ -32,6 +32,11 @@
                 @click="deleteTagSuggestBox(index)"
               ></a>
             </div>
+            <datalist id="suggestList">
+              <option v-for="(n, index) in tagSuggestions" :key="n + index">
+                {{ n }}
+              </option>
+            </datalist>
             <div class="column is-full">
               <button class="button is-rounded" @click="addTagSuggestBox()">
                 <font-awesome-icon icon="plus" />
@@ -40,21 +45,34 @@
           </div>
         </div>
       </div>
-      <datalist id="suggestList">
-        <option v-for="(n, index) in tagSuggestions" :key="n + index">
-          {{ n }}
-        </option>
-      </datalist>
-      <input v-model="author" class="input" placeholder="書いた人" />
-      <mavon-editor
-        v-model="content"
-        :toolbars="markdownOption"
-        language="ja"
-        placeholder="記事を書いてね！"
-      />
-      <button type="button" class="button is-success" @click="submit">
-        投稿する
-      </button>
+      <div class="field">
+        <label class="label">書いた人</label>
+        <div class="control">
+          <input
+            v-model="author"
+            class="input"
+            placeholder="書いた人のなまえ"
+          />
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">本文</label>
+        <div class="control">
+          <mavon-editor
+            v-model="content"
+            :toolbars="markdownOption"
+            language="ja"
+            placeholder="記事を書いてね！"
+          />
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column has-text-right">
+          <button type="button" class="button is-large" @click="submit">
+            投稿する！
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -92,7 +110,6 @@ export default {
         code: true,
         table: true,
         fullscreen: false,
-        readmodel: true,
         htmlcode: true,
         help: true,
       },
