@@ -189,7 +189,7 @@ export default {
     var panzoom = require("panzoom");
     var element = document.getElementById("scene");
     panzoom(element, {
-      onTouch: function (e) {
+      onTouch: function () {
         return false; // tells the library to not preventDefault.
       },
     });
