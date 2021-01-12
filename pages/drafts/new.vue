@@ -16,8 +16,13 @@
             <div
               v-for="(searchText, index) in searchTexts"
               :key="'serchText-' + index"
-              class="column is-one-third"
+              class="column has-text-right is-6"
             >
+              <a
+                v-show="searchTexts.length > 1"
+                class="delete"
+                @click="deleteTagSuggestBox(index)"
+              ></a>
               <input
                 v-model="searchTexts[index]"
                 class="input"
@@ -26,11 +31,6 @@
                 autocomplete="on"
                 list="suggestList"
               />
-              <a
-                v-show="searchTexts.length > 1"
-                class="delete"
-                @click="deleteTagSuggestBox(index)"
-              ></a>
             </div>
             <datalist id="suggestList">
               <option v-for="(n, index) in tagSuggestions" :key="n + index">
