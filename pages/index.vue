@@ -1,18 +1,41 @@
 <template>
   <div>
-    <header class="full">
-      <h1 class="hero">Hobeeeeee!!</h1>
-      <div class="columns is-centered">
-        <div class="column is-harf is-mobile">
-          <!-- <nuxt-link v-scroll-to="{ el: 'top'}" to="#" class="button hero_button">more</nuxt-link> -->
+    <section class="hero is-fullheight-with-navbar">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title hero_text">Hobeeeeee!!</h1>
+
+          <nuxt-link
+            v-scroll-to="'#explanation'"
+            to
+            class="button is-warning is-inverted is-outlined hero_button"
+          >
+            more
+          </nuxt-link>
         </div>
       </div>
-    </header>
-    <section>
-      <h1 class="h1">Hobeeeeee!!</h1>
     </section>
+    <header class="full"></header>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div id="explanation">
+          <div class="box">
+            <h1 class="title">Hobeeeeee!!</h1>
+            <p>
+              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
+            </p>
+            <br />
+            <p>
+              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキ
+            </p>
+            <br />
+            <p>
+              ストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
+            </p>
+          </div>
+        </div>
 
-    <!-- <div v-if="randomId !== ''">
+        <!-- <div v-if="randomId !== ''">
       <nuxt-link :to="randomId + '/graph/'" class="button"
         >趣味を見つける</nuxt-link
       >
@@ -21,6 +44,8 @@
       >
     </div>
     <div v-else>Loading...</div> -->
+      </div>
+    </section>
   </div>
 </template>
 
@@ -42,73 +67,8 @@ export default {
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 90vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.hero_text {
+  font-family: impetus, sans-serif;
+  font-size: 10em;
 }
-
-.full {
-  position: relative;
-  min-height: 1255px;
-  background: url("/hero_image.png") center top/cover no-repeat;
-}
-
-.hero {
-  margin: 0;
-  position: absolute;
-  top: calc(50% - 2em);
-  width: 100%;
-  text-align: center;
-  line-height: 1;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  font-size: 8vw;
-  text-shadow: 10px 10px 0 #fff;
-}
-
-.hero_button {
-  margin: 0;
-  position: absolute;
-  top: calc(50% - 1.5em);
-}
-
-section {
-  padding: 2rem 0;
-  text-align: center;
-}
-
-section h2 {
-  font-size: 5vw;
-  font-family: "Montserrat", sans-serif;
-}
-
-/* 
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-
-.find-hobby {
-  margin: 1em;
-} */
 </style>

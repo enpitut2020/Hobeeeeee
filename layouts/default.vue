@@ -15,4 +15,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+html {
+  visibility: hidden;
+}
+html.wf-active {
+  visibility: visible;
+}
+</style>
