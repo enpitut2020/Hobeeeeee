@@ -93,9 +93,6 @@ Vue.prototype.$getArticle = async function getArticle(articleId) {
     .then((doc) => {
       return doc.data();
     });
-  console.debug(
-    `article (getArticle() in firebaseUtils.js): ${JSON.stringify(article)}`
-  );
   return article;
 };
 
@@ -103,7 +100,6 @@ Vue.prototype.$getArticle = async function getArticle(articleId) {
 // 登録する記事のIDを返す
 Vue.prototype.$registerArticle = async function registerArticle(article) {
   let ref = await db.collection("articles");
-  console.debug("regiter article : "+JSON.stringify(article))
   return ref
     .add(article)
     .then((newArticle) => {
@@ -131,7 +127,7 @@ Vue.prototype.$getExistingTag = async function getExistingTag(query) {
       });
     })
     .catch(function (error) {
-      console.log("Error getting documents: ", error);
+      console.error("Error getting documents: ", error);
     });
   return tagData;
 };
@@ -192,7 +188,6 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
     })
     .then((relation) => {
       if (relation) {
-        // console.debug("インクリメントします")
         fromCurrentTagRelativeRef.update({
           relevance: firebase.firestore.FieldValue.increment(1),
         });
@@ -200,7 +195,6 @@ Vue.prototype.$incrementRelevance = async (fromTag, currentTag) => {
           relevance: firebase.firestore.FieldValue.increment(1),
         });
       } else {
-        // console.debug("リレーションがないので追加します")
         fromCurrentTagRelativeRef.set({
           relevance: firebase.firestore.FieldValue.increment(1),
           name: currentTag.name,
@@ -302,7 +296,7 @@ Vue.prototype.$deleteTagWithArticle = async function deleteTagWithArticle(target
       });
     })
     .catch((error) => {
-      console.log(`Error : ${error}`);
+      console.error(`Error : ${error}`);
     });
 };
 

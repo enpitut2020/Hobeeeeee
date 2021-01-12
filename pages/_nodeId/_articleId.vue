@@ -79,12 +79,6 @@ export default {
   },
 
   async created() {
-    console.log(
-      `tagID (created() in _articleId.vue): ${this.$route.params.nodeId}`
-    );
-    console.log(
-      `記事ID (created() in _articleId.vue): ${this.$route.params.articleId}`
-    );
     this.articleId = this.$route.params.articleId;
     this.currentTagId = this.$route.params.nodeId;
     const article = await this.$getArticle(this.articleId);
@@ -109,7 +103,6 @@ export default {
   methods: {
     zbzbButton() {
       // ZBZBButtonが押されたときの処理
-      console.log("zbzb button pushed");
       // isButtonPushedがfalseの時、ずぶずぶカウントが1増え、trueの時1減る
       if (this.isZbzbPushed) {
         this.zbzb_count -= 1;
@@ -132,5 +125,9 @@ export default {
 .share-button {
   background-color: #00acee;
   color: #eee;
+}
+
+.v-note-show.single-show {
+  font-family: heisei-maru-gothic-std, Meiryo, sans-serif;
 }
 </style>
