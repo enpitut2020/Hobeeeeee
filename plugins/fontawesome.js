@@ -11,6 +11,7 @@ const solid = [
     'faUser',
     'faPenNib',
     'faPlus',
+    'faFileAlt',
   ]
   
   // ここに追記するだけ

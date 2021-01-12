@@ -1,9 +1,11 @@
 <template>
   <section class="section">
     <div class="container">
-      <div class="content">
-        <h1 class="title">{{ name }}の記事一覧です</h1>
-        <nuxt-link :to="`/${targetTag.id}/graph`">趣味探しに戻る</nuxt-link>
+      <nuxt-link :to="`/${targetTag.id}/graph`">趣味探しに戻る</nuxt-link>
+      <div class="content mt-2">
+        <h1 class="title">
+          <font-awesome-icon icon="file-alt" /> {{ name }}の記事一覧
+        </h1>
         <div v-if="articles.length === 0">
           <p>まだ記事がありません。</p>
         </div>

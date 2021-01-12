@@ -10,9 +10,9 @@
         v-on:click="toggleMenu()"
         data-target="navbarExampleTransparentExample"
       >
-        <span></span>
-        <span></span>
-        <span></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
       </div>
     </div>
     <div
