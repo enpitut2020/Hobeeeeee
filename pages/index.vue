@@ -4,14 +4,13 @@
       <h1 class="hero">Hobeeeeee!!</h1>
       <div class="columns is-centered">
         <div class="column is-harf is-mobile">
-          <nuxt-link v-scroll-to="{ el: 'top'}" to="#" class="button hero_button">more</nuxt-link>
+          <!-- <nuxt-link v-scroll-to="{ el: 'top'}" to="#" class="button hero_button">more</nuxt-link> -->
         </div>
       </div>
     </header>
     <section>
       <h1 class="h1">Hobeeeeee!!</h1>
     </section>
-
 
     <!-- <div v-if="randomId !== ''">
       <nuxt-link :to="randomId + '/graph/'" class="button"
@@ -55,8 +54,7 @@ export default {
 .full {
   position: relative;
   min-height: 1255px;
-  background: url("/hero_image.png")
-    center top/cover no-repeat;
+  background: url("/hero_image.png") center top/cover no-repeat;
 }
 
 .hero {
@@ -66,7 +64,7 @@ export default {
   width: 100%;
   text-align: center;
   line-height: 1;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   font-size: 8vw;
   text-shadow: 10px 10px 0 #fff;
 }

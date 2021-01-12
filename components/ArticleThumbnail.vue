@@ -8,12 +8,12 @@
       <p>
         {{ article.author ? article.author : "ほびー" }} さんが
         {{ article.createdAt.toDate().toLocaleDateString() }} に投稿
-        <span class="zbzb_count">
-          {{ article.zbzbCount ? article.zbzbCount : 0 }}</span
+        <span class="tag is-primary"
+          >{{ article.zbzbCount ? article.zbzbCount : 0 }} ずぶずぶ</span
         >
-        <img src="/zbzb.png" class="zbzb" />
       </p>
     </div>
+    <hr class="mb-1" />
   </div>
 </template>
 
@@ -31,13 +31,7 @@ export default {
   font-weight: bold;
 }
 
-.zbzb_count {
-  color: #66d4b4;
-}
-
-.zbzb {
-  height: 20px;
-  width: 20px;
+.tag {
   vertical-align: top;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar is-transparent">
+  <nav class="navbar is-primary is-transparent">
     <div class="navbar-brand">
       <a class="navbar-item" href="https://bulma.io">
         <!-- <img src="logo.png" alt="" /> -->

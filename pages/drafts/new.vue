@@ -14,7 +14,7 @@
           <div class="level mb-0">
             <label class="label">タグ</label>
             <button
-              class="button is-rounded is-small"
+              class="button is-rounded is-small is-primary"
               @click="addTagSuggestBox()"
             >
               タグを追加
@@ -75,7 +75,7 @@
         </div>
         <div class="columns">
           <div class="column has-text-right">
-            <button type="button" class="button" @click="submit">
+            <button type="button" class="button is-primary" @click="submit">
               投稿する！
             </button>
           </div>

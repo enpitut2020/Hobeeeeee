@@ -112,7 +112,6 @@
             :cy="y"
             style="fill: #f38181"
             class="node-link"
-            @click="console.log('nanaka')"
           ></circle>
           <text
             text-anchor="middle"
@@ -281,11 +280,6 @@ export default {
         // 上の例だと(1, true)が返ってきたらループを抜ける
         isFinished = nodeNum.done;
       }
-      console.debug(
-        `Splitted relativeNodes (created() in GraphSvg.vue): ${JSON.stringify(
-          _scatteredNodes
-        )}`
-      );
       // 外側に配置するノードから順にソートする
       return _scatteredNodes.reverse();
     },
