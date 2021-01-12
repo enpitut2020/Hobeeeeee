@@ -30,6 +30,7 @@ export default {
     "~/plugins/firebaseUtils",
     "~/plugins/firebase",
     '~/plugins/adobe-fonts',
+    '~/plugins/vue-scrollto',
     {
       src: "@/plugins/vue-mavon-editor",
       srr: false,

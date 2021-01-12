@@ -19,7 +19,8 @@
     "firebase": "^8.0.1",
     "mavon-editor": "^2.9.0",
     "nuxt": "^2.14.6",
-    "panzoom": "^9.4.1"
+    "panzoom": "^9.4.1",
+    "vue-scrollto": "^2.20.0"
   },
   "devDependencies": {
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
