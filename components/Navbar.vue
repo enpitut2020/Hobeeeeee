@@ -1,14 +1,14 @@
 <template>
-  <nav class="navbar is-primary is-transparent">
+  <nav class="navbar is-primary">
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://bulma.io">
+      <a class="navbar-item" href="#">
         <!-- <img src="logo.png" alt="" /> -->
       </a>
       <div
         class="navbar-burger burger"
         v-bind:class="{ 'is-active': isMenuOpen }"
         v-on:click="toggleMenu()"
-        data-target="navbarExampleTransparentExample"
+        data-target="navbarExample"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -16,7 +16,7 @@
       </div>
     </div>
     <div
-      id="navbarExampleTransparentExample"
+      id="navbarExample"
       class="navbar-menu"
       v-bind:class="{ 'is-active': isMenuOpen }"
     >
