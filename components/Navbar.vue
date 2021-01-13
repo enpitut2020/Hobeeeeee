@@ -24,11 +24,16 @@
         <!-- Menu Item -->
         <div class="navbar-start">
           <a class="navbar-item" @click="$router.push('/')">Home</a>
-          <a class="navbar-item" @click="$router.push(`/${randomId}/graph/`)"
+          <a
+            class="navbar-item"
+            @click="
+              $router.push(`/${randomId}/graph/`);
+              reloadTargetTag();
+            "
             >趣味を探す</a
           >
           <a class="navbar-item" @click="$router.push(`/drafts/new`)"
-            >記事を書く</a
+            >趣味を書く</a
           >
         </div>
       </div>

@@ -2,7 +2,7 @@
   <div>
     <section class="section">
       <div class="container is-max-desktop">
-        <h1 class="title"><font-awesome-icon icon="pen-nib" /> 記事を書く</h1>
+        <h1 class="title"><font-awesome-icon icon="pen-nib" /> 趣味を書く</h1>
         <h2 class="subtitle">沼る記事を書こう！的な文</h2>
         <div class="field">
           <label class="label">タイトル</label>
