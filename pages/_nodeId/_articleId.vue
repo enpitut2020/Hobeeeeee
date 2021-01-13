@@ -178,7 +178,7 @@ export default {
       // 入力フォームを空にする
       this.inputComment = "";
       // 投稿後強制的にリロードする
-      // FIXME: ちょっとおそい，どうすれば？？　-> コンポーネントだけを再描画したい
+      // FIXME: ちょっとおそい，どうすれば？？ -> コンポーネントだけを再描画したい
       this.$router.go({ path: this.$router.currentRoute.path, force: true });
     },
   },
