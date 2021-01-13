@@ -40,7 +40,22 @@
       - コメント書く所，送信ボタンの簡単な設計でいい
       - ただのテキストをfirebaseの各記事に登録する
       - 各記事のサブコレクションにcommentsを入れる -->
-      <!-- TODO: 全コメント表示 -->
+      <div class="columns">
+        <input
+          v-model="submittingComment"
+          class="input column"
+          placeholder="コメント"
+        />
+        <button
+          v-bind:disabled="isNoComment()"
+          type="button"
+          class="button column is-one-fifth"
+          :class="{ 'is-success': !isNoComment() }"
+          @click="submit"
+        >
+          コメントする
+        </button>
+      </div>
       <ul>
         <li v-for="comment in comments" :key="comment.id">
           <Comment :comment="comment" />
@@ -67,7 +82,12 @@ export default {
       currentTagId: null,
       authorName: "ほびーさん",
       shareUrl: "",
+      // DBから取得したコメントの配列
       comments: comments,
+      // DBに登録する予定のコメントの文字列
+      submittingComment: "",
+      // コメント入力欄が空文字列
+      noComment: true,
       markdownOption: {
         bold: true,
         italic: true,
@@ -137,6 +157,13 @@ export default {
     },
     goTwitter() {
       window.open(this.shareUrl);
+    },
+    isNoComment() {
+      return this.submittingComment === "";
+    },
+    submit() {
+      console.debug(`submitted comment: ${this.submittingComment}`);
+      this.submittingComment = "";
     },
   },
 };
