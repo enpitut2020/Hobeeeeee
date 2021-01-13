@@ -388,9 +388,32 @@ Vue.prototype.$deleteTag = async function deleteTag(targetNodeId) {
     .delete()
     .then(() => {
       console.debug(`Tag has been successfully deleted!: ${targetNodeId}`);
-    }).catch((error) => {
-      console.error(`Error delete tag: ${error}`);
     })
+    .catch((error) => {
+      console.error(`Error delete tag: ${error}`);
+    });
+};
+
+/**
+ * コメントを取得する
+ * @param {String} articleId 記事のID
+ */
+Vue.prototype.$fetchComments = async function fetchComments(articleId) {
+  return await db
+    .collection("articles")
+    .doc(articleId)
+    .collection("comments")
+    .get()
+    .then((querySnapshot) => {
+      const comments = [];
+      querySnapshot.forEach((doc) => {
+        comments.push(doc.data());
+      });
+      return comments;
+    })
+    .catch((error) => {
+      console.error(`Error fetch comments: ${error}`);
+    });
 };
 
 export default (context) => {
@@ -407,6 +430,7 @@ export default (context) => {
   context.$addTagSuggestions = Vue.prototype.$addTagSuggestions;
   context.$deleteArticle = Vue.prototype.$deleteArticle;
   context.$deleteTag = Vue.prototype.$deleteTag;
+  context.$fetchComments = Vue.prototype.$fetchComments;
 };
 // 現在時刻を取得する
 Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {

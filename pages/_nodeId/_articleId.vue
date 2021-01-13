@@ -35,6 +35,17 @@
         <span v-show="isZbzbPushed == true">{{ zbzb_count }} ずぶった！</span>
       </button>
       <button class="button share-button" @click="goTwitter()">Tweet</button>
+      <!-- TODO: コメント投稿フォーム -->
+      <!-- - 各記事詳細画面の下の方に，コメントを各機能を入れる
+      - コメント書く所，送信ボタンの簡単な設計でいい
+      - ただのテキストをfirebaseの各記事に登録する
+      - 各記事のサブコレクションにcommentsを入れる -->
+      <!-- TODO: 全コメント表示 -->
+      <ul>
+        <li v-for="comment in comments" :key="comment.id">
+          <Comment :comment="comment" />
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -43,7 +54,9 @@
 import "mavon-editor/dist/css/index.css";
 
 export default {
-  data() {
+  async asyncData({ params, $fetchComments }) {
+    // コメントを取得
+    const comments = await $fetchComments(params.articleId);
     return {
       title: "",
       tags: [],
@@ -54,6 +67,7 @@ export default {
       currentTagId: null,
       authorName: "ほびーさん",
       shareUrl: "",
+      comments: comments,
       markdownOption: {
         bold: true,
         italic: true,
