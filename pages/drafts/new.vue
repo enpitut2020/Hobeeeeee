@@ -77,6 +77,10 @@ export default {
   },
 
   methods: {
+    removeSpaces(str) {
+      return str.replaceAll("　", "").replaceAll(" ", "");
+    },
+
     addTagSuggestBox() {
       this.searchTexts.push("");
     },
@@ -113,9 +117,11 @@ export default {
         return;
       }
       // await this.searchTexts.forEach(async (searchText, index) => {
-      const validatedSearchText = this.searchTexts.filter((x, i, self) => {
-        return self.indexOf(x) === i;
-      });
+      const validatedSearchText = this.searchTexts
+        .map((text) => this.removeSpaces(text))
+        .filter((x, i, self) => {
+          return self.indexOf(x) === i;
+        });
       for await (let searchText of validatedSearchText) {
         let existingTag = await this.$getExistingTag(searchText);
         if (existingTag == null) {
