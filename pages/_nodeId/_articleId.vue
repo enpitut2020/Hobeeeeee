@@ -179,7 +179,7 @@ export default {
       this.inputComment = "";
       // 投稿後強制的にリロードする
       // FIXME: ちょっとおそい，どうすれば？？ -> コンポーネントだけを再描画したい
-      this.comments.push(comment);
+      this.comments.unshift(comment);
     },
   },
 };
