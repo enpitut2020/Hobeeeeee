@@ -65,7 +65,7 @@ export default {
       isZbzbPushed: false,
       articleId: null,
       currentTagId: null,
-      authorName: "ほびーさん",
+      authorName: "",
       shareUrl: "",
       markdownOption: {
         bold: true,
@@ -97,7 +97,7 @@ export default {
     const article = await this.$getArticle(this.articleId);
     this.createdAt = article.createdAt.toDate().toLocaleDateString();
     this.content = article.body;
-    this.authorName = article.author ? article.author : "ほびーさん";
+    this.authorName = article.author ? article.author : "ほびー";
     this.title = article.title;
     if (article.zbzbCount == null) {
       this.zbzb_count = 0;

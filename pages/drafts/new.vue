@@ -141,7 +141,7 @@ export default {
         id: null,
         title: this.title,
         body: this.content,
-        author: this.author ? this.author : "ほびーさん",
+        author: this.author ? this.author : "ほびー",
         tags: [],
         createdAt: timestamp,
         updatedAt: timestamp,
