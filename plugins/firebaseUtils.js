@@ -416,6 +416,33 @@ Vue.prototype.$fetchComments = async function fetchComments(articleId) {
     });
 };
 
+/**
+ * 入力された記事を投稿する
+ * @param {Object} comment コメントのオブジェクト
+ * @param {String} articleId コメントされた記事のID
+ */
+Vue.prototype.$registerComment = async function registerComment(
+  comment,
+  articleId
+) {
+  console.debug(`register comment: ${JSON.stringify(comment)}`);
+  // 記事へのコメントへの参照
+  let ref = await db
+    .collection("articles")
+    .doc(articleId)
+    .collection("comments");
+  await ref
+    .add(comment)
+    .then((newComment) => {
+      ref.doc(newComment.id).update({
+        id: newComment.id,
+      });
+    })
+    .catch((error) => {
+      console.log(`Error register comment: ${error}`);
+    });
+};
+
 export default (context) => {
   //asyncDateではthisが使えないけどこれで登録すれば引数に取ればthisなしで使えるっぽい
   context.$getTags = Vue.prototype.$getTags;
@@ -431,6 +458,7 @@ export default (context) => {
   context.$deleteArticle = Vue.prototype.$deleteArticle;
   context.$deleteTag = Vue.prototype.$deleteTag;
   context.$fetchComments = Vue.prototype.$fetchComments;
+  context.$registerComment = Vue.prototype.$registerComment;
 };
 // 現在時刻を取得する
 Vue.prototype.$getFirebaseTimestamp = async function getFirebaseTimestamp() {

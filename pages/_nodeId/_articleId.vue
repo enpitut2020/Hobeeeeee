@@ -42,7 +42,7 @@
       - 各記事のサブコレクションにcommentsを入れる -->
       <div class="columns">
         <input
-          v-model="submittingComment"
+          v-model="inputComment"
           class="input column"
           placeholder="コメント"
         />
@@ -71,7 +71,9 @@ import "mavon-editor/dist/css/index.css";
 export default {
   async asyncData({ params, $fetchComments }) {
     // コメントを取得
-    const comments = await $fetchComments(params.articleId);
+    let comments = await $fetchComments(params.articleId);
+    // 日付の新しい順に並び替える
+    comments.reverse();
     return {
       title: "",
       tags: [],
@@ -85,8 +87,8 @@ export default {
       // DBから取得したコメントの配列
       comments: comments,
       // DBに登録する予定のコメントの文字列
-      submittingComment: "",
-      // コメント入力欄が空文字列
+      inputComment: "",
+      // コメント入力欄が空文字列かどうか
       noComment: true,
       markdownOption: {
         bold: true,
@@ -159,11 +161,25 @@ export default {
       window.open(this.shareUrl);
     },
     isNoComment() {
-      return this.submittingComment === "";
+      return this.inputComment === "";
     },
-    submit() {
-      console.debug(`submitted comment: ${this.submittingComment}`);
-      this.submittingComment = "";
+    async submit() {
+      // タイプスタンプ取得
+      let timestamp = await this.$getFirebaseTimestamp();
+      // コメントのオブジェクト生成
+      let comment = {
+        id: null,
+        body: this.inputComment,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      };
+      // コメントをDBに登録
+      await this.$registerComment(comment, this.articleId);
+      // 入力フォームを空にする
+      this.inputComment = "";
+      // 投稿後強制的にリロードする
+      // FIXME: ちょっとおそい，どうすれば？？　-> コンポーネントだけを再描画したい
+      this.$router.go({ path: this.$router.currentRoute.path, force: true });
     },
   },
 };
