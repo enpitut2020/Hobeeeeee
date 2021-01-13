@@ -113,11 +113,7 @@ export default {
         return;
       }
       // await this.searchTexts.forEach(async (searchText, index) => {
-      const validatedSearchText = this.searchTexts.filter(function (
-        x,
-        i,
-        self
-      ) {
+      const validatedSearchText = this.searchTexts.filter((x, i, self) => {
         return self.indexOf(x) === i;
       });
       for await (let searchText of validatedSearchText) {
