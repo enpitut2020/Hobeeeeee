@@ -24,7 +24,7 @@
             <div class="columns is-multiline">
               <div
                 v-for="(searchText, index) in searchTexts"
-                :key="'serchText-' + index"
+                :key="'searchText-' + index"
                 class="column has-text-right is-6"
               >
                 <div class="level">
@@ -125,6 +125,10 @@ export default {
   },
 
   methods: {
+    removeSpaces(str) {
+      return str.replaceAll("　", "").replaceAll(" ", "");
+    },
+
     addTagSuggestBox() {
       this.searchTexts.push("");
     },
@@ -161,8 +165,12 @@ export default {
         return;
       }
 
-      // await this.searchTexts.forEach(async (searchText, index) => {
-      for await (let searchText of this.searchTexts) {
+      const validatedSearchText = this.searchTexts
+        .map((text) => this.removeSpaces(text))
+        .filter((x, i, self) => {
+          return self.indexOf(x) === i;
+        });
+      for await (let searchText of validatedSearchText) {
         let existingTag = await this.$getExistingTag(searchText);
         if (existingTag == null) {
           // 新規登録
@@ -198,10 +206,6 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-/* 
-.section {
-  max-width: 800px;
-} */
 
 .mavon-editor {
   max-height: 1vh;
