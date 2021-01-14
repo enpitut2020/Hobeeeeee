@@ -50,7 +50,7 @@
           v-bind:disabled="isNoComment()"
           type="button"
           class="button column is-one-fifth"
-          :class="{ 'is-success': !isNoComment() }"
+          :class="{ 'is-success': !isNoComment }"
           @click="submit"
         >
           コメントする
@@ -114,6 +114,12 @@ export default {
     };
   },
 
+  computed: {
+    isNoComment() {
+      return this.inputComment === "";
+    },
+  },
+
   async created() {
     console.log(
       `tagID (created() in _articleId.vue): ${this.$route.params.nodeId}`
@@ -159,9 +165,6 @@ export default {
     },
     goTwitter() {
       window.open(this.shareUrl);
-    },
-    isNoComment() {
-      return this.inputComment === "";
     },
     async submit() {
       // タイプスタンプ取得
