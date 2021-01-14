@@ -1,38 +1,87 @@
 <template>
   <div>
-    <div class="section">
-      <input v-model="title" class="input" placeholder="タイトル" />
-      <div
-        v-for="(searchText, index) in searchTexts"
-        :key="'serchText-' + index"
-      >
-        <input
-          v-model="searchTexts[index]"
-          class="input"
-          placeholder="タグ"
-          name="yourarea"
-          autocomplete="on"
-          list="suggestList"
-        />
+    <section class="section">
+      <div class="container is-max-desktop">
+        <h1 class="title"><font-awesome-icon icon="pen-nib" /> 趣味を書く</h1>
+        <h2 class="subtitle">沼る記事を書こう！的な文</h2>
+        <div class="field">
+          <label class="label">タイトル</label>
+          <div class="control">
+            <input v-model="title" class="input" placeholder="記事のタイトル" />
+          </div>
+        </div>
+        <div class="field">
+          <div class="level mb-0">
+            <label class="label">タグ</label>
+            <button
+              class="button is-rounded is-small is-primary"
+              @click="addTagSuggestBox()"
+            >
+              タグを追加
+            </button>
+          </div>
+          <div class="control">
+            <div class="columns is-multiline">
+              <div
+                v-for="(searchText, index) in searchTexts"
+                :key="'searchText-' + index"
+                class="column has-text-right is-6"
+              >
+                <div class="level">
+                  <input
+                    v-model="searchTexts[index]"
+                    class="input"
+                    placeholder="記事に関するタグ"
+                    name="yourarea"
+                    autocomplete="on"
+                    list="suggestList"
+                  />
+                  <a
+                    v-show="searchTexts.length > 1"
+                    class="delete ml-2"
+                    @click="deleteTagSuggestBox(index)"
+                  ></a>
+                </div>
+              </div>
+              <datalist id="suggestList">
+                <option v-for="(n, index) in tagSuggestions" :key="n + index">
+                  {{ n }}
+                </option>
+              </datalist>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">書いた人</label>
+          <div class="control">
+            <input
+              v-model="author"
+              class="input"
+              placeholder="書いた人のなまえ"
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">本文</label>
+          <div class="control">
+            <mavon-editor
+              v-model="content"
+              :toolbars="markdownOption"
+              language="ja"
+              placeholder="記事を書いてね！"
+              class="mavon-editor"
+            />
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column has-text-right">
+            <button type="button" class="button is-primary" @click="submit">
+              投稿する！
+            </button>
+          </div>
+        </div>
       </div>
-      <button @click="addTagSuggestBox()">+</button>
-      <button @click="deleteTagSuggestBox()">-</button>
-      <datalist id="suggestList">
-        <option v-for="(n, index) in tagSuggestions" :key="n + index">
-          {{ n }}
-        </option>
-      </datalist>
-      <input v-model="author" class="input" placeholder="書いた人" />
-      <mavon-editor
-        v-model="content"
-        :toolbars="markdownOption"
-        language="ja"
-        placeholder="記事を書いてね！"
-      />
-      <button type="button" class="button is-success" @click="submit">
-        投稿する
-      </button>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -69,7 +118,6 @@ export default {
         code: true,
         table: true,
         fullscreen: false,
-        readmodel: true,
         htmlcode: true,
         help: true,
       },
@@ -85,9 +133,9 @@ export default {
       this.searchTexts.push("");
     },
 
-    deleteTagSuggestBox() {
+    deleteTagSuggestBox(index) {
       if (this.searchTexts.length > 1) {
-        this.searchTexts.pop();
+        this.searchTexts.splice(index, 1);
       }
     },
 
@@ -97,7 +145,7 @@ export default {
         id: null,
         title: this.title,
         body: this.content,
-        author: this.author ? this.author : "ほびーさん",
+        author: this.author ? this.author : "ほびー",
         tags: [],
         createdAt: timestamp,
         updatedAt: timestamp,
@@ -116,7 +164,7 @@ export default {
       if (!confirm(`以下の内容で投稿しますか？\n${this.title}`)) {
         return;
       }
-      // await this.searchTexts.forEach(async (searchText, index) => {
+
       const validatedSearchText = this.searchTexts
         .map((text) => this.removeSpaces(text))
         .filter((x, i, self) => {
@@ -152,3 +200,18 @@ export default {
   },
 };
 </script>
+
+<style>
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mavon-editor {
+  max-height: 1vh;
+}
+
+.v-note-show {
+  font-family: heisei-maru-gothic-std, Meiryo, sans-serif;
+}
+</style>
