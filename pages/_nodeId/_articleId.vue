@@ -73,7 +73,7 @@ export default {
     // コメントを取得
     let comments = await $fetchComments(params.articleId);
     // 日付の新しい順に並び替える
-    comments.reverse();
+    comments.sort((a, b) => b.createdAt - a.createdAt);
     return {
       title: "",
       tags: [],
