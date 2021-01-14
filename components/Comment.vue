@@ -15,9 +15,14 @@ export default {
     comment: { type: Object, default: () => {} },
   },
   computed: {
+    // コメントの横に表示するタイムスタンプ
     commentTime() {
-      const timeFullString = this.comment.createdAt.toDate().toLocaleString();
-      return timeFullString.substring(0, timeFullString.length - 3);
+      // 日本時間に固定
+      const locale = "ja";
+      // YYYY/MM/DD hh:mm
+      const options = { dateStyle: "medium", timeStyle: "short" };
+      // Dateオブジェクト -> 文字列
+      return this.comment.createdAt.toDate().toLocaleString(locale, options);
     },
   },
 };
