@@ -49,6 +49,7 @@
                 '&viewBoxHeight=' +
                 viewBoxHeight
               "
+              class="node-link"
             >
               <!-- 関連趣味のノード -->
               <circle
@@ -104,12 +105,13 @@
           </g>
         </g>
         <!-- 現在フォーカスしている趣味のノードと名前の描画 -->
-        <nuxt-link :to="'/' + targetNode.id + '/list'">
+        <nuxt-link :to="'/' + targetNode.id + '/list'" class="node-link">
           <circle
             :r="nodeParam.RADIUS"
             :cx="x"
             :cy="y"
             style="fill: #f38181"
+            class="node-link"
           ></circle>
           <text
             text-anchor="middle"
@@ -185,7 +187,11 @@ export default {
     this.y = this.height / 2;
     var panzoom = require("panzoom");
     var element = document.getElementById("scene");
-    panzoom(element);
+    panzoom(element, {
+      onTouch: function () {
+        return false; // tells the library to not preventDefault.
+      },
+    });
   },
   methods: {
     // 関連を表す線の太さを計算する
@@ -274,11 +280,6 @@ export default {
         // 上の例だと(1, true)が返ってきたらループを抜ける
         isFinished = nodeNum.done;
       }
-      console.debug(
-        `Splitted relativeNodes (created() in GraphSvg.vue): ${JSON.stringify(
-          _scatteredNodes
-        )}`
-      );
       // 外側に配置するノードから順にソートする
       return _scatteredNodes.reverse();
     },

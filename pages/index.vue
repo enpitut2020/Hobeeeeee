@@ -1,14 +1,51 @@
 <template>
-  <div class="container">
-    <div v-if="randomId !== ''">
-      <nuxt-link :to="randomId + '/graph/'" class="button find-hobby"
+  <div>
+    <section class="hero is-fullheight-with-navbar">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title hero_text">Hobeeeeee!!</h1>
+
+          <nuxt-link
+            v-scroll-to="'#explanation'"
+            to
+            class="button is-warning is-inverted is-outlined hero_button"
+          >
+            more
+          </nuxt-link>
+        </div>
+      </div>
+    </section>
+    <header class="full"></header>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div id="explanation">
+          <div class="box">
+            <h1 class="title">Hobeeeeee!!</h1>
+            <p>
+              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
+            </p>
+            <br />
+            <p>
+              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキ
+            </p>
+            <br />
+            <p>
+              ストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
+            </p>
+          </div>
+        </div>
+
+        <!-- <div v-if="randomId !== ''">
+      <nuxt-link :to="randomId + '/graph/'" class="button"
         >趣味を見つける</nuxt-link
       >
       <nuxt-link to="/drafts/new" class="button find-hobby"
         >趣味を広める</nuxt-link
       >
     </div>
-    <div v-else>Loading...</div>
+    <div v-else>Loading...</div> -->
+      </div>
+    </section>
   </div>
 </template>
 
@@ -30,38 +67,8 @@ export default {
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 90vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-
-.find-hobby {
-  margin: 1em;
+.hero_text {
+  font-family: impetus, sans-serif;
+  font-size: 10em;
 }
 </style>

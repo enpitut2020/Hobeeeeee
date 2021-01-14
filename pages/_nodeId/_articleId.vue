@@ -1,18 +1,42 @@
 <template>
-  <!-- 記事詳細画面 -->
-  <div class="container">
-    <div class="my-title-container">
-      <h1 class="title">{{ title }}</h1>
-      <h2 class="subtitle">書いた人: {{ authorName }}</h2>
-      <div class="is-divider"></div>
-      <nuxt-link
-        v-for="tag in tags"
-        :key="tag.id"
-        :to="'/' + tag.id + '/graph'"
-        class="tag"
-      >
-        {{ tag.name }}({{ tag.articlesCount }})
-      </nuxt-link>
+  <section class="section">
+    <div class="container is-max-desktop">
+      <nuxt-link :to="'/' + currentTagId + '/list'">記事一覧へ戻る</nuxt-link>
+      <h1 class="title mt-3 mb-0">{{ title }}</h1>
+      <div class="level mb-0">
+        <h2 class="subtitle">
+          {{ authorName }} さんが{{ createdAt }}
+          に投稿
+        </h2>
+        <div class="buttons is-right">
+          <button
+            class="button is-primary"
+            :class="{ 'is-light': isZbzbPushed == false }"
+            @click="zbzbButton()"
+          >
+            <span v-show="isZbzbPushed == false"
+              >{{ zbzb_count }} ずぶずぶ</span
+            >
+            <span v-show="isZbzbPushed == true">
+              {{ zbzb_count }}ずぶった!</span
+            >
+          </button>
+          <button class="button share-button" @click="goTwitter()">
+            <font-awesome-icon :icon="['fab', 'twitter']" />
+            Tweet
+          </button>
+        </div>
+      </div>
+      <div class="tags">
+        <nuxt-link
+          v-for="(tag, index) in tags"
+          :key="tag.id + index"
+          :to="'/' + tag.id + '/graph'"
+          class="tag is-warning is-rounded"
+        >
+          {{ tag.name }}({{ tag.articlesCount }})
+        </nuxt-link>
+      </div>
       <mavon-editor
         v-model="content"
         language="ja"
@@ -62,7 +86,7 @@
         </li>
       </ul>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -78,11 +102,12 @@ export default {
       title: "",
       tags: [],
       content: "",
+      createdAt: "",
       zbzb_count: null,
       isZbzbPushed: false,
       articleId: null,
       currentTagId: null,
-      authorName: "ほびーさん",
+      authorName: "",
       shareUrl: "",
       // DBから取得したコメントの配列
       comments: comments,
@@ -121,17 +146,12 @@ export default {
   },
 
   async created() {
-    console.log(
-      `tagID (created() in _articleId.vue): ${this.$route.params.nodeId}`
-    );
-    console.log(
-      `記事ID (created() in _articleId.vue): ${this.$route.params.articleId}`
-    );
     this.articleId = this.$route.params.articleId;
     this.currentTagId = this.$route.params.nodeId;
     const article = await this.$getArticle(this.articleId);
+    this.createdAt = article.createdAt.toDate().toLocaleDateString();
     this.content = article.body;
-    this.authorName = article.author ? article.author : "ほびーさん";
+    this.authorName = article.author ? article.author : "ほびー";
     this.title = article.title;
     if (article.zbzbCount == null) {
       this.zbzb_count = 0;
@@ -151,7 +171,6 @@ export default {
   methods: {
     zbzbButton() {
       // ZBZBButtonが押されたときの処理
-      console.log("zbzb button pushed");
       // isButtonPushedがfalseの時、ずぶずぶカウントが1増え、trueの時1減る
       if (this.isZbzbPushed) {
         this.zbzb_count -= 1;
@@ -188,9 +207,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .share-button {
-  background-color: #00acee;
+  background-color: #55acee;
   color: #eee;
+}
+
+.v-note-show {
+  font-family: heisei-maru-gothic-std, Meiryo, sans-serif;
+  line-height: 2;
 }
 </style>
