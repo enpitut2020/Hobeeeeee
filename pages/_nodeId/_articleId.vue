@@ -105,9 +105,13 @@ export default {
       this.zbzb_count = article.zbzbCount;
     }
     const getTagsInfo = [];
-    article.tags.forEach((tag) => {
-      getTagsInfo.push(this.$getTag(tag));
-    });
+    article.tags
+      .filter((x, i, self) => {
+        return self.indexOf(x) === i;
+      })
+      .forEach((tag) => {
+        getTagsInfo.push(this.$getTag(tag));
+      });
     this.tags = await Promise.all(getTagsInfo);
     let hashtag = "%23Hobeeeeee";
     const tweetText = `Hobeeeeee!!の「${this.title}」で${this.tags[0].name}の沼を覗こう!! ${hashtag}`;
