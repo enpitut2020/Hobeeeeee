@@ -47,7 +47,7 @@
           placeholder="コメント"
         />
         <button
-          v-bind:disabled="isNoComment()"
+          :disabled="isNoComment"
           type="button"
           class="button column is-one-fifth"
           :class="{ 'is-success': !isNoComment }"

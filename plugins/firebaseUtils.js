@@ -25,7 +25,9 @@ Vue.prototype.$getTags = async function getTags() {
     .catch(() => {
       alert("firestoreからのデータの取得でエラーが発生しました");
     });
-  console.debug(`tags (getTags() in firebaseUtils.js) : ${JSON.stringify(tags)}`);
+  console.debug(
+    `tags (getTags() in firebaseUtils.js) : ${JSON.stringify(tags)}`
+  );
   return tags;
 };
 
@@ -130,7 +132,7 @@ Vue.prototype.$getArticle = async function getArticle(articleId) {
 // 登録する記事のIDを返す
 Vue.prototype.$registerArticle = async function registerArticle(article) {
   let ref = await db.collection("articles");
-  console.debug("regiter article : "+JSON.stringify(article))
+  console.debug("regiter article : " + JSON.stringify(article));
   return ref
     .add(article)
     .then((newArticle) => {
@@ -187,7 +189,8 @@ Vue.prototype.$createTag = async function createTag(tagName) {
 
 //既存趣味の記事が増えた時、tagのvolumeを更新
 Vue.prototype.$incrementArticlesCount = async function incrementArticlesCount(
-  tagId, count
+  tagId,
+  count
 ) {
   db.collection("tags")
     .doc(tagId)
@@ -281,7 +284,7 @@ Vue.prototype.$addTagSuggestions = async function addTagSuggestions(
     })
     .catch((e) => {
       console.error(e);
-    })
+    });
 };
 
 // 記事を削除する
@@ -299,12 +302,14 @@ Vue.prototype.$deleteArticle = async function deleteArticle(articleId) {
       // 記事数を1減らす
       await Vue.prototype.$incrementArticlesCount(tagId, -1);
       // 記事を削除する
-      await db.collection("articles")
+      await db
+        .collection("articles")
         .doc(articleId)
         .delete()
         .then(() => {
           console.debug(`Article has been successfully deleted!: ${articleId}`);
-        }).catch((error) => {
+        })
+        .catch((error) => {
           console.error(`Error delete article: ${error}`);
         });
     }
@@ -313,7 +318,9 @@ Vue.prototype.$deleteArticle = async function deleteArticle(articleId) {
 
 // 全ての記事から該当タグを除外する
 // 該当タグしかついていなかったらその記事を削除
-Vue.prototype.$deleteTagWithArticle = async function deleteTagWithArticle(targetNodeId) {
+Vue.prototype.$deleteTagWithArticle = async function deleteTagWithArticle(
+  targetNodeId
+) {
   await db
     .collection("articles")
     .where("tags", "array-contains", targetNodeId)
@@ -324,13 +331,21 @@ Vue.prototype.$deleteTagWithArticle = async function deleteTagWithArticle(target
         if (article.tags.length === 1) {
           // 該当タグしかついていなかったら、記事自体を削除する
           doc.ref.delete();
-          console.debug(`Delete article (deleteTagWithArticle() in firebaseUtils.js): ${JSON.stringify(article)}`);
+          console.debug(
+            `Delete article (deleteTagWithArticle() in firebaseUtils.js): ${JSON.stringify(
+              article
+            )}`
+          );
         } else {
           // 該当タグだけ削除する
           doc.ref.update({
-            tags: firebase.firestore.FieldValue.arrayRemove(targetNodeId)
+            tags: firebase.firestore.FieldValue.arrayRemove(targetNodeId),
           });
-          console.debug(`Remove tag (deleteTagWithArticle() in firebaseUtils.js): ${JSON.stringify(article)}`);
+          console.debug(
+            `Remove tag (deleteTagWithArticle() in firebaseUtils.js): ${JSON.stringify(
+              article
+            )}`
+          );
         }
       });
     })
@@ -340,7 +355,9 @@ Vue.prototype.$deleteTagWithArticle = async function deleteTagWithArticle(target
 };
 
 // 全てのタグのrelativeコレクションのtags配列からtargetNodeIdを削除する
-Vue.prototype.$deleteTagInRelative = async function deleteTagInRelative(targetNodeId) {
+Vue.prototype.$deleteTagInRelative = async function deleteTagInRelative(
+  targetNodeId
+) {
   await db
     .collectionGroup("relative")
     .where("id", "==", targetNodeId)
@@ -348,15 +365,20 @@ Vue.prototype.$deleteTagInRelative = async function deleteTagInRelative(targetNo
     .then((queryResults) => {
       queryResults.forEach((doc) => {
         doc.ref.delete();
-      })
-      console.debug(`tag in relative has been successfully deleted!: ${targetNodeId}`);
-    }).catch((error) => {
-      console.error(`Error delete article: ${error}`);
+      });
+      console.debug(
+        `tag in relative has been successfully deleted!: ${targetNodeId}`
+      );
     })
+    .catch((error) => {
+      console.error(`Error delete article: ${error}`);
+    });
 };
 
 // タグの推薦リストから該当タグを削除する
-Vue.prototype.$removeTagFromSuggestions = async function removeTagFromSuggestions(targetNodeId) {
+Vue.prototype.$removeTagFromSuggestions = async function removeTagFromSuggestions(
+  targetNodeId
+) {
   const tag = await Vue.prototype.$getTag(targetNodeId);
   if (!tag) {
     return;
@@ -365,13 +387,16 @@ Vue.prototype.$removeTagFromSuggestions = async function removeTagFromSuggestion
     .collection("tagSuggestions")
     .doc("suggestions")
     .update({
-      tagSuggestions: firebase.firestore.FieldValue.arrayRemove(tag.name)
+      tagSuggestions: firebase.firestore.FieldValue.arrayRemove(tag.name),
     })
     .then(() => {
-      console.debug(`TagSuggestion has been successfully deleted!: ${tag.name}`);
-    }).catch((error) => {
-      console.error(`Error delete TagSuggestion: ${error}`);
+      console.debug(
+        `TagSuggestion has been successfully deleted!: ${tag.name}`
+      );
     })
+    .catch((error) => {
+      console.error(`Error delete TagSuggestion: ${error}`);
+    });
 };
 
 // タグを削除する

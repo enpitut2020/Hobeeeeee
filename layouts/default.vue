@@ -9,10 +9,10 @@
 export default {
   mounted() {
     this.$nextTick(function () {
-      this.$adobeFonts(document)
-    })
+      this.$adobeFonts(document);
+    });
   },
-}
+};
 </script>
 
 <style>

@@ -19,7 +19,7 @@ export default {
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
     // node.js module but we specify the pre-processor
-    { src: '~assets/main.scss', lang: 'scss' }
+    { src: "~assets/main.scss", lang: "scss" },
     // { src: 'bulma/bulma.sass', lang: 'sass' }
   ],
 
@@ -27,7 +27,7 @@ export default {
   plugins: [
     "~/plugins/firebaseUtils",
     "~/plugins/firebase",
-    '~/plugins/adobe-fonts',
+    "~/plugins/adobe-fonts",
     {
       src: "@/plugins/vue-mavon-editor",
       srr: false,
