@@ -6,9 +6,9 @@
       </a>
       <div
         class="navbar-burger burger"
-        v-bind:class="{ 'is-active': isMenuOpen }"
-        v-on:click="toggleMenu()"
+        :class="{ 'is-active': isMenuOpen }"
         data-target="navbarExample"
+        @click="toggleMenu()"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -18,7 +18,7 @@
     <div
       id="navbarExample"
       class="navbar-menu"
-      v-bind:class="{ 'is-active': isMenuOpen }"
+      :class="{ 'is-active': isMenuOpen }"
     >
       <div class="navbar-start">
         <!-- Menu Item -->

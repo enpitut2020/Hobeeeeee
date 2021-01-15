@@ -47,6 +47,44 @@
         default-open="preview"
         preview-background="#fff"
       />
+      <nuxt-link :to="'/' + currentTagId + '/list'" class="button"
+        >記事一覧へ戻る</nuxt-link
+      >
+      <button
+        class="button"
+        :class="{ 'is-success': isZbzbPushed == true }"
+        @click="zbzbButton()"
+      >
+        <span v-show="isZbzbPushed == false">{{ zbzb_count }} ずぶずぶ！</span>
+        <span v-show="isZbzbPushed == true">{{ zbzb_count }} ずぶった！</span>
+      </button>
+      <button class="button share-button" @click="goTwitter()">Tweet</button>
+      <!-- TODO: コメント投稿フォーム -->
+      <!-- - 各記事詳細画面の下の方に，コメントを各機能を入れる
+      - コメント書く所，送信ボタンの簡単な設計でいい
+      - ただのテキストをfirebaseの各記事に登録する
+      - 各記事のサブコレクションにcommentsを入れる -->
+      <div class="columns">
+        <input
+          v-model="inputComment"
+          class="input column"
+          placeholder="コメント"
+        />
+        <button
+          :disabled="isNoComment"
+          type="button"
+          class="button column is-one-fifth"
+          :class="{ 'is-success': !isNoComment }"
+          @click="submit"
+        >
+          コメントする
+        </button>
+      </div>
+      <ul>
+        <li v-for="comment in comments" :key="comment.id">
+          <Comment :comment="comment" />
+        </li>
+      </ul>
     </div>
   </section>
 </template>
@@ -55,7 +93,11 @@
 import "mavon-editor/dist/css/index.css";
 
 export default {
-  data() {
+  async asyncData({ params, $fetchComments }) {
+    // コメントを取得
+    let comments = await $fetchComments(params.articleId);
+    // 日付の新しい順に並び替える
+    comments.sort((a, b) => b.createdAt - a.createdAt);
     return {
       title: "",
       tags: [],
@@ -67,6 +109,12 @@ export default {
       currentTagId: null,
       authorName: "",
       shareUrl: "",
+      // DBから取得したコメントの配列
+      comments: comments,
+      // DBに登録する予定のコメントの文字列
+      inputComment: "",
+      // コメント入力欄が空文字列かどうか
+      noComment: true,
       markdownOption: {
         bold: true,
         italic: true,
@@ -89,6 +137,12 @@ export default {
         help: true,
       },
     };
+  },
+
+  computed: {
+    isNoComment() {
+      return this.inputComment === "";
+    },
   },
 
   async created() {
@@ -134,6 +188,24 @@ export default {
     },
     goTwitter() {
       window.open(this.shareUrl);
+    },
+    async submit() {
+      // タイプスタンプ取得
+      let timestamp = await this.$getFirebaseTimestamp();
+      // コメントのオブジェクト生成
+      let comment = {
+        id: null,
+        body: this.inputComment,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      };
+      // コメントをDBに登録
+      await this.$registerComment(comment, this.articleId);
+      // 入力フォームを空にする
+      this.inputComment = "";
+      // 投稿後強制的にリロードする
+      // FIXME: ちょっとおそい，どうすれば？？ -> コンポーネントだけを再描画したい
+      this.comments.unshift(comment);
     },
   },
 };
