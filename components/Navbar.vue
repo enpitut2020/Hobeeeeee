@@ -32,7 +32,14 @@
             "
             >趣味を探す</a
           >
-          <a class="navbar-item" @click="$router.push(`/drafts/new`)"
+          <a
+            class="navbar-item"
+            @click="
+              $router.push({
+                path: `/drafts/new`,
+                query: { tagId: $route.params.nodeId },
+              })
+            "
             >趣味を書く</a
           >
         </div>

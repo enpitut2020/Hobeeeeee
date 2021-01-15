@@ -89,9 +89,18 @@
 import "mavon-editor/dist/css/index.css";
 
 export default {
-  async asyncData({ $getSuggestions }) {
+  async asyncData({ query, $getTag, $getSuggestions }) {
+    let recommendedTagName = "";
+    if (typeof query.tagId !== "undefined") {
+      // クエリパラメータにtagIdが渡されていたら、そのタグを推薦
+      const recommendedTag = await $getTag(query.tagId);
+      recommendedTagName = recommendedTag.name;
+    }
     let data = await $getSuggestions();
-    return { tagSuggestions: data.tagSuggestions };
+    return {
+      recommendedTagName: recommendedTagName,
+      tagSuggestions: data.tagSuggestions,
+    };
   },
   data() {
     return {
@@ -122,6 +131,11 @@ export default {
         help: true,
       },
     };
+  },
+
+  created() {
+    // 直前に見ていた趣味のタグをプリセットする
+    this.searchTexts[0] = this.recommendedTagName;
   },
 
   methods: {
