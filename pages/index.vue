@@ -1,5 +1,7 @@
 <template>
   <div>
+    <div class="back_left"></div>
+    <div class="back_right"></div>
     <section class="hero is-fullheight-with-navbar">
       <div class="hero-body">
         <div class="container has-text-centered">
@@ -84,6 +86,32 @@ export default {
   font-family: impetus, sans-serif;
   font-size: 10em;
 }
+
+.back_left {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  right: 50%;
+  margin-right: 31%;
+  background-position: right top;
+  background-repeat: repeat;
+  background-image: url("/hero_image.png");
+  background-size: 75%;
+  display: block;
+}
+
+.back_right {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  left: 50%;
+  margin-left: 32%;
+  background-repeat: repeat;
+  background-image: url("/hero_image.png");
+  background-size: 75%;
+  display: block;
+}
+
 .svg-wrapper {
   position: relative;
   width: 100%;
