@@ -3,8 +3,21 @@
     <section class="hero is-fullheight-with-navbar">
       <div class="hero-body">
         <div class="container has-text-centered">
-          <h1 class="title hero_text">Hobeeeeee!!</h1>
-
+          <div class="svg-wrapper">
+            <!-- prettier-ignore -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="1474" height="328.5" viewBox="0 0 1474 328.5">
+              <g id="hobeeeeee" transform="translate(-232.5 -460)">
+                <g id="title">
+                  <text id="title_shadow" transform="translate(969.5 675)" fill="#444242" stroke="#555151" stroke-width="5" font-size="195" font-family="Impetus-Heavy, Impetus" font-weight="800"><tspan x="-731.055" y="0">Hobeeeeee!!</tspan></text>
+                  <text id="title_text" transform="translate(969.5 660)" fill="#67d5b5" stroke="#555151" stroke-width="5" font-size="195" font-family="Impetus-Heavy, Impetus" font-weight="800"><tspan x="-731.055" y="0">H</tspan><tspan y="0" fill="#f38181">o</tspan><tspan y="0">b</tspan><tspan y="0" fill="#fce38a">e</tspan><tspan y="0">e</tspan><tspan y="0" fill="#fce38a">e</tspan><tspan y="0">e</tspan><tspan y="0" fill="#fce38a">e</tspan><tspan y="0">e</tspan><tspan y="0" fill="#fce38a">!!</tspan></text>
+                </g>
+                <g id="copy">
+                  <text id="copy_shadow" transform="translate(968.5 763.5)" fill="#444242" stroke="#3e3939" stroke-width="3" font-size="80" font-family="AzoSans-Black, Azo Sans" font-weight="800"><tspan x="-492.32" y="0">Sorry for my funny hobby</tspan></text>
+                  <text id="copy_text" transform="translate(968.5 753.5)" fill="#fff" stroke="#3e3939" stroke-width="3" font-size="80" font-family="AzoSans-Black, Azo Sans" font-weight="800"><tspan x="-492.32" y="0">Sorry for my funny hobby</tspan></text>
+                </g>
+              </g>
+            </svg>
+          </div>
           <nuxt-link
             v-scroll-to="'#explanation'"
             to
@@ -70,5 +83,18 @@ export default {
 .hero_text {
   font-family: impetus, sans-serif;
   font-size: 10em;
+}
+.svg-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 30%; /* SVG高さ / SVG幅 * 100 */
+}
+
+.svg-wrapper svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>
