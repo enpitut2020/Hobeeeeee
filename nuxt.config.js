@@ -1,4 +1,4 @@
-import * as FontAwesome from './plugins/fontawesome'
+import * as FontAwesome from "./plugins/fontawesome";
 
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
@@ -21,7 +21,7 @@ export default {
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
     // node.js module but we specify the pre-processor
-    { src: '~assets/main.scss', lang: 'scss' }
+    { src: "~assets/main.scss", lang: "scss" },
     // { src: 'bulma/bulma.sass', lang: 'sass' }
   ],
 
@@ -29,8 +29,8 @@ export default {
   plugins: [
     "~/plugins/firebaseUtils",
     "~/plugins/firebase",
-    '~/plugins/adobe-fonts',
-    '~/plugins/vue-scrollto',
+    "~/plugins/adobe-fonts",
+    "~/plugins/vue-scrollto",
     {
       src: "@/plugins/vue-mavon-editor",
       srr: false,
@@ -42,20 +42,18 @@ export default {
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
-    ['@nuxtjs/fontawesome', { component: 'fontAwesome', suffix: true }]
+    ["@nuxtjs/fontawesome", { component: "fontAwesome", suffix: true }],
   ],
   fontawesome: {
     icons: {
       solid: FontAwesome.solid,
       regular: FontAwesome.regular,
-      brands: FontAwesome.brands
-    }
+      brands: FontAwesome.brands,
+    },
   },
 
   // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: [
-            "@nuxtjs/bulma",
-          ],
+  modules: ["@nuxtjs/bulma"],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
