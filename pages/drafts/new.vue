@@ -5,14 +5,18 @@
         <h1 class="title"><font-awesome-icon icon="pen-nib" /> 趣味を書く</h1>
         <h2 class="subtitle">沼る記事を書こう！的な文</h2>
         <div class="field">
-          <label class="label">タイトル</label>
+          <label class="label"
+            >タイトル<span style="color: #f38181"> *</span></label
+          >
           <div class="control">
             <input v-model="title" class="input" placeholder="記事のタイトル" />
           </div>
         </div>
         <div class="field">
           <div class="level mb-0">
-            <label class="label">タグ</label>
+            <label class="label"
+              >タグ<span style="color: #f38181"> *</span></label
+            >
             <button
               class="button is-rounded is-small is-primary"
               @click="addTagSuggestBox()"
@@ -62,7 +66,9 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">本文</label>
+          <label class="label"
+            >本文<span style="color: #f38181"> *</span></label
+          >
           <div class="control">
             <mavon-editor
               v-model="content"
@@ -125,10 +131,6 @@ export default {
   },
 
   methods: {
-    removeSpaces(str) {
-      return str.replaceAll("　", "").replaceAll(" ", "");
-    },
-
     addTagSuggestBox() {
       this.searchTexts.push("");
     },
@@ -154,10 +156,9 @@ export default {
       if (
         this.searchTexts[0] === "" ||
         this.title === "" ||
-        this.content === "" ||
-        this.author === ""
+        this.content === ""
       ) {
-        alert("未入力の項目があります");
+        alert("タイトル・タグ・本文は必須項目です");
         return;
       }
 
@@ -166,7 +167,7 @@ export default {
       }
 
       const validatedSearchText = this.searchTexts
-        .map((text) => this.removeSpaces(text))
+        .map((text) => text.trim())
         .filter((x, i, self) => {
           return self.indexOf(x) === i;
         });
