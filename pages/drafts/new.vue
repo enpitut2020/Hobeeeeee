@@ -131,10 +131,6 @@ export default {
   },
 
   methods: {
-    removeSpaces(str) {
-      return str.replaceAll("　", "").replaceAll(" ", "");
-    },
-
     addTagSuggestBox() {
       this.searchTexts.push("");
     },
@@ -171,7 +167,7 @@ export default {
       }
 
       const validatedSearchText = this.searchTexts
-        .map((text) => this.removeSpaces(text))
+        .map((text) => text.trim())
         .filter((x, i, self) => {
           return self.indexOf(x) === i;
         });
