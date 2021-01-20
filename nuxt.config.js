@@ -1,3 +1,5 @@
+import * as FontAwesome from "./plugins/fontawesome";
+
 export default {
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
@@ -7,7 +9,7 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: "hobeeeeee",
+    title: "Hobeeeeee!!",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -19,7 +21,7 @@ export default {
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
     // node.js module but we specify the pre-processor
-    { src: '~assets/main.scss', lang: 'scss' }
+    { src: "~assets/main.scss", lang: "scss" },
     // { src: 'bulma/bulma.sass', lang: 'sass' }
   ],
 
@@ -27,7 +29,8 @@ export default {
   plugins: [
     "~/plugins/firebaseUtils",
     "~/plugins/firebase",
-    '~/plugins/adobe-fonts',
+    "~/plugins/adobe-fonts",
+    "~/plugins/vue-scrollto",
     {
       src: "@/plugins/vue-mavon-editor",
       srr: false,
@@ -38,7 +41,16 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
-  buildModules: [],
+  buildModules: [
+    ["@nuxtjs/fontawesome", { component: "fontAwesome", suffix: true }],
+  ],
+  fontawesome: {
+    icons: {
+      solid: FontAwesome.solid,
+      regular: FontAwesome.regular,
+      brands: FontAwesome.brands,
+    },
+  },
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: ["@nuxtjs/bulma"],

@@ -5,37 +5,48 @@
 // Update blue
 $blue: #72d0eb;
 // Add pink and its invert
-$pink: #ffb3b3;
-$pink-invert: #fff;
+$green: #66d4b4;
+$green-invert: #fff;
+
+$yellow: #fce38a;
 // Add a serif family
-$family-serif: heisei-maru-gothic-std ,Meiryo, sans-serif;
+$family-serif: heisei-maru-gothic-std, Meiryo, sans-serif;
 
 // 3. Set the derived variables
 // Use the new pink as the primary color
-$primary: $pink;
-$primary-invert: $pink-invert;
+$primary: $green;
+$primary-invert: $green-invert;
 // Use the existing orange as the danger color
 $danger: $orange;
 // Use the new serif family
 $family-primary: $family-serif;
 
 $body-background-color: #eaffd0;
-$navbar-background-color: #66D4B4;
 
 // 4. Setup your Custom Colors
 $linkedin: #0077b5;
 $linkedin-invert: findColorInvert($linkedin);
 $twitter: #55acee;
 $twitter-invert: findColorInvert($twitter);
+$share-button: #55acee;
 $github: #333;
 $github-invert: findColorInvert($github);
 
 // 5. Add new color variables to the color map.
 @import "~bulma/sass/utilities/derived-variables.sass";
 $addColors: (
-  "twitter":($twitter, $twitter-invert),
-  "linkedin": ($linkedin, $linkedin-invert),
-  "github": ($github, $github-invert)
+  "twitter": (
+    $twitter,
+    $twitter-invert,
+  ),
+  "linkedin": (
+    $linkedin,
+    $linkedin-invert,
+  ),
+  "github": (
+    $github,
+    $github-invert,
+  ),
 );
 $colors: map-merge($colors, $addColors);
 

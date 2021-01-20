@@ -1,67 +1,131 @@
 <template>
-  <div class="container">
-    <div v-if="randomId !== ''">
-      <nuxt-link :to="randomId + '/graph/'" class="button find-hobby"
-        >趣味を見つける</nuxt-link
-      >
-      <nuxt-link to="/drafts/new" class="button find-hobby"
-        >趣味を広める</nuxt-link
-      >
-    </div>
-    <div v-else>Loading...</div>
+  <div>
+    <div class="back_left"></div>
+    <div class="back_right"></div>
+    <section class="hero is-fullheight-with-navbar">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <div class="svg-wrapper">
+            <img src="/title.png" alt="" />
+          </div>
+          <div v-if="randomId !== ''" class="columns is-centered mt-5">
+            <div class="column">
+              <a class="button is-primary is-size-2 is-size-3-tablet is-size-4-mobile  button_find"
+                @click="$router.push(randomId+'/graph')">
+                <font-awesome-icon icon="project-diagram" />　趣味を探す
+              </a>
+            </div>
+            <div class="column">
+              <a class="button is-primary is-size-2 is-size-3-tablet is-size-4-mobile button_write"
+                @click="$router.push('/drafts/new')">
+                　
+                <font-awesome-icon icon="pen-nib" />　趣味を書く
+              </a>
+            </div>
+          </div>
+          <div v-else>Loading...</div>
+          <nuxt-link v-scroll-to="'#explanation'" to class="button is-warning is-inverted is-outlined hero_button">
+            more
+          </nuxt-link>
+        </div>
+      </div>
+    </section>
+    <header class="full"></header>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div id="explanation">
+          <div class="box">
+            <h1 class="title">『Hobeeeeee!!』とは？</h1>
+            <!-- 
+              - 書くこと
+              1. Hobeeeeee!!とは?
+              2. 趣味を見つけるでなにできるか？
+              3. 趣味を書くで何できるか？
+             -->
+            <p>新しい趣味を見つけたい・広めたい人に向けたwebサービスなのだぁ。
+            </p>
+            <br />
+            <h1 class="title">― 趣味を探す ―</h1>
+            <p>
+              趣味の沼を探索することであなたにぴったりの趣味を見つけることができるのだぁ。<br>
+              趣味同士の関係はあなたの行動によってアップデートされていくのだぁ。
+            </p>
+            <br />
+            <h1 class="title">― 趣味を書く ―</h1>
+            <p>
+              あなたが趣味を書くことでみんなに布教することができるのだぁ。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      hobbeeData: {},
-      randomId: "",
-      title: "",
-    };
-  },
+  export default {
+    data() {
+      return {
+        randomId: "",
+      };
+    },
 
-  async created() {
-    let tag = await this.$getRandomTags(1);
-    if (tag[0]) this.randomId = tag[0].id;
-  },
-};
+    async created() {
+      let tag = await this.$getRandomTags(1);
+      if (tag[0]) this.randomId = tag[0].id;
+    },
+  };
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 90vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+  .hero_text {
+    font-family: impetus, sans-serif;
+    font-size: 10em;
+  }
 
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
+  .back_left {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    right: 50%;
+    margin-right: 31%;
+    background-position: right top;
+    background-repeat: repeat;
+    background-image: url("/hero_image.png");
+    background-size: 75%;
+    display: block;
+  }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
+  .back_right {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    left: 50%;
+    margin-left: 32%;
+    background-repeat: repeat;
+    background-image: url("/hero_image.png");
+    background-size: 75%;
+    display: block;
+  }
 
-.links {
-  padding-top: 15px;
-}
+  .svg-wrapper {
+    position: relative;
+    width: 100%;
+  }
 
-.find-hobby {
-  margin: 1em;
-}
+  .svg-wrapper svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .button_find {
+    max-width: 70vw;
+  }
+
+  .button_write {
+    max-width: 70%;
+  }
 </style>

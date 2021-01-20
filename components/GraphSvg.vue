@@ -1,94 +1,121 @@
 <template>
   <div>
-    <svg :viewBox="
+    <div>
+      <svg :viewBox="
         viewBoxX + ' ' + viewBoxY + ' ' + viewBoxWidth + ' ' + viewBoxHeight
       " :width="width" :height="height">
-      <g id='scene'>
-        <!-- 関連趣味に関する描画のループ -->
-        <g v-for="(nodes, tierIndex) in scatteredNodes" :key="'t-' + tierIndex">
-          <g v-for="(node, nodeIndex) in nodes" :key="'n-' + nodeIndex">
-            <!-- ノード間をつなぐ線 -->
-            <line :x1="x" :y1="y" :x2="
-              x +
-              nodeParam.DISTANCE *
-                reverseIndex(tierIndex) *
-                Math.cos(
-                  radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                )
-            " :y2="
-              y +
-              nodeParam.DISTANCE *
-                reverseIndex(tierIndex) *
-                Math.sin(
-                  radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
-                )
-            " stroke="#eaffd0" :stroke-width="`${node.strokeWidth}px`" />
-            <nuxt-link :to="
-              '/' +
-              node.id +
-              '/graph?from=' +
-              targetNode.id +
-              '&viewBoxX=' +
-              viewBoxX +
-              '&viewBoxY=' +
-              viewBoxY +
-              '&viewBoxWidth=' +
-              viewBoxWidth +
-              '&viewBoxHeight=' +
-              viewBoxHeight
-            ">
-              <!-- 関連趣味のノード -->
-              <circle :r="node.radius" :cx="
+        <g id="scene">
+          <!-- 関連趣味に関する描画のループ -->
+          <g v-for="(nodes, tierIndex) in scatteredNodes" :key="'t-' + tierIndex">
+            <g v-for="(node, nodeIndex) in nodes" :key="'n-' + nodeIndex">
+              <!-- ノード間をつなぐ線 -->
+              <line :x1="x" :y1="y" :x2="
                 x +
                 nodeParam.DISTANCE *
                   reverseIndex(tierIndex) *
                   Math.cos(
                     radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
                   )
-              " :cy="
+              " :y2="
                 y +
                 nodeParam.DISTANCE *
                   reverseIndex(tierIndex) *
                   Math.sin(
                     radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
                   )
-              " :class="{ randomTags: node.isRandom }"></circle>
-              <text :x="x + (nodeIndex + 1) * 200" :y="y + (nodeIndex + 1) * 200" text-anchor="middle"
-                dominant-baseline="central" style="font-size: 24px; fill: #111111">
-                <!-- 関連趣味名 .randomTags -->
-                <tspan :x="
+              " stroke="#eaffd0" :stroke-width="`${node.strokeWidth}px`" />
+              <nuxt-link :to="
+                '/' +
+                node.id +
+                '/graph?from=' +
+                targetNode.id +
+                '&viewBoxX=' +
+                viewBoxX +
+                '&viewBoxY=' +
+                viewBoxY +
+                '&viewBoxWidth=' +
+                viewBoxWidth +
+                '&viewBoxHeight=' +
+                viewBoxHeight
+              " class="node-link">
+                <!-- 関連趣味のノード -->
+                <circle :r="node.radius" :cx="
                   x +
                   nodeParam.DISTANCE *
                     reverseIndex(tierIndex) *
                     Math.cos(
                       radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
                     )
-                " :y="
+                " :cy="
                   y +
                   nodeParam.DISTANCE *
                     reverseIndex(tierIndex) *
                     Math.sin(
                       radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
                     )
-                ">
-                  {{ node.name }}
-                </tspan>
-              </text>
-            </nuxt-link>
+                " :class="{ 'random-tags': node.isRandom }"></circle>
+                <text :x="x + (nodeIndex + 1) * 200" :y="y + (nodeIndex + 1) * 200" text-anchor="middle"
+                  dominant-baseline="central" style="font-size: 24px; fill: #111111">
+                  <!-- 関連趣味名 .randomTags -->
+                  <tspan :x="
+                    x +
+                    nodeParam.DISTANCE *
+                      reverseIndex(tierIndex) *
+                      Math.cos(
+                        radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                      )
+                  " :y="
+                    y +
+                    nodeParam.DISTANCE *
+                      reverseIndex(tierIndex) *
+                      Math.sin(
+                        radOfNode(nodeIndex, reverseIndex(tierIndex) - 1, nodes)
+                      )
+                  ">
+                    {{ node.name }}
+                  </tspan>
+                </text>
+              </nuxt-link>
+            </g>
           </g>
+          <!-- 現在フォーカスしている趣味のノードと名前の描画 -->
+          <nuxt-link :to="'/' + targetNode.id + '/list'" class="node-link">
+            <circle :r="nodeParam.RADIUS" :cx="x" :cy="y" class="node-link target-tag"></circle>
+            <text text-anchor="middle" dominant-baseline="central" style="font-size: 24px; fill: #111111">
+              <tspan :x="x" :y="y - nodeParam.TEXT_SHIFT_HEIGHT">
+                {{ name }}
+              </tspan>
+              <tspan :x="x" :y="y + nodeParam.TEXT_SHIFT_HEIGHT">
+                の沼を覗く？
+              </tspan>
+            </text>
+          </nuxt-link>
         </g>
-        <!-- 現在フォーカスしている趣味のノードと名前の描画 -->
-        <nuxt-link :to="'/' + targetNode.id + '/list'">
-          <circle :r="nodeParam.RADIUS" :cx="x" :cy="y" style="fill: #f38181"></circle>
-          <text text-anchor="middle" dominant-baseline="central" style="font-size: 24px; fill: #111111">
-            <tspan :x="x" :y="y - nodeParam.TEXT_SHIFT_HEIGHT">{{ name }}</tspan>
-            <tspan :x="x" :y="y + nodeParam.TEXT_SHIFT_HEIGHT">
-              の沼を覗く？
-            </tspan>
-          </text>
-        </nuxt-link>
-      </g>
-    </svg>
+      </svg>
+    </div>
+    <div class="card legend">
+      <p class="is-size-5">グラフの見方</p>
+      <div class="content">
+        <div class=" level block-list">
+          <div class="level-item has-text-left">
+            <p><svg class="color-sample" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50" class="target-tag" />
+              </svg> 今見ているタグ
+            </p>
+          </div>
+          <div class="level-item has-text-left">
+            <p><svg class="color-sample" viewBox="0 0 100 100">
+                <circle class="relative-tags" cx="50" cy="50" r="50" />
+              </svg> 関連があるタグ</p>
+          </div>
+          <div class="level-item has-text-left">
+            <p><svg class="color-sample" viewBox="0 0 100 100">
+                <circle class=" random-tags" cx="50" cy="50" r="50" />
+              </svg> 関連がないタグ</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -146,9 +173,13 @@
     mounted() {
       this.x = this.width / 2;
       this.y = this.height / 2;
-      var panzoom = require('panzoom')
-      var element = document.getElementById('scene')
-      panzoom(element)
+      var panzoom = require("panzoom");
+      var element = document.getElementById("scene");
+      panzoom(element, {
+        onTouch: function () {
+          return false; // tells the library to not preventDefault.
+        },
+      });
     },
     methods: {
       // 関連を表す線の太さを計算する
@@ -237,11 +268,6 @@
           // 上の例だと(1, true)が返ってきたらループを抜ける
           isFinished = nodeNum.done;
         }
-        console.debug(
-          `Splitted relativeNodes (created() in GraphSvg.vue): ${JSON.stringify(
-            _scatteredNodes
-          )}`
-        );
         // 外側に配置するノードから順にソートする
         return _scatteredNodes.reverse();
       },
@@ -270,7 +296,33 @@
     stroke-width: 0px;
   }
 
-  .randomTags {
+  .random-tags {
     fill: #fce38a;
+  }
+
+  .relative-tags {
+    fill: #67d5b5;
+
+  }
+
+  .target-tag {
+    fill: #f38181;
+  }
+
+  .legend {
+    padding: 1em;
+    position: fixed;
+    bottom: 2em;
+    left: 2em;
+  }
+
+  .color-sample {
+    vertical-align: middle;
+    width: 1em;
+    height: 1em;
+  }
+
+  .level-item {
+    margin-right: 2em;
   }
 </style>
