@@ -322,7 +322,7 @@
     height: 1em;
   }
 
-  .level-item{
-    margin-right:2em;
+  .level-item {
+    margin-right: 2em;
   }
 </style>
