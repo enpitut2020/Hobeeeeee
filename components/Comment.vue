@@ -4,7 +4,7 @@
       <div class="column has-text-left">
         {{ comment.body }}
       </div>
-      <div class="column has-text-right">at {{ commentTime }}</div>
+      <div class="column has-text-right is-3">at {{ commentTime }}</div>
     </div>
   </div>
 </template>
