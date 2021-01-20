@@ -48,7 +48,7 @@
           <div class="column">
             <input v-model="inputComment" class="input" placeholder="コメント" />
           </div>
-          <div class="level">
+          <div class="level"></div>
             <div class="column has-text-right">
               <button :disabled="isNoComment" type="button" class="button" :class="{ 'is-primary': !isNoComment }"
                 @click="submit">
