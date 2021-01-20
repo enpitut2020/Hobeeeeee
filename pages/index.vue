@@ -1,39 +1,18 @@
 <template>
   <div>
+    <div class="back_left"></div>
+    <div class="back_right"></div>
     <section class="hero is-fullheight-with-navbar">
       <div class="hero-body">
         <div class="container has-text-centered">
-          <h1 class="title hero_text">Hobeeeeee!!</h1>
-
-          <nuxt-link
-            v-scroll-to="'#explanation'"
-            to
-            class="button is-warning is-inverted is-outlined hero_button"
-          >
-            more
-          </nuxt-link>
+          <div class="svg-wrapper">
+            <img src="/title.png" alt="">
+          </div>
         </div>
       </div>
     </section>
     <header class="full"></header>
-    <section class="section">
-      <div class="container is-max-desktop">
-        <div id="explanation">
-          <div class="box">
-            <h1 class="title">Hobeeeeee!!</h1>
-            <p>
-              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
-            </p>
-            <br />
-            <p>
-              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキ
-            </p>
-            <br />
-            <p>
-              ストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
-            </p>
-          </div>
-        </div>
+    
 
         <!-- <div v-if="randomId !== ''">
       <nuxt-link :to="randomId + '/graph/'" class="button"
@@ -44,8 +23,6 @@
       >
     </div>
     <div v-else>Loading...</div> -->
-      </div>
-    </section>
   </div>
 </template>
 
@@ -70,5 +47,43 @@ export default {
 .hero_text {
   font-family: impetus, sans-serif;
   font-size: 10em;
+}
+
+.back_left {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  right: 50%;
+  margin-right: 31%;
+  background-position: right top;
+  background-repeat: repeat;
+  background-image: url("/hero_image.png");
+  background-size: 75%;
+  display: block;
+}
+
+.back_right {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  left: 50%;
+  margin-left: 32%;
+  background-repeat: repeat;
+  background-image: url("/hero_image.png");
+  background-size: 75%;
+  display: block;
+}
+
+.svg-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.svg-wrapper svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>
