@@ -6,23 +6,49 @@
       <div class="hero-body">
         <div class="container has-text-centered">
           <div class="svg-wrapper">
-            <img src="/title.png" alt="">
+            <img src="/title.png" alt="" />
           </div>
+          <div v-if="randomId !== ''" class="columns is-centered mt-5">
+            <div class="column is-2">
+              <nuxt-link
+                :to="randomId + '/graph/'"
+                class="button is-primary is-large button_find"
+                >趣味を見つける</nuxt-link
+              >
+            </div>
+            <div class="column is-2">
+              <nuxt-link
+                to="/drafts/new"
+                class="button is-primary is-large button_write"
+                >趣味を書く</nuxt-link
+              >
+            </div>
+          </div>
+          <div v-else>Loading...</div>
         </div>
       </div>
     </section>
     <header class="full"></header>
-    
-
-        <!-- <div v-if="randomId !== ''">
-      <nuxt-link :to="randomId + '/graph/'" class="button"
-        >趣味を見つける</nuxt-link
-      >
-      <nuxt-link to="/drafts/new" class="button find-hobby"
-        >趣味を広める</nuxt-link
-      >
-    </div>
-    <div v-else>Loading...</div> -->
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div id="explanation">
+          <div class="box">
+            <h1 class="title">Hobeeeeee!!</h1>
+            <p>
+              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
+            </p>
+            <br />
+            <p>
+              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキ
+            </p>
+            <br />
+            <p>
+              ストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -83,6 +109,16 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.button_find {
+  width: 100%;
+  height: 100%;
+}
+
+.button_write {
   width: 100%;
   height: 100%;
 }
