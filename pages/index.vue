@@ -14,41 +14,17 @@
                   <text id="title_text" transform="translate(969.5 660)" fill="#67d5b5" stroke="#555151" stroke-width="5" font-size="195" font-family="Impetus-Heavy, Impetus" font-weight="800"><tspan x="-731.055" y="0">H</tspan><tspan y="0" fill="#f38181">o</tspan><tspan y="0">b</tspan><tspan y="0" fill="#fce38a">e</tspan><tspan y="0">e</tspan><tspan y="0" fill="#fce38a">e</tspan><tspan y="0">e</tspan><tspan y="0" fill="#fce38a">e</tspan><tspan y="0">e</tspan><tspan y="0" fill="#fce38a">!!</tspan></text>
                 </g>
                 <g id="copy">
-                  <text id="copy_shadow" transform="translate(968.5 763.5)" fill="#444242" font-size="80" font-family="AzoSans-Black, Azo Sans" font-weight="800"><tspan x="-492.32" y="0">Sorry for my funny hobby</tspan></text>
+                  <text id="copy_shadow" transform="translate(968.5 763.5)" fill="#444242" font-size="80" font-family="azo-sans-web, Azo Sans" font-weight="800"><tspan x="-492.32" y="0">Sorry for my funny hobby</tspan></text>
                   <text id="copy_text" transform="translate(968.5 753.5)" fill="#fff" stroke="#3e3939" stroke-width="3" font-size="80" font-family="AzoSans-Black, Azo Sans" font-weight="800"><tspan x="-492.32" y="0">Sorry for my funny hobby</tspan></text>
                 </g>
               </g>
             </svg>
           </div>
-          <nuxt-link
-            v-scroll-to="'#explanation'"
-            to
-            class="button is-warning is-inverted is-outlined hero_button"
-          >
-            more
-          </nuxt-link>
         </div>
       </div>
     </section>
     <header class="full"></header>
-    <section class="section">
-      <div class="container is-max-desktop">
-        <div id="explanation">
-          <div class="box">
-            <h1 class="title">Hobeeeeee!!</h1>
-            <p>
-              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
-            </p>
-            <br />
-            <p>
-              サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキ
-            </p>
-            <br />
-            <p>
-              ストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト
-            </p>
-          </div>
-        </div>
+    
 
         <!-- <div v-if="randomId !== ''">
       <nuxt-link :to="randomId + '/graph/'" class="button"
@@ -59,8 +35,6 @@
       >
     </div>
     <div v-else>Loading...</div> -->
-      </div>
-    </section>
   </div>
 </template>
 

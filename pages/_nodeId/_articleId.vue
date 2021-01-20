@@ -64,27 +64,29 @@
       - コメント書く所，送信ボタンの簡単な設計でいい
       - ただのテキストをfirebaseの各記事に登録する
       - 各記事のサブコレクションにcommentsを入れる -->
-      <div class="columns">
-        <input
-          v-model="inputComment"
-          class="input column"
-          placeholder="コメント"
-        />
-        <button
-          :disabled="isNoComment"
-          type="button"
-          class="button column is-one-fifth"
-          :class="{ 'is-success': !isNoComment }"
-          @click="submit"
-        >
-          コメントする
-        </button>
+      <div class="columns mt-2">
+        <div class="column">
+          <input
+            v-model="inputComment"
+            class="input column"
+            placeholder="コメント"
+          />
+          <button
+            :disabled="isNoComment"
+            type="button"
+            class="button"
+            :class="{ 'is-primary': !isNoComment }"
+            @click="submit"
+          >
+            コメントする
+          </button>
+        </div>
+        <ul>
+          <li v-for="comment in comments" :key="comment.id">
+            <Comment :comment="comment" />
+          </li>
+        </ul>
       </div>
-      <ul>
-        <li v-for="comment in comments" :key="comment.id">
-          <Comment :comment="comment" />
-        </li>
-      </ul>
     </div>
   </section>
 </template>
