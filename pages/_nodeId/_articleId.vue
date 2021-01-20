@@ -47,18 +47,24 @@
         default-open="preview"
         preview-background="#fff"
       />
-      <nuxt-link :to="'/' + currentTagId + '/list'" class="button"
-        >記事一覧へ戻る</nuxt-link
-      >
-      <button
-        class="button"
-        :class="{ 'is-success': isZbzbPushed == true }"
-        @click="zbzbButton()"
-      >
-        <span v-show="isZbzbPushed == false">{{ zbzb_count }} ずぶずぶ！</span>
-        <span v-show="isZbzbPushed == true">{{ zbzb_count }} ずぶった！</span>
-      </button>
-      <button class="button share-button" @click="goTwitter()">Tweet</button>
+      <div class="buttons mt-2 is-right">
+        <button
+          class="button is-primary"
+          :class="{ 'is-light': isZbzbPushed == false }"
+          @click="zbzbButton()"
+        >
+          <span v-show="isZbzbPushed == false"
+            >{{ zbzb_count }} ずぶずぶ</span
+          >
+          <span v-show="isZbzbPushed == true">
+            {{ zbzb_count }}ずぶった!</span
+          >
+        </button>
+        <button class="button share-button" @click="goTwitter()">
+          <font-awesome-icon :icon="['fab', 'twitter']" />
+          Tweet
+        </button>
+      </div>
       <!-- TODO: コメント投稿フォーム -->
       <!-- - 各記事詳細画面の下の方に，コメントを各機能を入れる
       - コメント書く所，送信ボタンの簡単な設計でいい
