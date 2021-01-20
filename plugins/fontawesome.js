@@ -12,6 +12,7 @@ const solid = [
   "faPenNib",
   "faPlus",
   "faFileAlt",
+  "faProjectDiagram"
 ];
 
 // ここに追記するだけ
