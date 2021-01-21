@@ -1,5 +1,5 @@
 <template>
-  <section class="section">
+  <section class="section mt-5">
     <div class="container is-max-desktop">
       <nuxt-link :to="`/${targetTag.id}/graph`">趣味探しに戻る</nuxt-link>
       <h1 class="title mt-3">
