@@ -13,6 +13,7 @@ const solid = [
   "faPlus",
   "faFileAlt",
   "faProjectDiagram",
+  "faQuestion",
 ];
 
 // ここに追記するだけ
