@@ -1,9 +1,9 @@
 <template>
   <div>
-    <section class="section">
+    <section class="section mt-5">
       <div class="container is-max-desktop">
         <h1 class="title"><font-awesome-icon icon="pen-nib" /> 趣味を書く</h1>
-        <h2 class="subtitle">沼る記事を書こう！的な文</h2>
+        <h2 class="subtitle">自分の好きな趣味をみんなに広めるのだぁ</h2>
         <div class="field">
           <label class="label"
             >タイトル<span style="color: #f38181"> *</span></label
@@ -74,7 +74,7 @@
               v-model="content"
               :toolbars="markdownOption"
               language="ja"
-              placeholder="記事を書いてね！"
+              placeholder="記事を書くのだぁ！マークダウン形式が使えるのだぁ！"
               class="mavon-editor"
             />
           </div>
