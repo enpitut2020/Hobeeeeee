@@ -74,7 +74,7 @@
               v-model="content"
               :toolbars="markdownOption"
               language="ja"
-              placeholder="記事を書いてね！"
+              placeholder="記事を書くのだぁ！マークダウン形式が使えるのだぁ！"
               class="mavon-editor"
             />
           </div>
