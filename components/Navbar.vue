@@ -1,8 +1,8 @@
 <template>
-  <nav class="navbar is-primary">
+  <nav class="navbar is-primary is-fixed-top">
     <div class="navbar-brand">
-      <a class="navbar-item" href="#">
-        <!-- <img src="logo.png" alt="" /> -->
+      <a class="navbar-item" href="/">
+        <img src="/logo.png" alt="" />
       </a>
       <div
         class="navbar-burger burger"

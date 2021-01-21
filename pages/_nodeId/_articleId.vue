@@ -1,5 +1,5 @@
 <template>
-  <section class="section">
+  <section class="section mt-5">
     <div class="container is-max-desktop">
       <nuxt-link :to="'/' + currentTagId + '/list'">記事一覧へ戻る</nuxt-link>
       <h1 class="title mt-3 mb-0">{{ title }}</h1>
@@ -70,17 +70,18 @@
         <div class="column">
           <input v-model="inputComment" class="input" placeholder="コメント" />
         </div>
-        <div class="level"></div>
-        <div class="column has-text-right">
-          <button
-            :disabled="isNoComment"
-            type="button"
-            class="button"
-            :class="{ 'is-primary': !isNoComment }"
-            @click="submit"
-          >
-            コメントする
-          </button>
+        <div class="level">
+          <div class="column has-text-right">
+            <button
+              :disabled="isNoComment"
+              type="button"
+              class="button"
+              :class="{ 'is-primary': !isNoComment }"
+              @click="submit"
+            >
+              コメントする
+            </button>
+          </div>
         </div>
       </div>
       <ul>

@@ -140,8 +140,13 @@
         </g>
       </svg>
     </div>
-    <div class="card legend">
-      <p class="is-size-5">グラフの見方</p>
+    <button class="button is-primary help_button" v-if="isHiddenHelp" @mouseover="isHiddenHelp=false">
+      <span class="icon is-small">
+        <font-awesome-icon icon="question" />
+      </span>
+    </button>
+    <div class="card legend" v-else @mouseleave="isHiddenHelp=true">
+      <p class="is-size-5">このページのみかた</p>
       <div class="content">
         <div class="level block-list">
           <div class="level-item has-text-left">
@@ -149,7 +154,7 @@
               <svg class="color-sample" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="50" class="target-tag" />
               </svg>
-              今見ているタグ
+              いま見てる趣味
             </p>
           </div>
           <div class="level-item has-text-left">
@@ -157,7 +162,7 @@
               <svg class="color-sample" viewBox="0 0 100 100">
                 <circle class="relative-tags" cx="50" cy="50" r="50" />
               </svg>
-              関連があるタグ
+              好きかもしれない趣味
             </p>
           </div>
           <div class="level-item has-text-left">
@@ -165,7 +170,7 @@
               <svg class="color-sample" viewBox="0 0 100 100">
                 <circle class="random-tags" cx="50" cy="50" r="50" />
               </svg>
-              関連がないタグ
+              知らなそうな趣味
             </p>
           </div>
         </div>
@@ -200,6 +205,7 @@ export default {
       viewBoxWidth: 1500,
       viewBoxHeight: 1500,
       scatteredNodes: null,
+      isHiddenHelp: true,
     };
   },
   computed: {
@@ -363,12 +369,20 @@ circle {
   fill: #f38181;
 }
 
+.help_button {
+  padding: 1em;
+  position: fixed;
+  bottom: 2em;
+  left: 2em; 
+}
+
 .legend {
   padding: 1em;
   position: fixed;
   bottom: 2em;
   left: 2em;
 }
+
 
 .color-sample {
   vertical-align: middle;
